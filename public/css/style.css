@@ -1,0 +1,10 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+.modelBtn {
+    width: 25px;
+    height: 25px;
+}
+.modelBtn i {
+    margin-left: -10px;
+}
