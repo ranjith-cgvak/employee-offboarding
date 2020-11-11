@@ -42,10 +42,10 @@
         </div>
     </div>
 </div>
+<!-- end employee details -->
 
 
-
-<!-- Modal -->
+<!-- Modal box for change of date of leave -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -108,6 +108,7 @@ unset($__errorArgs, $__bag); ?>
     </div>
   </div>
 </div>
+<!-- end of model change of date of leave -->
 
 <!-- START CUSTOM TABS -->
 <div class="container-fluid">
@@ -117,8 +118,12 @@ unset($__errorArgs, $__bag); ?>
             <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_1-1" data-toggle="tab">Resignation Details</a></li>
-                <li style="display:<?php echo e(($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' '); ?>;" ><a href="#tab_1-2" data-toggle="tab">Withdraw Details</a></li>
-                <li style="display:<?php echo e(($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' '); ?>;"><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
+                <?php if($emp_resignation->date_of_withdraw != NULL ): ?>
+                <li><a href="#tab_1-2" data-toggle="tab">Withdraw Details</a></li>
+                <?php endif; ?>
+                <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
+                <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
+                <?php endif; ?>
                 <!-- <li style="display:<?php echo e(($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' '); ?>;"><a href="#tab_3-2" data-toggle="tab">No Due</a></li> -->
             </ul>
             <div class="tab-content">
@@ -127,7 +132,7 @@ unset($__errorArgs, $__bag); ?>
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="box box-secondary formBox" <?php if(session()->get('success')): ?> style="display: none;"  <?php endif; ?> >
+                                <div class="box box-secondary formBox" >
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Resignation Details</h3>
                                     </div>
@@ -163,10 +168,13 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
+
+                        <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
                         <!-- Comments on the resignation -->
-                        <div class="row" style="display:<?php echo e(($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' '); ?>;">
+                        <div class="row">
                             <div class="col-xs-12">
-                                <div class="box box-secondary formBox" <?php if(session()->get('success')): ?> style="display: none;"  <?php endif; ?> >
+                                <div class="box box-secondary formBox">
+                                    <!--box-header -->
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Comments</h3>
                                     </div>
@@ -180,7 +188,9 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" style="display:<?php echo e((Auth::user()->designation != 'Lead' ) ? 'none' : ' '); ?>;" required><?php echo e(($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '); ?></textarea>
+                                                <?php if(Auth::user()->designation == 'Lead' ): ?>
+                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '); ?></textarea>
+                                                <?php endif; ?>
                                                     <?php $__errorArgs = ['leadComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -194,14 +204,44 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                    <p style="display:<?php echo e((Auth::user()->designation == 'Lead' ) ? 'none' : ' '); ?>;"><?php echo e($emp_resignation->comment_lead); ?></p>
+                                                    <?php if(Auth::user()->designation != 'Lead' ): ?>
+                                                    <p><?php echo e($emp_resignation->comment_lead); ?></p>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
-                                            <div class="form-group row" style="display:<?php echo e((Auth::user()->designation == 'Lead' ) ? 'none' : ' '); ?>;">
+                                            <?php if(Auth::user()->designation != 'Lead'): ?>
+                                            <div class="form-group row">
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
+                                                    <?php if(Auth::user()->designation == 'Head' ): ?>
                                                     <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_head != NULL) ? $emp_resignation->comment_head : ' '); ?></textarea>
+                                                    <?php endif; ?>
                                                     <?php $__errorArgs = ['headComment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                    <?php if(Auth::user()->designation == 'HR'): ?>
+                                                    <p><?php echo e($emp_resignation->comment_head); ?></p>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                            <?php endif; ?>
+
+                                            <?php if(Auth::user()->designation == 'HR' ): ?>
+                                            <div class="form-group row">
+                                                <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
+                                                <div class="col-sm-6">
+                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_hr != NULL) ? $emp_resignation->comment_hr : ' '); ?></textarea>
+                                                    <?php $__errorArgs = ['hrComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -216,6 +256,8 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
+                                            <?php endif; ?>
+
                                             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
                                         </div>
                                         <!-- /.box-body -->
@@ -226,15 +268,16 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <!-- /.tab-pane -->
-
+                <?php if($emp_resignation->date_of_withdraw != NULL ): ?>
                 <!-- /.tab-pane -->
-                <div class="tab-pane" id="tab_1-2" style="display:<?php echo e(($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' '); ?>;">
+                <div class="tab-pane" id="tab_1-2">
 
                     <!-- Withdraw Details -->
-                    <div class="container-fluid" style="display:<?php echo e(($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' '); ?>;">
+                    <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="box box-secondary formBox">
@@ -259,8 +302,8 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row" style="display:<?php echo e(($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' '); ?>;">
+                        <!-- comments on withdraw details -->
+                        <div class="row">
                             <div class="col-xs-12">
                                 <div class="box box-secondary formBox">
                                     <div class="box-header with-border">
@@ -276,7 +319,10 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label for="withdrawLeadComment" class="col-sm-2 form-label">Lead Comment on Withdraw </label>
                                                 <div class="col-sm-6">
-                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" style="display:<?php echo e((Auth::user()->designation != 'Lead' ) ? 'none' : ' '); ?>;" required><?php echo e(($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '); ?></textarea>
+                                                    <?php if(Auth::user()->designation == 'Lead' ): ?>
+                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '); ?></textarea>
+                                                    <?php endif; ?>
+
                                                     <?php $__errorArgs = ['withdrawLeadComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -290,14 +336,48 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                    <p style="display:<?php echo e((Auth::user()->designation == 'Lead' ) ? 'none' : ' '); ?>;"><?php echo e($emp_resignation->comment_dow_lead); ?></p>
+
+                                                    <?php if(Auth::user()->designation != 'Lead' ): ?>
+                                                    <p><?php echo e($emp_resignation->comment_dow_lead); ?></p>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
-                                            <div class="form-group row" style="display:<?php echo e((Auth::user()->designation == 'Lead' ) ? 'none' : ' '); ?>;">
+
+                                            <?php if(Auth::user()->designation != 'Lead'): ?>
+                                            <div class="form-group row">
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
+                                                    <?php if(Auth::user()->designation == 'Head' ): ?> 
                                                     <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required><?php echo e(($emp_resignation->comment_dow_head != NULL) ? $emp_resignation->comment_dow_head : ' '); ?></textarea>
+                                                    <?php endif; ?>
                                                     <?php $__errorArgs = ['withdrawHeadComment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+
+                                                    <?php if(Auth::user()->designation == 'HR' ): ?>
+                                                    <p><?php echo e($emp_resignation->comment_dow_head); ?></p>
+                                                    <?php endif; ?>
+
+                                                </div>
+                                            </div>
+                                            <?php endif; ?>
+
+                                            <?php if(Auth::user()->designation == 'HR' ): ?> 
+                                            <div class="form-group row">
+                                                <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
+                                                <div class="col-sm-4">
+                                                    <textarea name="withdrawHrComment" id="withdrawHrComment" cols="30" rows="10" class="form-control" required><?php echo e(($emp_resignation->comment_dow_hr != NULL) ? $emp_resignation->comment_dow_hr : ' '); ?></textarea>
+                                                    <?php $__errorArgs = ['withdrawHrComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -312,6 +392,8 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
+                                            <?php endif; ?>
+
                                             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
                                         </div>
                                         <!-- /.box-body -->
@@ -322,14 +404,17 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 
                 </div>
                 <!-- /.tab-pane -->
+                <?php endif; ?>
 
+                <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
                 <div class="tab-pane" id="tab_2-2">
                     <!-- Acceptance details -->
-                    <div class="container-fluid" style="display:<?php echo e(($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' '); ?>;" >
+                    <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="box box-secondary">
@@ -382,6 +467,7 @@ unset($__errorArgs, $__bag); ?>
 
                 </div>
                 <!-- /.tab-pane -->
+                <?php endif; ?>
                 <!-- <div class="tab-pane" id="tab_3-2">
 
                 
@@ -400,4 +486,4 @@ unset($__errorArgs, $__bag); ?>
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\gowthamraj\Documents\employee-offboarding\resources\views/process/viewResignation.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/process/viewResignation.blade.php ENDPATH**/ ?>

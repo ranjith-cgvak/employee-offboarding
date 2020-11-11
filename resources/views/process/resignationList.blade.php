@@ -25,7 +25,9 @@
                   <th>DOL</th>
                   <th>Status</th>
                   <th>View</th>
-                  <th style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">&nbsp;&nbsp;&nbsp;&nbsp; Assign Lead</th>
+                  @if(Auth::user()->designation == 'Head')
+                  <th>&nbsp;&nbsp;&nbsp;&nbsp; Assign Lead</th>
+                  @endif
                 </tr>
                 @foreach($emp_list as $emp)
                 <tr>
@@ -36,8 +38,10 @@
                   <td>{{ ($emp->changed_dol == NULL) ? $emp->date_of_leaving : $emp->changed_dol }}</td>
                   <td><span class="label {{ ($emp->date_of_withdraw != NULL) ? 'label-danger' : 'label-primary'}}">{{ ($emp->date_of_withdraw != NULL) ? 'Withdrawn' : 'New'}}</span></td>
                   <td><a href="{{ route('process.edit', $emp->id )}}">View</a></td>
-                  <td style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">
-                    <form method="post" action="{{ route('process.update' , $emp->user_id ) }}" style="display: {{ ($emp->lead != NULL) ? 'none' : ' ' }} ; ">
+                  @if(Auth::user()->designation == 'Head')
+                  <td>
+                    @if($emp->lead == NULL)
+                    <form method="post" action="{{ route('process.update' , $emp->user_id ) }}">
                       @csrf
                       {{ method_field('PUT') }}
                       <div class="form-group">
@@ -54,8 +58,10 @@
                         </div>
                       </div>
                     </form>
+                    @endif
                     {{ $emp->lead }}
                   </td>
+                  @endif
                 </tr>
                 @endforeach
               </table>

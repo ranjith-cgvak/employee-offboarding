@@ -29,7 +29,7 @@ class HomeController extends Controller
         $employee = \Auth::User()->designation == "Software Engineer";
         $head = \Auth::User()->designation == "Head";
         $lead = \Auth::User()->designation == "Lead";
-        $Hr = \Auth::User()->designation == "Hr";
+        $Hr = \Auth::User()->designation == "HR";
         $userId = auth()->id();
         $myResignation = \DB::table('resignations')
         ->where([
@@ -47,6 +47,9 @@ class HomeController extends Controller
             return redirect()->route('process.index');
         }
         else if($head) {
+            return redirect()->route('process.index');
+        }
+        else if($Hr) {
             return redirect()->route('process.index');
         }
     }

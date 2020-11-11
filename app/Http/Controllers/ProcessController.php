@@ -22,6 +22,12 @@ class ProcessController extends Controller
         ->join('users', 'resignations.user_id', '=', 'users.id')
         ->get();
         }
+        else if(\Auth::User()->designation == "HR") {
+            $emp_list = \DB::table('resignations')
+            ->select('resignations.id','user_id','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
+            ->join('users', 'resignations.user_id', '=', 'users.id')
+            ->get();
+        }
         else {
             $leadName = \Auth::User()->name;
             $emp_list = \DB::table('resignations')
@@ -113,6 +119,9 @@ class ProcessController extends Controller
         if(\Auth::User()->designation == "Head") {
             $resignation->comment_dol_head = $request->get('commentDol');
         }
+        else if(\Auth::User()->designation == "HR") {
+            $resignation->comment_dol_hr = $request->get('commentDol');
+        }
         else {
             $resignation->comment_dol_lead = $request->get('commentDol');
         }
@@ -128,6 +137,12 @@ class ProcessController extends Controller
                 'headComment'=>'required'
             ]);
             $resignation->comment_head = $request->get('headComment');
+        }
+        else if(\Auth::User()->designation == "HR") {
+            $request->validate([
+                'hrComment'=>'required'
+            ]);
+            $resignation->comment_hr = $request->get('hrComment');
         }
         else {
             $request->validate([
@@ -147,6 +162,12 @@ class ProcessController extends Controller
                 'withdrawHeadComment'=>'required'
             ]);
             $resignation->comment_dow_head = $request->get('withdrawHeadComment');
+        }
+        else if(\Auth::User()->designation == "HR") {
+            $request->validate([
+                'withdrawHrComment'=>'required'
+            ]);
+            $resignation->comment_dow_hr = $request->get('withdrawHrComment');
         }
         else {
             $request->validate([

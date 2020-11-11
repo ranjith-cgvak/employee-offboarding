@@ -41,10 +41,10 @@
         </div>
     </div>
 </div>
+<!-- end employee details -->
 
 
-
-<!-- Modal -->
+<!-- Modal box for change of date of leave -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -92,6 +92,7 @@
     </div>
   </div>
 </div>
+<!-- end of model change of date of leave -->
 
 <!-- START CUSTOM TABS -->
 <div class="container-fluid">
@@ -101,8 +102,12 @@
             <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_1-1" data-toggle="tab">Resignation Details</a></li>
-                <li style="display:{{ ($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' ' }};" ><a href="#tab_1-2" data-toggle="tab">Withdraw Details</a></li>
-                <li style="display:{{ ($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' ' }};"><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
+                @if($emp_resignation->date_of_withdraw != NULL )
+                <li><a href="#tab_1-2" data-toggle="tab">Withdraw Details</a></li>
+                @endif
+                @if($emp_resignation->date_of_withdraw == NULL )
+                <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
+                @endif
                 <!-- <li style="display:{{ ($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' ' }};"><a href="#tab_3-2" data-toggle="tab">No Due</a></li> -->
             </ul>
             <div class="tab-content">
@@ -111,7 +116,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="box box-secondary formBox" @if(session()->get('success')) style="display: none;"  @endif >
+                                <div class="box box-secondary formBox" >
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Resignation Details</h3>
                                     </div>
@@ -147,10 +152,13 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if($emp_resignation->date_of_withdraw == NULL )
                         <!-- Comments on the resignation -->
-                        <div class="row" style="display:{{ ($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' ' }};">
+                        <div class="row">
                             <div class="col-xs-12">
-                                <div class="box box-secondary formBox" @if(session()->get('success')) style="display: none;"  @endif >
+                                <div class="box box-secondary formBox">
+                                    <!--box-header -->
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Comments</h3>
                                     </div>
@@ -163,21 +171,46 @@
                                             <div class="form-group row">
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" style="display:{{ (Auth::user()->designation != 'Lead' ) ? 'none' : ' ' }};" required>{{ ($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '}}</textarea>
+                                                @if(Auth::user()->designation == 'Lead' )
+                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '}}</textarea>
+                                                @endif
                                                     @error('leadComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
                                                     </span>
                                                     @enderror
-                                                    <p style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">{{ $emp_resignation->comment_lead }}</p>
+                                                    @if(Auth::user()->designation != 'Lead' )
+                                                    <p>{{ $emp_resignation->comment_lead }}</p>
+                                                    @endif
                                                 </div>
                                             </div>
-                                            <div class="form-group row" style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">
+                                            @if(Auth::user()->designation != 'Lead')
+                                            <div class="form-group row">
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
+                                                    @if(Auth::user()->designation == 'Head' )
                                                     <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_head != NULL) ? $emp_resignation->comment_head : ' '}}</textarea>
+                                                    @endif
                                                     @error('headComment')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                    @if(Auth::user()->designation == 'HR')
+                                                    <p>{{ $emp_resignation->comment_head }}</p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                            @if(Auth::user()->designation == 'HR' )
+                                            <div class="form-group row">
+                                                <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
+                                                <div class="col-sm-6">
+                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_hr != NULL) ? $emp_resignation->comment_hr : ' '}}</textarea>
+                                                    @error('hrComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -185,6 +218,8 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                            @endif
+
                                             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
                                         </div>
                                         <!-- /.box-body -->
@@ -195,15 +230,16 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
                 <!-- /.tab-pane -->
-
+                @if($emp_resignation->date_of_withdraw != NULL )
                 <!-- /.tab-pane -->
-                <div class="tab-pane" id="tab_1-2" style="display:{{ ($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' ' }};">
+                <div class="tab-pane" id="tab_1-2">
 
                     <!-- Withdraw Details -->
-                    <div class="container-fluid" style="display:{{ ($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' ' }};">
+                    <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="box box-secondary formBox">
@@ -228,8 +264,8 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row" style="display:{{ ($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' ' }};">
+                        <!-- comments on withdraw details -->
+                        <div class="row">
                             <div class="col-xs-12">
                                 <div class="box box-secondary formBox">
                                     <div class="box-header with-border">
@@ -244,21 +280,51 @@
                                             <div class="form-group row">
                                                 <label for="withdrawLeadComment" class="col-sm-2 form-label">Lead Comment on Withdraw </label>
                                                 <div class="col-sm-6">
-                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" style="display:{{ (Auth::user()->designation != 'Lead' ) ? 'none' : ' ' }};" required>{{ ($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '}}</textarea>
+                                                    @if(Auth::user()->designation == 'Lead' )
+                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required>{{ ($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '}}</textarea>
+                                                    @endif
+
                                                     @error('withdrawLeadComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
                                                     </span>
                                                     @enderror
-                                                    <p style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">{{ $emp_resignation->comment_dow_lead }}</p>
+
+                                                    @if(Auth::user()->designation != 'Lead' )
+                                                    <p>{{ $emp_resignation->comment_dow_lead }}</p>
+                                                    @endif
                                                 </div>
                                             </div>
-                                            <div class="form-group row" style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">
+
+                                            @if(Auth::user()->designation != 'Lead')
+                                            <div class="form-group row">
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
+                                                    @if (Auth::user()->designation == 'Head' ) 
                                                     <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required>{{ ($emp_resignation->comment_dow_head != NULL) ? $emp_resignation->comment_dow_head : ' '}}</textarea>
+                                                    @endif
                                                     @error('withdrawHeadComment')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+
+                                                    @if(Auth::user()->designation == 'HR' )
+                                                    <p>{{ $emp_resignation->comment_dow_head }}</p>
+                                                    @endif
+
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                            @if (Auth::user()->designation == 'HR' ) 
+                                            <div class="form-group row">
+                                                <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
+                                                <div class="col-sm-4">
+                                                    <textarea name="withdrawHrComment" id="withdrawHrComment" cols="30" rows="10" class="form-control" required>{{ ($emp_resignation->comment_dow_hr != NULL) ? $emp_resignation->comment_dow_hr : ' '}}</textarea>
+                                                    @error('withdrawHrComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -266,6 +332,8 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                            @endif
+
                                             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
                                         </div>
                                         <!-- /.box-body -->
@@ -276,14 +344,17 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 
                 </div>
                 <!-- /.tab-pane -->
+                @endif
 
+                @if($emp_resignation->date_of_withdraw == NULL )
                 <div class="tab-pane" id="tab_2-2">
                     <!-- Acceptance details -->
-                    <div class="container-fluid" style="display:{{ ($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' ' }};" >
+                    <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="box box-secondary">
@@ -336,6 +407,7 @@
 
                 </div>
                 <!-- /.tab-pane -->
+                @endif
                 <!-- <div class="tab-pane" id="tab_3-2">
 
                 

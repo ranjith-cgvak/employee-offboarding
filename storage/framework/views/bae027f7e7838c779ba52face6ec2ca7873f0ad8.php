@@ -7,4 +7,4 @@
         </a>
     </li>
     </ul>
-</section><?php /**PATH C:\Users\gowthamraj\Documents\employee-offboarding\resources\views/common/sidebar.blade.php ENDPATH**/ ?>
+</section><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/common/sidebar.blade.php ENDPATH**/ ?>
