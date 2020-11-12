@@ -22,7 +22,7 @@ class ProcessController extends Controller
         ->join('users', 'resignations.user_id', '=', 'users.id')
         ->get();
         }
-        else if(\Auth::User()->designation == "HR") {
+        else if(\Auth::User()->designation == "HR" || \Auth::User()->designation == "SA") {
             $emp_list = \DB::table('resignations')
             ->select('resignations.id','user_id','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
             ->join('users', 'resignations.user_id', '=', 'users.id')

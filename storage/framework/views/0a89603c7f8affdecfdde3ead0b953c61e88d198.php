@@ -124,7 +124,9 @@ unset($__errorArgs, $__bag); ?>
                 <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
                 <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
                 <?php endif; ?>
-                <!-- <li style="display:<?php echo e(($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' '); ?>;"><a href="#tab_3-2" data-toggle="tab">No Due</a></li> -->
+                <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
+                <li><a href="#tab_3-2" data-toggle="tab">No Due</a></li>
+                <?php endif; ?>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1-1">
@@ -168,8 +170,9 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
-
-                        <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
+                        
+                        <?php if(Auth::user()->designation != 'SA'): ?>
+                        <?php if($emp_resignation->date_of_withdraw == NULL): ?>
                         <!-- Comments on the resignation -->
                         <div class="row">
                             <div class="col-xs-12">
@@ -269,6 +272,7 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <!-- /.tab-pane -->
@@ -302,6 +306,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
+                        <?php if(Auth::user()->designation != 'SA'): ?>
                         <!-- comments on withdraw details -->
                         <div class="row">
                             <div class="col-xs-12">
@@ -404,6 +409,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
+                        <?php endif; ?>
                         
                     </div>
                 
@@ -427,34 +433,39 @@ unset($__errorArgs, $__bag); ?>
                                             <thead>
                                                 <th></th>
                                                 <th>Resignation Details</th>
+                                                <?php if(Auth::user()->designation != 'SA'): ?>
                                                 <th title="General Comment">Comment</th>
                                                 <th>Date of leaving</th>
                                                 <th title="Comment on date of leaving">Comment DOL</th>
-                                                
+                                                <?php endif; ?>
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <td>Lead</td>
                                                     <td class="<?php echo e(($emp_resignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_lead == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                                                    <?php if(Auth::user()->designation != 'SA'): ?>
                                                     <td><?php echo e($emp_resignation->comment_lead); ?></td>
                                                     <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $emp_resignation->changed_dol : ' '); ?></td>
                                                     <td><?php echo e($emp_resignation->comment_dol_lead); ?></td>
-                                                   
+                                                    <?php endif; ?>
                                                 </tr>
                                                 <tr>
                                                     <td>Department Head / Unit Head</td>
                                                     <td class="<?php echo e(($emp_resignation->comment_head == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_head == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                                                    <?php if(Auth::user()->designation != 'SA'): ?>
                                                     <td><?php echo e($emp_resignation->comment_head); ?></td>
                                                     <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $emp_resignation->changed_dol : ' '); ?></td>
                                                     <td><?php echo e($emp_resignation->comment_dol_head); ?></td>
-                                                    
+                                                    <?php endif; ?>
                                                 </tr>
                                                 <tr>
                                                     <td>HR</td>
                                                     <td class="<?php echo e(($emp_resignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_hr == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                                                    <?php if(Auth::user()->designation != 'SA'): ?>
                                                     <td><?php echo e($emp_resignation->comment_hr); ?></td>
                                                     <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $emp_resignation->changed_dol : ' '); ?></td>
                                                     <td><?php echo e($emp_resignation->comment_dol_hr); ?></td>
+                                                    <?php endif; ?>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -468,11 +479,39 @@ unset($__errorArgs, $__bag); ?>
                 </div>
                 <!-- /.tab-pane -->
                 <?php endif; ?>
-                <!-- <div class="tab-pane" id="tab_3-2">
-
+                <div class="tab-pane" id="tab_3-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-secondary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">No Due</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <th>Attributes</th>
+                                                <th>Comments</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Official Email Account</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Skype Account</td>
+                                                    <td></td> 
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 
-                
-                </div> -->
+                </div>
                 <!-- /.tab-pane -->
             </div>
             <!-- /.tab-content -->

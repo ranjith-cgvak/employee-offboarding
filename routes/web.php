@@ -19,6 +19,10 @@ Route::get('/', function () {
 Route::get('/welcome', function () {
     return view('welcome');
 });
+
+Route::get('/progress', function () {
+    return view('resignation.progress');
+}); 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

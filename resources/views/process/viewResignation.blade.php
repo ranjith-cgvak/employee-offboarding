@@ -108,7 +108,9 @@
                 @if($emp_resignation->date_of_withdraw == NULL )
                 <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
                 @endif
-                <!-- <li style="display:{{ ($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' ' }};"><a href="#tab_3-2" data-toggle="tab">No Due</a></li> -->
+                @if($emp_resignation->date_of_withdraw == NULL )
+                <li><a href="#tab_3-2" data-toggle="tab">No Due</a></li>
+                @endif
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1-1">
@@ -152,8 +154,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        @if($emp_resignation->date_of_withdraw == NULL )
+                        
+                        @if(Auth::user()->designation != 'SA')
+                        @if($emp_resignation->date_of_withdraw == NULL)
                         <!-- Comments on the resignation -->
                         <div class="row">
                             <div class="col-xs-12">
@@ -231,6 +234,7 @@
                             </div>
                         </div>
                         @endif
+                        @endif
                     </div>
                 </div>
                 <!-- /.tab-pane -->
@@ -264,6 +268,7 @@
                                 </div>
                             </div>
                         </div>
+                        @if(Auth::user()->designation != 'SA')
                         <!-- comments on withdraw details -->
                         <div class="row">
                             <div class="col-xs-12">
@@ -344,6 +349,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                         
                     </div>
                 
@@ -367,34 +373,39 @@
                                             <thead>
                                                 <th></th>
                                                 <th>Resignation Details</th>
+                                                @if(Auth::user()->designation != 'SA')
                                                 <th title="General Comment">Comment</th>
                                                 <th>Date of leaving</th>
                                                 <th title="Comment on date of leaving">Comment DOL</th>
-                                                
+                                                @endif
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <td>Lead</td>
                                                     <td class="{{ ($emp_resignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_lead == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    @if(Auth::user()->designation != 'SA')
                                                     <td>{{ $emp_resignation->comment_lead }}</td>
                                                     <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $emp_resignation->changed_dol : ' ' }}</td>
                                                     <td>{{ $emp_resignation->comment_dol_lead }}</td>
-                                                   
+                                                    @endif
                                                 </tr>
                                                 <tr>
                                                     <td>Department Head / Unit Head</td>
                                                     <td class="{{ ($emp_resignation->comment_head == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_head == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    @if(Auth::user()->designation != 'SA')
                                                     <td>{{ $emp_resignation->comment_head }}</td>
                                                     <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $emp_resignation->changed_dol : ' ' }}</td>
                                                     <td>{{ $emp_resignation->comment_dol_head }}</td>
-                                                    
+                                                    @endif
                                                 </tr>
                                                 <tr>
                                                     <td>HR</td>
                                                     <td class="{{ ($emp_resignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_hr == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    @if(Auth::user()->designation != 'SA')
                                                     <td>{{ $emp_resignation->comment_hr }}</td>
                                                     <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $emp_resignation->changed_dol : ' ' }}</td>
                                                     <td>{{ $emp_resignation->comment_dol_hr }}</td>
+                                                    @endif
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -408,11 +419,39 @@
                 </div>
                 <!-- /.tab-pane -->
                 @endif
-                <!-- <div class="tab-pane" id="tab_3-2">
-
+                <div class="tab-pane" id="tab_3-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-secondary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">No Due</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <th>Attributes</th>
+                                                <th>Comments</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Official Email Account</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Skype Account</td>
+                                                    <td></td> 
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 
-                
-                </div> -->
+                </div>
                 <!-- /.tab-pane -->
             </div>
             <!-- /.tab-content -->
