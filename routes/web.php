@@ -27,7 +27,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('resignation', 'ResignationController');
-
+Route::resource('questions','QuestionsController');
 Route::get('updateDol' , 'ProcessController@updateDol')->name('updateDol');
 Route::get('updateResignationComment' , 'ProcessController@updateResignationComment')->name('updateResignationComment');
 Route::get('updateDowComment' , 'ProcessController@updateDowComment')->name('updateDowComment');

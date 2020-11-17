@@ -496,15 +496,38 @@ unset($__errorArgs, $__bag); ?>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>Official Email Account</td>
-                                                    <td></td>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox"> Official Email Account
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <textarea name="commentMailAccount" class="form-control" id="commentMailAccount" cols="30" rows="3"></textarea>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Skype Account</td>
-                                                    <td></td> 
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox"> Skype Account
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <textarea name="commentSkypeAccount" class="form-control" id="commentSkypeAccount" cols="30" rows="3"></textarea>
+                                                        </div>
+                                                    </td> 
                                                 </tr>
                                             </tbody>
                                         </table>
+                                    </div>
+                                    <div class="box-footer">
+                                        <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                     </div>
                                 </div>
                             </div>
