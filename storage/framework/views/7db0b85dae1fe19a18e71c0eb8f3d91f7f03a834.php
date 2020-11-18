@@ -2,6 +2,13 @@
 
 <?php $__env->startSection('content'); ?>
 
+<?php if(session()->get('success')): ?>
+<div class="alert alert-success">
+<?php echo e(session()->get('success')); ?>
+
+</div>
+<?php endif; ?>
+
 <!-- Employee details -->
 <div class="container-fluid">
     <div class="box box-primary box-body">
@@ -29,12 +36,7 @@
         </div>
     </div>
 </div>
-<?php if(session()->get('success')): ?>
-<div class="alert alert-success">
-<?php echo e(session()->get('success')); ?>
 
-</div>
-<?php endif; ?>
 <!-- Leaving form -->
 <div class="container-fluid">
     <div class="row">
@@ -51,8 +53,30 @@
                         <div class="form-group row">
                             <label for="reason" class="col-sm-2 form-label">Reason For Leaving <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
-                                <textarea name="reason" id="reason" class="form-control" cols="20" rows="10" required></textarea>
+                                <select name="reason" id="reason" class="form-control">
+                                <option value="">Select</option>
+                                <option value="Health reason">Health reason</option>
+                                </select>
                                 <?php $__errorArgs = ['reason'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <br>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                </span>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="comment_on_resignation" class="col-sm-2 form-label">Comments <span class="text-danger">*</span></label>
+                            <div class="col-sm-6">
+                                <textarea name="comment_on_resignation" id="comment_on_resignation" class="form-control" cols="20" rows="10" required></textarea>
+                                <?php $__errorArgs = ['comments'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }

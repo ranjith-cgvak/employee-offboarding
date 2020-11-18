@@ -22,7 +22,31 @@ class ResignationController extends Controller
         ])
         ->first();
         $user = \DB::table('users')->where('id',$userId)->first();
-        return view('resignation.index', compact('myResignation','user'));
+        return view('resignation.resignationDetails', compact('myResignation','user'));
+    }
+
+    public function showAcceptanceStatus() {
+        $userId = auth()->id();
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['user_id', '=', $userId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
+        $user = \DB::table('users')->where('id',$userId)->first();
+        return view('resignation.acceptanceStatus', compact('myResignation','user'));
+    }
+
+    public function showWithdrawForm() {
+        $userId = auth()->id();
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['user_id', '=', $userId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
+        $user = \DB::table('users')->where('id',$userId)->first();
+        return view('resignation.withdrawForm', compact('myResignation','user'));
     }
 
     /**
@@ -53,7 +77,8 @@ class ResignationController extends Controller
         $dateofleaving = date("Y-m-d",strtotime($request->get('dateOfLeaving')));
         $resignation = new resignation([
             'reason' => $request->get('reason'),
-            'date_of_resignation' => $request->get('dateOfResignation')
+            'date_of_resignation' => $request->get('dateOfResignation'),
+            'comment_on_resignation' => $request->get('comment_on_resignation')
         ]);
         $resignation->user_id = $userId;
         $resignation->date_of_leaving = $dateofleaving;

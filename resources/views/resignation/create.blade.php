@@ -2,6 +2,12 @@
 
 @section('content')
 
+@if(session()->get('success'))
+<div class="alert alert-success">
+{{ session()->get('success') }}
+</div>
+@endif
+
 <!-- Employee details -->
 <div class="container-fluid">
     <div class="box box-primary box-body">
@@ -29,11 +35,7 @@
         </div>
     </div>
 </div>
-@if(session()->get('success'))
-<div class="alert alert-success">
-{{ session()->get('success') }}
-</div>
-@endif
+
 <!-- Leaving form -->
 <div class="container-fluid">
     <div class="row">
@@ -50,8 +52,23 @@
                         <div class="form-group row">
                             <label for="reason" class="col-sm-2 form-label">Reason For Leaving <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
-                                <textarea name="reason" id="reason" class="form-control" cols="20" rows="10" required></textarea>
+                                <select name="reason" id="reason" class="form-control">
+                                <option value="">Select</option>
+                                <option value="Health reason">Health reason</option>
+                                </select>
                                 @error('reason')
+                                <br>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong class="text-danger">{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="comment_on_resignation" class="col-sm-2 form-label">Comments <span class="text-danger">*</span></label>
+                            <div class="col-sm-6">
+                                <textarea name="comment_on_resignation" id="comment_on_resignation" class="form-control" cols="20" rows="10" required></textarea>
+                                @error('comments')
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger">{{ $message }}</strong>

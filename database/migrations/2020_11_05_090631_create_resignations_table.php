@@ -17,7 +17,9 @@ class CreateResignationsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->text('reason');
+            $table->string('reason');
+            $table->string('other_reason')->nullable();
+            $table->text('comment_on_resignation');
             $table->date('date_of_resignation');
             $table->date('date_of_leaving');
             $table->date('date_of_withdraw')->nullable();
