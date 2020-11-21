@@ -51,12 +51,26 @@
                     <div class="box-body">
                         <div class="form-group row">
                             <label for="reason" class="col-sm-2 form-label">Reason For Leaving <span class="text-danger">*</span></label>
+                            
                             <div class="col-sm-6">
-                                <select name="reason" id="reason" class="form-control">
+                                <select name="reason" id="reason" class="form-control" onchange='CheckOthers(this.value)'>
                                 <option value="">Select</option>
                                 <option value="Health reason">Health reason</option>
+                                <option value="others">Others</option>
                                 </select>
                                 @error('reason')
+                                <br>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong class="text-danger">{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group row" id="othersDiv"  style='display:none;'>
+                            <label for="others" class="col-sm-2 form-label">Mention the reason  <span class="text-danger">*</span></label>
+                            <div class="col-sm-6">
+                                <input type="text" name="others"  class="form-control">
+                                @error('others')
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger">{{ $message }}</strong>
@@ -111,5 +125,15 @@
     </div>
 </div>
 
+<!-- others option on drop down -->
+<script>
+function CheckOthers(val){
+    var element=document.getElementById('othersDiv');
+    if(val=='others')
+    element.style.display='block';
+    else  
+        element.style.display='none';
+    }
+</script>
 
 @endsection

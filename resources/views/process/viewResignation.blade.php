@@ -131,6 +131,14 @@
                                                 <p>{{ $emp_resignation->reason }}</p>
                                             </div>
                                         </div>
+                                        @if($emp_resignation->other_reason != NULL)
+                                        <div class="form-group row">
+                                            <label for="reason" class="col-sm-2 form-label">Other Reasons </label>
+                                            <div class="col-sm-6">
+                                                <p>{{ $emp_resignation->other_reason }}</p>
+                                            </div>
+                                        </div>
+                                        @endif
                                         <div class="form-group row">
                                             <label for="dateOfResignation" class="col-sm-2 form-label">Date Of Resignation</label>
                                             <div class="col-sm-4">

@@ -58,7 +58,14 @@ class ResignationController extends Controller
     {
         $userId = auth()->id();
         $user = \DB::table('users')->where('id',$userId)->first();
-        return view('resignation.create', compact('user'));
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['user_id', '=', $userId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
+        $user = \DB::table('users')->where('id',$userId)->first();
+        return view('resignation.create', compact('myResignation','user'));
     }
 
     /**
@@ -72,7 +79,6 @@ class ResignationController extends Controller
         $request->validate([
             'reason'=>'required'
         ]);
-
         $userId = auth()->id();
         $dateofleaving = date("Y-m-d",strtotime($request->get('dateOfLeaving')));
         $resignation = new resignation([
@@ -80,6 +86,9 @@ class ResignationController extends Controller
             'date_of_resignation' => $request->get('dateOfResignation'),
             'comment_on_resignation' => $request->get('comment_on_resignation')
         ]);
+        if($request->get('others') != NULL ) {
+            $resignation->other_reason = $request->get('others');
+        } 
         $resignation->user_id = $userId;
         $resignation->date_of_leaving = $dateofleaving;
         $resignation->save();

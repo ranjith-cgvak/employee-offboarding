@@ -7,18 +7,18 @@
         </a>
     </li>
     <?php if(Auth::user()->designation == 'Software Engineer'): ?>
-    <li>
-        <a href="<?php echo e(route('resignation.index')); ?>">
+    <li data-toggle="tooltip" data-placement="right" <?php if(!$myResignation): ?> title= 'Apply resignation to enable' <?php endif; ?> >
+        <a class="<?php echo e(($myResignation == NULL) ? 'isDisabled' : ' '); ?>" href="<?php echo e(route('resignation.index')); ?>">
         <i class="fa fa-list-alt"></i> <span>My Resignation</span>
         </a>
     </li>
-    <li>
-        <a href="<?php echo e(route('acceptanceStatus')); ?>">
-        <i class="fa fa-tasks"></i> <span>Acceptance Details</span>
+    <li data-toggle="tooltip" data-placement="right" <?php if(!$myResignation): ?> title= 'Apply resignation to enable' <?php endif; ?>>
+        <a class="<?php echo e(($myResignation == NULL) ? 'isDisabled' : ' '); ?>" href="<?php echo e(route('acceptanceStatus')); ?>">
+        <i class="fa fa-check-square-o"></i> <span>Acceptance Details</span>
         </a>
     </li>
-    <li>
-        <a href="<?php echo e(route('withdrawForm')); ?>">
+    <li data-toggle="tooltip" data-placement="right" <?php if(!$myResignation): ?> title= 'Apply resignation to enable' <?php endif; ?>>
+        <a class="<?php echo e(($myResignation == NULL) ? 'isDisabled' : ' '); ?>" href="<?php echo e(route('withdrawForm')); ?>">
         <i class="fa fa-file-text-o"></i> <span>Withdraw Form</span>
         </a>
     </li>

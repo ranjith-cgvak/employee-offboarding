@@ -52,12 +52,33 @@
                     <div class="box-body">
                         <div class="form-group row">
                             <label for="reason" class="col-sm-2 form-label">Reason For Leaving <span class="text-danger">*</span></label>
+                            
                             <div class="col-sm-6">
-                                <select name="reason" id="reason" class="form-control">
+                                <select name="reason" id="reason" class="form-control" onchange='CheckOthers(this.value)'>
                                 <option value="">Select</option>
                                 <option value="Health reason">Health reason</option>
+                                <option value="others">Others</option>
                                 </select>
                                 <?php $__errorArgs = ['reason'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <br>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                </span>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="othersDiv"  style='display:none;'>
+                            <label for="others" class="col-sm-2 form-label">Mention the reason  <span class="text-danger">*</span></label>
+                            <div class="col-sm-6">
+                                <input type="text" name="others"  class="form-control">
+                                <?php $__errorArgs = ['others'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -140,6 +161,16 @@ unset($__errorArgs, $__bag); ?>
     </div>
 </div>
 
+<!-- others option on drop down -->
+<script>
+function CheckOthers(val){
+    var element=document.getElementById('othersDiv');
+    if(val=='others')
+    element.style.display='block';
+    else  
+        element.style.display='none';
+    }
+</script>
 
 <?php $__env->stopSection(); ?>
 

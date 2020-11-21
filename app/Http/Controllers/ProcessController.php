@@ -83,7 +83,7 @@ class ProcessController extends Controller
     public function edit($id)
     {
         $emp_resignation = \DB::table('resignations')
-        ->select('resignations.id','user_id','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','users.created_at','reason','comment','comment_head','comment_dol_head','comment_lead','comment_dol_lead','comment_hr','comment_dol_hr','comment_dow_lead','comment_dow_head','comment_dow_hr','changed_dol')
+        ->select('resignations.id','user_id','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','users.created_at','reason','comment','comment_head','comment_dol_head','comment_lead','comment_dol_lead','comment_hr','comment_dol_hr','comment_dow_lead','comment_dow_head','comment_dow_hr','changed_dol','other_reason')
         ->join('users', 'resignations.user_id', '=', 'users.id')
         ->where('resignations.id',$id)
         ->first();
