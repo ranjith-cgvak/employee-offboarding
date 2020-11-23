@@ -107,9 +107,8 @@
                 @endif
                 @if($emp_resignation->date_of_withdraw == NULL )
                 <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
-                @endif
-                @if($emp_resignation->date_of_withdraw == NULL )
                 <li><a href="#tab_3-2" data-toggle="tab">No Due</a></li>
+                <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
                 @endif
             </ul>
             <div class="tab-content">
@@ -484,6 +483,148 @@
                 
                 </div>
                 <!-- /.tab-pane -->
+
+                <!-- Feedback form -->
+                <div class="tab-pane" id="tab_4-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form method="get" action="{{ route('storeFeedback') }}">
+                                    <div class="box box-secondary">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">Feedback</h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <td>    
+                                                        <h3 class="text-center">Present Skill Set</h3>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="primary_skill" id="primary_skill" placeholder="Primary" class="form-control">
+                                                        <input type="text" name="secondary_skill" id="secondary_skill" placeholder="Secondary" class="form-control">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            </br>
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-5">
+                                                                <h3 class="text-center">Last Worked Project</h3>
+                                                            </div>
+                                                            <div class="col-sm-7">
+                                                                <br>
+                                                                <input type="text" name="last_worked_project" id="last_worked_project" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            </table>
+                                            </br>
+                                            <table class="table table-borderless">
+                                                <thead>
+                                                    <th><h3>Attributes</h3></th>
+                                                    <th><h3>Ratings</h3></th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label for="attendance" class="form-label">Attendance</label></td>
+                                                        <td>
+                                                            <select name="attendance" id="attendance" class="form-control">
+                                                                <option value="">Select</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="reponsiveness" class="form-label">Reponsiveness</label></td>
+                                                        <td>
+                                                            <select name="reponsiveness" id="reponsiveness" class="form-control">
+                                                                <option value="">Select</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="reponsibility" class="form-label">Reponsibility</label></td>
+                                                        <td>
+                                                            <select name="reponsibility" id="reponsibility" class="form-control">
+                                                                <option value="">Select</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery</label></td>
+                                                        <td>
+                                                            <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control">
+                                                                <option value="">Select</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="technical_knowledge" class="form-label">Technical Knowledge</label></td>
+                                                        <td>
+                                                            <select name="technical_knowledge" id="technical_knowledge" class="form-control">
+                                                                <option value="">Select</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="logical_ablitiy" class="form-label">Logical Ability</label></td>
+                                                        <td>
+                                                            <select name="logical_ablitiy" id="logical_ablitiy" class="form-control">
+                                                                <option value="">Select</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="attitude" class="form-label">Attitude</label></td>
+                                                        <td>
+                                                            <select name="attitude" id="attitude" class="form-control">
+                                                                <option value="">Select</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software</label></td>
+                                                        <td>
+                                                            <select name="overall_performance" id="overall_performance" class="form-control">
+                                                                <option value="">Select</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            
+                                            </br>
+                                            <div class="form-group">
+                                                <label for="feedback_comments" class="form-label">Comments</label>
+                                                <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control"></textarea>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-xs-12">
+                                                    <label class="form-label">Thankyou for your valuable feedback</label>
+                                                </div>
+                                                <div class="col-xs-2">
+                                                    <input type="date" name="date_of_feedback" id="date_of_feedback" class="form-control">
+                                                </div>
+                                                
+                                            </div>
+                                            <input type="hidden" name="user_id" value="{{ $emp_resignation->user_id }}">  
+                                        </div>
+                                        <div class="box-footer">
+                                            <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <!-- /.tab-pane -->
+
             </div>
             <!-- /.tab-content -->
             </div>

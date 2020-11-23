@@ -179,6 +179,10 @@ class ProcessController extends Controller
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
 
+    public function storeFeedback(Request $request) {
+        dd($request->all());
+    }
+
     /**
      * Remove the specified resource from storage.
      *

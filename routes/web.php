@@ -31,6 +31,7 @@ Route::resource('questions','QuestionsController');
 Route::get('updateDol' , 'ProcessController@updateDol')->name('updateDol');
 Route::get('updateResignationComment' , 'ProcessController@updateResignationComment')->name('updateResignationComment');
 Route::get('updateDowComment' , 'ProcessController@updateDowComment')->name('updateDowComment');
+Route::get('storeFeedback' , 'ProcessController@storeFeedback')->name('storeFeedback');
 Route::get('resignationDetails','ResignationController@index')->name('resignationDetails');
 Route::get('acceptanceStatus','ResignationController@showAcceptanceStatus')->name('acceptanceStatus');
 Route::get('withdrawForm','ResignationController@showWithdrawForm')->name('withdrawForm');
