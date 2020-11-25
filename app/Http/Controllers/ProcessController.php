@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Resignation;
 use App\User;
+use App\Feedback;
 use App\Support\Facades\DB;
 
 class ProcessController extends Controller
@@ -87,7 +88,11 @@ class ProcessController extends Controller
         ->join('users', 'resignations.user_id', '=', 'users.id')
         ->where('resignations.id',$id)
         ->first();
-        return view('process.viewResignation' , compact('emp_resignation'));
+        $commenterId = auth()->id();
+        $isFeedback = \DB::table('feedback')
+        ->where('commenter_id',$commenterId)
+        ->first();
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback'));
     }
 
     /**
@@ -180,7 +185,42 @@ class ProcessController extends Controller
     }
 
     public function storeFeedback(Request $request) {
-        dd($request->all());
+        $request->validate([
+            'primary_skill'=>'required',
+            'secondary_skill'=>'required',
+            'last_worked_project'=>'required',
+            'attendance'=>'required',
+            'reponsiveness'=>'required',
+            'reponsibility'=>'required',
+            'commit_on_task_delivery'=>'required',
+            'technical_knowledge'=>'required',
+            'logical_ablitiy'=>'required',
+            'attitude'=>'required',
+            'overall_performance'=>'required',
+            'feedback_comments'=>'required'
+        ]);
+        $resignationId = $request->get('resignationId');
+        $commenterId = auth()->id();
+        $feedbackDate = date("Y-m-d",strtotime($request->get('date_of_feedback')));
+        $feedback = new feedback([
+            'emp_id' => $request->get('user_id'),
+            'skill_set_primary' => $request->get('primary_skill'),
+            'skill_set_secondary' => $request->get('secondary_skill'),
+            'last_worked_project' => $request->get('last_worked_project'),
+            'attendance_rating' => $request->get('attendance'),
+            'responsiveness_rating' => $request->get('reponsiveness'),
+            'responsibility_rating' => $request->get('reponsibility'),
+            'commitment_on_task_delivery_rating' => $request->get('commit_on_task_delivery'),
+            'technical_knowledge_rating' => $request->get('technical_knowledge'),
+            'logical_ability_rating' => $request->get('logical_ablitiy'),
+            'attitude_rating' => $request->get('attitude'),
+            'overall_rating' => $request->get('overall_performance'),
+            'comments' => $request->get('feedback_comments')
+        ]);
+        $feedback->feedback_date = $feedbackDate;
+        $feedback->commenter_id = $commenterId;
+        $feedback->save();
+        return redirect()->route('process.edit', ['process' => $resignationId]);
     }
 
     /**
