@@ -32,7 +32,7 @@
                 <p><b>Department: </b>IT</p>
             </div>
             <div class="col-xs-4">
-                <p><b>Lead: </b><?php echo e(($user->lead == NULL) ? 'Not Assigned' : $user->lead); ?></p>
+                <p><b>Lead: </b><?php echo e(($user->lead_id == NULL) ? 'Not Assigned' : $user->lead); ?></p>
             </div>
         </div>
     </div>

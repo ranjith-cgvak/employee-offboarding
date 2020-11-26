@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Feedback extends Model
 {
     protected $fillable = [
-        'emp_id',
-        'commenter_id',
+        'resignation_id',
         'skill_set_primary',
         'skill_set_secondary',
         'last_worked_project',
@@ -20,7 +19,8 @@ class Feedback extends Model
         'logical_ability_rating',
         'attitude_rating',
         'overall_rating',
-        'comments',
+        'lead_comment',
+        'head_comment',
         'feedback_date'   
     ];
 }

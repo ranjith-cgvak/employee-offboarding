@@ -40,6 +40,7 @@ class ProcessController extends Controller
         $lead_list = \DB::table('users')
         ->where('designation','Lead')
         ->get();
+        
         return view('process.resignationList', compact('emp_list','lead_list'));
     }
 
@@ -89,10 +90,13 @@ class ProcessController extends Controller
         ->where('resignations.id',$id)
         ->first();
         $commenterId = auth()->id();
-        $isFeedback = \DB::table('feedback')
-        ->where('commenter_id',$commenterId)
+        $loggedUser = \DB::table('users')
+        ->where('id',$commenterId)
         ->first();
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback'));
+        $feedback = \DB::table('feedback')
+        ->where('feedback.resignation_id',$id)
+        ->first();
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','loggedUser','feedback'));
     }
 
     /**
@@ -200,10 +204,9 @@ class ProcessController extends Controller
             'feedback_comments'=>'required'
         ]);
         $resignationId = $request->get('resignationId');
-        $commenterId = auth()->id();
         $feedbackDate = date("Y-m-d",strtotime($request->get('date_of_feedback')));
         $feedback = new feedback([
-            'emp_id' => $request->get('user_id'),
+            'resignation_id' => $request->get('resignationId'),
             'skill_set_primary' => $request->get('primary_skill'),
             'skill_set_secondary' => $request->get('secondary_skill'),
             'last_worked_project' => $request->get('last_worked_project'),
@@ -214,15 +217,21 @@ class ProcessController extends Controller
             'technical_knowledge_rating' => $request->get('technical_knowledge'),
             'logical_ability_rating' => $request->get('logical_ablitiy'),
             'attitude_rating' => $request->get('attitude'),
-            'overall_rating' => $request->get('overall_performance'),
-            'comments' => $request->get('feedback_comments')
+            'overall_rating' => $request->get('overall_performance')
         ]);
+        if(\Auth::User()->designation == "Head") {
+            $feedback->head_comment = $request->get('feedback_comments');
+        }
+        else {
+            $feedback->lead_comment = $request->get('feedback_comments');
+        }
         $feedback->feedback_date = $feedbackDate;
-        $feedback->commenter_id = $commenterId;
         $feedback->save();
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
-
+    public function updateFeedback(Request $request) {
+        dd('update method');
+    }
     /**
      * Remove the specified resource from storage.
      *
