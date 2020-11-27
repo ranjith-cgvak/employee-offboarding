@@ -230,7 +230,45 @@ class ProcessController extends Controller
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
     public function updateFeedback(Request $request) {
-        dd('update method');
+        $request->validate([
+            'primary_skill'=>'required',
+            'secondary_skill'=>'required',
+            'last_worked_project'=>'required',
+            'attendance'=>'required',
+            'reponsiveness'=>'required',
+            'reponsibility'=>'required',
+            'commit_on_task_delivery'=>'required',
+            'technical_knowledge'=>'required',
+            'logical_ablitiy'=>'required',
+            'attitude'=>'required',
+            'overall_performance'=>'required',
+            'feedback_comments'=>'required'
+        ]);
+        $feedbackId = $request->get('feedbackId');
+        $resignationId = $request->get('resignationId');
+        $feedbackDate = date("Y-m-d",strtotime($request->get('date_of_feedback')));
+        $updateFeedback = Feedback::find($feedbackId);
+        $updateFeedback->skill_set_primary =  $request->get('primary_skill');
+        $updateFeedback->skill_set_secondary = $request->get('secondary_skill');
+        $updateFeedback->last_worked_project = $request->get('last_worked_project');
+        $updateFeedback->attendance_rating = $request->get('attendance');
+        $updateFeedback->responsiveness_rating = $request->get('reponsiveness');
+        $updateFeedback->responsibility_rating = $request->get('reponsibility');
+        $updateFeedback->commitment_on_task_delivery_rating = $request->get('commit_on_task_delivery');
+        $updateFeedback->technical_knowledge_rating = $request->get('technical_knowledge');
+        $updateFeedback->logical_ability_rating = $request->get('logical_ablitiy');
+        $updateFeedback->attitude_rating = $request->get('attitude');
+        $updateFeedback->overall_rating = $request->get('overall_performance');
+        $updateFeedback->feedback_date = $feedbackDate;
+
+        if(\Auth::User()->designation == "Head") {
+            $updateFeedback->head_comment = $request->get('feedback_comments');
+        }
+        else {
+            $updateFeedback->lead_comment = $request->get('feedback_comments');
+        }
+        $updateFeedback->save();
+        return redirect()->route('process.edit', ['process' => $resignationId]);
     }
     /**
      * Remove the specified resource from storage.

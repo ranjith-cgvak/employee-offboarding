@@ -559,49 +559,12 @@ unset($__errorArgs, $__bag); ?>
                                                 <tr>
                                                 <td rowspan="2"><h3 class="text-center">Present Skill Set</h3></td>
                                                 <td><label for="primary_skill" class="form-label">Primary</label></td></td>
-                                                <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_primary); ?>" required>
-                                                    <?php $__errorArgs = ['primary_skill'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                    <br>
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                    </span>
-                                                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                </td>
-                                                </tr>
-                                                <tr>
-                                                <td><label for="secondary_skill" class="form-label">Secondary</label</td>
-                                                <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?>" required>       
-                                                    <?php $__errorArgs = ['secondary_skill'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                    <br>
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                    </span>
-                                                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                </td>
-                                                </tr>
-
-                                                <tr>
-                                                <td><h3 class="text-center">Last worked project</h3></td>
-                                                    <td>
-                                                    <label for="last_worked_project" class="form-label">Project Name:</label</td>
-                                                    </td>
-                                                    <td colspan="2">
-                                                        <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->last_worked_project); ?>" required>
-                                                        <?php $__errorArgs = ['last_worked_project'];
+                                                <?php if(Auth::user()->designation == 'HR'): ?>
+                                                    <td><?php echo e((!$feedback) ? '' : $feedback->skill_set_primary); ?></td>
+                                                <?php endif; ?>
+                                                <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                    <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_primary); ?>" required>
+                                                        <?php $__errorArgs = ['primary_skill'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -615,6 +578,59 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                                     </td>
+                                                <?php endif; ?>
+                                                </tr>
+                                                <tr>
+                                                <td><label for="secondary_skill" class="form-label">Secondary</label</td>
+                                                <?php if(Auth::user()->designation == 'HR'): ?>
+                                                    <td><?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?></td>
+                                                <?php endif; ?>
+                                                <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?>" required>       
+                                                        <?php $__errorArgs = ['secondary_skill'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                        </span>
+                                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                    </td>
+                                                <?php endif; ?>
+                                                </tr>
+
+                                                <tr>
+                                                <td><h3 class="text-center">Last worked project</h3></td>
+                                                    <td>
+                                                    <label for="last_worked_project" class="form-label">Project Name:</label</td>
+                                                    </td>
+                                                    <?php if(Auth::user()->designation == 'HR'): ?>
+                                                        <td><?php echo e((!$feedback) ? '' : $feedback->last_worked_project); ?></td>
+                                                    <?php endif; ?>
+                                                    <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                        <td colspan="2">
+                                                            <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->last_worked_project); ?>" required>
+                                                            <?php $__errorArgs = ['last_worked_project'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                            <br>
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                            </span>
+                                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                        </td>
+                                                    <?php endif; ?>
+                                                    
                                                 </tr>
 
                                             </table>
@@ -631,240 +647,297 @@ unset($__errorArgs, $__bag); ?>
                                                 <tbody>
                                                     <tr>
                                                         <td><label for="attendance" class="form-label">Attendance</label></td>
-                                                        <td>
-                                                            <select name="attendance" id="attendance" class="form-control" required>
-                                                                <option value="<?php echo e((!$feedback) ? '' : $feedback->attendance_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attendance_rating); ?></option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            <?php $__errorArgs = ['attendance'];
+                                                        <?php if(Auth::user()->designation == 'HR'): ?>
+                                                            <td><?php echo e((!$feedback) ? '' : $feedback->attendance_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                            <td>
+                                                                <select name="attendance" id="attendance" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attendance_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attendance_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['attendance'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                            </span>
-                                                            <?php unset($message);
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                        </td>
+                                                            </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsiveness" class="form-label">Reponsiveness</label></td>
-                                                        <td>
-                                                            <select name="reponsiveness" id="reponsiveness" class="form-control" required>
-                                                                <option value="<?php echo e((!$feedback) ? '' : $feedback->responsiveness_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsiveness_rating); ?></option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            <?php $__errorArgs = ['reponsiveness'];
+                                                        <?php if(Auth::user()->designation == 'HR'): ?>
+                                                            <td><?php echo e((!$feedback) ? '' : $feedback->responsiveness_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                            <td>
+                                                                <select name="reponsiveness" id="reponsiveness" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsiveness_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsiveness_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['reponsiveness'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                            </span>
-                                                            <?php unset($message);
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                        </td>
+                                                            </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsibility" class="form-label">Reponsibility</label></td>
-                                                        <td>
-                                                            <select name="reponsibility" id="reponsibility" class="form-control" required>
-                                                                <option value="<?php echo e((!$feedback) ? '' : $feedback->responsibility_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsibility_rating); ?></option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            <?php $__errorArgs = ['reponsibility'];
+                                                        <?php if(Auth::user()->designation == 'HR'): ?>
+                                                            <td><?php echo e((!$feedback) ? '' : $feedback->responsibility_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                            <td>
+                                                                <select name="reponsibility" id="reponsibility" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsibility_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsibility_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['reponsibility'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                            </span>
-                                                            <?php unset($message);
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                        </td>
+                                                            </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery</label></td>
-                                                        <td>
-                                                            <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control" required>
-                                                                <option value="<?php echo e((!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating); ?></option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            <?php $__errorArgs = ['commit_on_task_delivery'];
+                                                        <?php if(Auth::user()->designation == 'HR'): ?>
+                                                            <td><?php echo e((!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                            <td>
+                                                                <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['commit_on_task_delivery'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                            </span>
-                                                            <?php unset($message);
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                        </td>
+                                                            </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="technical_knowledge" class="form-label">Technical Knowledge</label></td>
-                                                        <td>
-                                                            <select name="technical_knowledge" id="technical_knowledge" class="form-control" required>
-                                                                <option value="<?php echo e((!$feedback) ? '' : $feedback->technical_knowledge_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->technical_knowledge_rating); ?></option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            <?php $__errorArgs = ['technical_knowledge'];
+                                                        <?php if(Auth::user()->designation == 'HR'): ?>
+                                                            <td><?php echo e((!$feedback) ? '' : $feedback->technical_knowledge_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                            <td>
+                                                                <select name="technical_knowledge" id="technical_knowledge" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->technical_knowledge_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->technical_knowledge_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['technical_knowledge'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                            </span>
-                                                            <?php unset($message);
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                        </td>
+                                                            </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="logical_ablitiy" class="form-label">Logical Ability</label></td>
-                                                        <td>
-                                                            <select name="logical_ablitiy" id="logical_ablitiy" class="form-control" required>
-                                                                <option value="<?php echo e((!$feedback) ? '' : $feedback->logical_ability_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->logical_ability_rating); ?></option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            <?php $__errorArgs = ['logical_ablitiy'];
+                                                        <?php if(Auth::user()->designation == 'HR'): ?>
+                                                            <td><?php echo e((!$feedback) ? '' : $feedback->logical_ability_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                            <td>
+                                                                <select name="logical_ablitiy" id="logical_ablitiy" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->logical_ability_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->logical_ability_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['logical_ablitiy'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                            </span>
-                                                            <?php unset($message);
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                        </td>
+                                                            </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="attitude" class="form-label">Attitude</label></td>
-                                                        <td>
-                                                            <select name="attitude" id="attitude" class="form-control" required>
-                                                                <option value="<?php echo e((!$feedback) ? '' : $feedback->attitude_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attitude_rating); ?></option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            <?php $__errorArgs = ['attitude'];
+                                                        <?php if(Auth::user()->designation == 'HR'): ?>
+                                                            <td><?php echo e((!$feedback) ? '' : $feedback->attitude_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                            <td>
+                                                                <select name="attitude" id="attitude" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attitude_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attitude_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['attitude'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                            </span>
-                                                            <?php unset($message);
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                        </td>
+                                                            </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software</label></td>
-                                                        <td>
-                                                            <select name="overall_performance" id="overall_performance" class="form-control" required>
-                                                                <option value="<?php echo e((!$feedback) ? '' : $feedback->overall_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->overall_rating); ?></option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            <?php $__errorArgs = ['overall_performance'];
+                                                        <?php if(Auth::user()->designation == 'HR'): ?>
+                                                            <td><?php echo e((!$feedback) ? '' : $feedback->overall_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                            <td>
+                                                                <select name="overall_performance" id="overall_performance" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->overall_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->overall_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['overall_performance'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                            </span>
-                                                            <?php unset($message);
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                        </td>
+                                                            </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             
                                             </br>
-                                            <div class="form-group">
-                                                <label for="feedback_comments" class="form-label">Comments</label>
-                                                <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((!$feedback) ? '' : ((Auth::user()->designation == 'Lead') ? $feedback->lead_comment : $feedback->head_comment)); ?></textarea>
-                                                <?php $__errorArgs = ['feedback_comments'];
+                                            <?php if((Auth::user()->designation == 'Head') OR (Auth::user()->designation == 'HR')): ?>
+                                                <div class="form-group">
+                                                    <label class="form-label">Lead Comments</label>
+                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->lead_comment); ?></textarea>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if(Auth::user()->designation == 'HR'): ?>
+                                                <div class="form-group">
+                                                    <label class="form-label">Head Comments</label>
+                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->head_comment); ?></textarea>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                <div class="form-group">
+                                                    <label for="feedback_comments" class="form-label">Comments</label>
+                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((!$feedback) ? '' : ((Auth::user()->designation == 'Lead') ? $feedback->lead_comment : $feedback->head_comment)); ?></textarea>
+                                                    <?php $__errorArgs = ['feedback_comments'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                <br>
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                </span>
-                                                <?php unset($message);
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                    <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-xs-12">
-                                                    <label class="form-label">Thankyou for your valuable feedback</label>
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <input type="date" name="date_of_feedback" value="<?php echo e(Date('Y-m-d')); ?>" id="date_of_feedback" class="form-control disablePast">
                                                 </div>
                                                 
+                                                <div class="form-group row">
+                                                    <div class="col-xs-12">
+                                                        <label class="form-label">Thankyou for your valuable feedback</label>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input type="date" name="date_of_feedback" value="<?php echo e(Date('Y-m-d')); ?>" id="date_of_feedback" class="form-control disablePast">
+                                                    </div>
+                                                    
+                                                </div>
+                                            <?php endif; ?>
+                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>"> 
+                                            <input type="hidden" id="feedbackId" name="feedbackId" value="<?php echo e((!$feedback) ? '' : $feedback->id); ?>"> 
+                                        </div>
+                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                            <div class="box-footer">
+                                                <button type="submit" class="btn btn-primary" id="myBtn" <?php if(Auth::user()->designation == 'Lead'): ?> <?php echo e((!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')); ?> <?php endif; ?> ><?php echo e((!$feedback) ? 'Submit' : 'Update'); ?> </button>
                                             </div>
-                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">  
-                                        </div>
-                                        <div class="box-footer">
-                                            <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
-                                        </div>
-                                        
+                                        <?php endif; ?>
                                     </div>
                                 </form>
                             </div>

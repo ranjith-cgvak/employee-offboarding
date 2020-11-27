@@ -499,25 +499,35 @@
                                                 <tr>
                                                 <td rowspan="2"><h3 class="text-center">Present Skill Set</h3></td>
                                                 <td><label for="primary_skill" class="form-label">Primary</label></td></td>
-                                                <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_primary }}" required>
-                                                    @error('primary_skill')
-                                                    <br>
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                    </span>
-                                                    @enderror
-                                                </td>
+                                                @if(Auth::user()->designation == 'HR')
+                                                    <td>{{ (!$feedback) ? '' : $feedback->skill_set_primary }}</td>
+                                                @endif
+                                                @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                    <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_primary }}" required>
+                                                        @error('primary_skill')
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger">{{ $message }}</strong>
+                                                        </span>
+                                                        @enderror
+                                                    </td>
+                                                @endif
                                                 </tr>
                                                 <tr>
                                                 <td><label for="secondary_skill" class="form-label">Secondary</label</td>
-                                                <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}" required>       
-                                                    @error('secondary_skill')
-                                                    <br>
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                    </span>
-                                                    @enderror
-                                                </td>
+                                                @if(Auth::user()->designation == 'HR')
+                                                    <td>{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}</td>
+                                                @endif
+                                                @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}" required>       
+                                                        @error('secondary_skill')
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger">{{ $message }}</strong>
+                                                        </span>
+                                                        @enderror
+                                                    </td>
+                                                @endif
                                                 </tr>
 
                                                 <tr>
@@ -525,15 +535,21 @@
                                                     <td>
                                                     <label for="last_worked_project" class="form-label">Project Name:</label</td>
                                                     </td>
-                                                    <td colspan="2">
-                                                        <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="{{ (!$feedback) ? '' : $feedback->last_worked_project }}" required>
-                                                        @error('last_worked_project')
-                                                        <br>
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong class="text-danger">{{ $message }}</strong>
-                                                        </span>
-                                                        @enderror
-                                                    </td>
+                                                    @if(Auth::user()->designation == 'HR')
+                                                        <td>{{ (!$feedback) ? '' : $feedback->last_worked_project }}</td>
+                                                    @endif
+                                                    @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                        <td colspan="2">
+                                                            <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="{{ (!$feedback) ? '' : $feedback->last_worked_project }}" required>
+                                                            @error('last_worked_project')
+                                                            <br>
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong class="text-danger">{{ $message }}</strong>
+                                                            </span>
+                                                            @enderror
+                                                        </td>
+                                                    @endif
+                                                    
                                                 </tr>
 
                                             </table>
@@ -550,177 +566,234 @@
                                                 <tbody>
                                                     <tr>
                                                         <td><label for="attendance" class="form-label">Attendance</label></td>
-                                                        <td>
-                                                            <select name="attendance" id="attendance" class="form-control" required>
-                                                                <option value="{{ (!$feedback) ? '' : $feedback->attendance_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attendance_rating }}</option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            @error('attendance')
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger">{{ $message }}</strong>
-                                                            </span>
-                                                            @enderror
-                                                        </td>
+                                                        @if(Auth::user()->designation == 'HR')
+                                                            <td>{{ (!$feedback) ? '' : $feedback->attendance_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                            <td>
+                                                                <select name="attendance" id="attendance" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->attendance_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attendance_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('attendance')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsiveness" class="form-label">Reponsiveness</label></td>
-                                                        <td>
-                                                            <select name="reponsiveness" id="reponsiveness" class="form-control" required>
-                                                                <option value="{{ (!$feedback) ? '' : $feedback->responsiveness_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsiveness_rating }}</option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            @error('reponsiveness')
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger">{{ $message }}</strong>
-                                                            </span>
-                                                            @enderror
-                                                        </td>
+                                                        @if(Auth::user()->designation == 'HR')
+                                                            <td>{{ (!$feedback) ? '' : $feedback->responsiveness_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                            <td>
+                                                                <select name="reponsiveness" id="reponsiveness" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->responsiveness_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsiveness_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('reponsiveness')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsibility" class="form-label">Reponsibility</label></td>
-                                                        <td>
-                                                            <select name="reponsibility" id="reponsibility" class="form-control" required>
-                                                                <option value="{{ (!$feedback) ? '' : $feedback->responsibility_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsibility_rating }}</option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            @error('reponsibility')
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger">{{ $message }}</strong>
-                                                            </span>
-                                                            @enderror
-                                                        </td>
+                                                        @if(Auth::user()->designation == 'HR')
+                                                            <td>{{ (!$feedback) ? '' : $feedback->responsibility_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                            <td>
+                                                                <select name="reponsibility" id="reponsibility" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->responsibility_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsibility_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('reponsibility')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery</label></td>
-                                                        <td>
-                                                            <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control" required>
-                                                                <option value="{{ (!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating }}">{{ (!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating }}</option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            @error('commit_on_task_delivery')
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger">{{ $message }}</strong>
-                                                            </span>
-                                                            @enderror
-                                                        </td>
+                                                        @if(Auth::user()->designation == 'HR')
+                                                            <td>{{ (!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                            <td>
+                                                                <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating }}">{{ (!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('commit_on_task_delivery')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td><label for="technical_knowledge" class="form-label">Technical Knowledge</label></td>
-                                                        <td>
-                                                            <select name="technical_knowledge" id="technical_knowledge" class="form-control" required>
-                                                                <option value="{{ (!$feedback) ? '' : $feedback->technical_knowledge_rating }}">{{ (!$feedback) ? 'Select' : $feedback->technical_knowledge_rating }}</option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            @error('technical_knowledge')
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger">{{ $message }}</strong>
-                                                            </span>
-                                                            @enderror
-                                                        </td>
+                                                        @if(Auth::user()->designation == 'HR')
+                                                            <td>{{ (!$feedback) ? '' : $feedback->technical_knowledge_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                            <td>
+                                                                <select name="technical_knowledge" id="technical_knowledge" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->technical_knowledge_rating }}">{{ (!$feedback) ? 'Select' : $feedback->technical_knowledge_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('technical_knowledge')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td><label for="logical_ablitiy" class="form-label">Logical Ability</label></td>
-                                                        <td>
-                                                            <select name="logical_ablitiy" id="logical_ablitiy" class="form-control" required>
-                                                                <option value="{{ (!$feedback) ? '' : $feedback->logical_ability_rating }}">{{ (!$feedback) ? 'Select' : $feedback->logical_ability_rating }}</option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            @error('logical_ablitiy')
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger">{{ $message }}</strong>
-                                                            </span>
-                                                            @enderror
-                                                        </td>
+                                                        @if(Auth::user()->designation == 'HR')
+                                                            <td>{{ (!$feedback) ? '' : $feedback->logical_ability_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                            <td>
+                                                                <select name="logical_ablitiy" id="logical_ablitiy" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->logical_ability_rating }}">{{ (!$feedback) ? 'Select' : $feedback->logical_ability_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('logical_ablitiy')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td><label for="attitude" class="form-label">Attitude</label></td>
-                                                        <td>
-                                                            <select name="attitude" id="attitude" class="form-control" required>
-                                                                <option value="{{ (!$feedback) ? '' : $feedback->attitude_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attitude_rating }}</option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            @error('attitude')
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger">{{ $message }}</strong>
-                                                            </span>
-                                                            @enderror
-                                                        </td>
+                                                        @if(Auth::user()->designation == 'HR')
+                                                            <td>{{ (!$feedback) ? '' : $feedback->attitude_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                            <td>
+                                                                <select name="attitude" id="attitude" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->attitude_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attitude_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('attitude')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software</label></td>
-                                                        <td>
-                                                            <select name="overall_performance" id="overall_performance" class="form-control" required>
-                                                                <option value="{{ (!$feedback) ? '' : $feedback->overall_rating }}">{{ (!$feedback) ? 'Select' : $feedback->overall_rating }}</option>
-                                                                <option value="Excellent">Excellent</option>
-                                                                <option value="Good">Good</option>
-                                                                <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Poor">Poor</option>
-                                                            </select>
-                                                            @error('overall_performance')
-                                                            <br>
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger">{{ $message }}</strong>
-                                                            </span>
-                                                            @enderror
-                                                        </td>
+                                                        @if(Auth::user()->designation == 'HR')
+                                                            <td>{{ (!$feedback) ? '' : $feedback->overall_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                            <td>
+                                                                <select name="overall_performance" id="overall_performance" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->overall_rating }}">{{ (!$feedback) ? 'Select' : $feedback->overall_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('overall_performance')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             
                                             </br>
-                                            <div class="form-group">
-                                                <label for="feedback_comments" class="form-label">Comments</label>
-                                                <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required>{{ (!$feedback) ? '' : ((Auth::user()->designation == 'Lead') ? $feedback->lead_comment : $feedback->head_comment) }}</textarea>
-                                                @error('feedback_comments')
-                                                <br>
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong class="text-danger">{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-xs-12">
-                                                    <label class="form-label">Thankyou for your valuable feedback</label>
+                                            @if((Auth::user()->designation == 'Head') OR (Auth::user()->designation == 'HR'))
+                                                <div class="form-group">
+                                                    <label class="form-label">Lead Comments</label>
+                                                    <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->lead_comment  }}</textarea>
                                                 </div>
-                                                <div class="col-xs-2">
-                                                    <input type="date" name="date_of_feedback" value="{{ Date('Y-m-d')}}" id="date_of_feedback" class="form-control disablePast">
+                                            @endif
+                                            @if(Auth::user()->designation == 'HR')
+                                                <div class="form-group">
+                                                    <label class="form-label">Head Comments</label>
+                                                    <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->head_comment  }}</textarea>
+                                                </div>
+                                            @endif
+                                            @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                <div class="form-group">
+                                                    <label for="feedback_comments" class="form-label">Comments</label>
+                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required>{{ (!$feedback) ? '' : ((Auth::user()->designation == 'Lead') ? $feedback->lead_comment : $feedback->head_comment) }}</textarea>
+                                                    @error('feedback_comments')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
                                                 </div>
                                                 
+                                                <div class="form-group row">
+                                                    <div class="col-xs-12">
+                                                        <label class="form-label">Thankyou for your valuable feedback</label>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input type="date" name="date_of_feedback" value="{{ Date('Y-m-d')}}" id="date_of_feedback" class="form-control disablePast">
+                                                    </div>
+                                                    
+                                                </div>
+                                            @endif
+                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}"> 
+                                            <input type="hidden" id="feedbackId" name="feedbackId" value="{{ (!$feedback) ? '' : $feedback->id }}"> 
+                                        </div>
+                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                            <div class="box-footer">
+                                                <button type="submit" class="btn btn-primary" id="myBtn" @if(Auth::user()->designation == 'Lead') {{ (!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')}} @endif >{{ (!$feedback) ? 'Submit' : 'Update' }} </button>
                                             </div>
-                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">  
-                                        </div>
-                                        <div class="box-footer">
-                                            <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
-                                        </div>
-                                        
+                                        @endif
                                     </div>
                                 </form>
                             </div>
@@ -729,6 +802,7 @@
                 
                 </div>
                 <!-- /.tab-pane -->
+                <!-- /End of feedback -->
 
             </div>
             <!-- /.tab-content -->
