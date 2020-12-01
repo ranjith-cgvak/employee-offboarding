@@ -14,38 +14,38 @@ class ResignationController extends Controller
      */
     public function index()
     {
-        $userId = auth()->id();
+        $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
         ->where([
-            ['user_id', '=', $userId],
+            ['employee_id', '=', $empId],
             ['date_of_withdraw', '=', NULL],
         ])
         ->first();
-        $user = \DB::table('users')->where('id',$userId)->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
         return view('resignation.resignationDetails', compact('myResignation','user'));
     }
 
     public function showAcceptanceStatus() {
-        $userId = auth()->id();
+        $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
         ->where([
-            ['user_id', '=', $userId],
+            ['employee_id', '=', $empId],
             ['date_of_withdraw', '=', NULL],
         ])
         ->first();
-        $user = \DB::table('users')->where('id',$userId)->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
         return view('resignation.acceptanceStatus', compact('myResignation','user'));
     }
 
     public function showWithdrawForm() {
-        $userId = auth()->id();
+        $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
         ->where([
-            ['user_id', '=', $userId],
+            ['employee_id', '=', $empId],
             ['date_of_withdraw', '=', NULL],
         ])
         ->first();
-        $user = \DB::table('users')->where('id',$userId)->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
         return view('resignation.withdrawForm', compact('myResignation','user'));
     }
 
@@ -56,15 +56,14 @@ class ResignationController extends Controller
      */
     public function create()
     {
-        $userId = auth()->id();
-        $user = \DB::table('users')->where('id',$userId)->first();
+        $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
         ->where([
-            ['user_id', '=', $userId],
+            ['employee_id', '=', $empId],
             ['date_of_withdraw', '=', NULL],
         ])
         ->first();
-        $user = \DB::table('users')->where('id',$userId)->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
         return view('resignation.create', compact('myResignation','user'));
     }
 
@@ -79,7 +78,7 @@ class ResignationController extends Controller
         $request->validate([
             'reason'=>'required'
         ]);
-        $userId = auth()->id();
+        $empId = \Auth::User()->emp_id;
         $dateofleaving = date("Y-m-d",strtotime($request->get('dateOfLeaving')));
         $resignation = new resignation([
             'reason' => $request->get('reason'),
@@ -89,7 +88,7 @@ class ResignationController extends Controller
         if($request->get('others') != NULL ) {
             $resignation->other_reason = $request->get('others');
         } 
-        $resignation->user_id = $userId;
+        $resignation->employee_id = $empId;
         $resignation->date_of_leaving = $dateofleaving;
         $resignation->save();
         return redirect('/resignation')->with('success','Details saved!');

@@ -18,13 +18,13 @@
         <div class="box-body">
             <div class="row">
                 <div class="col-xs-4">
-                    <p><b>Employee Name: </b>{{ $emp_resignation->name }}</p>
+                    <p><b>Employee Name: </b>{{ $emp_resignation->display_name }}</p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Employee ID: </b>{{ $emp_resignation->user_id }}</p>
+                    <p><b>Employee ID: </b>{{ $emp_resignation->employee_id }}</p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Date of joinig: </b>{{ $emp_resignation->created_at }}</p>
+                    <p><b>Date of joinig: </b>{{ $emp_resignation->joining_date }}</p>
                 </div>
             </div>
             <div class="row">
@@ -32,7 +32,7 @@
                     <p><b>Designation: </b>{{ $emp_resignation->designation }}</p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Department: </b>IT</p>
+                    <p><b>Department: </b>{{ $emp_resignation->department_name }}</p>
                 </div>
                 <div class="col-xs-4">
                     <p><b>Lead: </b>{{ $emp_resignation->lead }}</p>
@@ -73,7 +73,7 @@
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{ (Auth::user()->designation != 'Lead' ) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead}}</textarea>
+                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{ (Auth::User()->designation_id != 2) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead}}</textarea>
                     @error('dateOfLeaving')
                     <br>
                     <span class="invalid-feedback" role="alert">
@@ -181,7 +181,7 @@
                                             <div class="form-group row">
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
-                                                @if(Auth::user()->designation == 'Lead' )
+                                                @if(Auth::User()->designation_id == 2)
                                                 <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '}}</textarea>
                                                 @endif
                                                     @error('leadComment')
@@ -190,16 +190,16 @@
                                                         <strong class="text-danger">{{ $message }}</strong>
                                                     </span>
                                                     @enderror
-                                                    @if(Auth::user()->designation != 'Lead' )
-                                                    <p>{{ $emp_resignation->comment_lead }}</p>
+                                                    @if(Auth::User()->designation_id != 2)
+                                                    <p>{{ ($emp_resignation->comment_lead == NULL)  ? 'N/A' : $emp_resignation->comment_lead }}</p>
                                                     @endif
                                                 </div>
                                             </div>
-                                            @if(Auth::user()->designation != 'Lead')
+                                            @if(Auth::User()->designation_id != 2)
                                             <div class="form-group row">
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
-                                                    @if(Auth::user()->designation == 'Head' )
+                                                    @if(Auth::User()->designation_id == 3 )
                                                     <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_head != NULL) ? $emp_resignation->comment_head : ' '}}</textarea>
                                                     @endif
                                                     @error('headComment')
@@ -208,14 +208,14 @@
                                                         <strong class="text-danger">{{ $message }}</strong>
                                                     </span>
                                                     @enderror
-                                                    @if(Auth::user()->designation == 'HR')
+                                                    @if(Auth::User()->department_id == 2)
                                                     <p>{{ $emp_resignation->comment_head }}</p>
                                                     @endif
                                                 </div>
                                             </div>
                                             @endif
 
-                                            @if(Auth::user()->designation == 'HR' )
+                                            @if(Auth::User()->department_id == 2 )
                                             <div class="form-group row">
                                                 <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
                                                 <div class="col-sm-6">
@@ -292,7 +292,7 @@
                                             <div class="form-group row">
                                                 <label for="withdrawLeadComment" class="col-sm-2 form-label">Lead Comment on Withdraw </label>
                                                 <div class="col-sm-6">
-                                                    @if(Auth::user()->designation == 'Lead' )
+                                                    @if(Auth::User()->designation_id == 2 )
                                                     <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required>{{ ($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '}}</textarea>
                                                     @endif
 
@@ -303,17 +303,17 @@
                                                     </span>
                                                     @enderror
 
-                                                    @if(Auth::user()->designation != 'Lead' )
+                                                    @if(Auth::User()->designation_id != 2)
                                                     <p>{{ $emp_resignation->comment_dow_lead }}</p>
                                                     @endif
                                                 </div>
                                             </div>
 
-                                            @if(Auth::user()->designation != 'Lead')
+                                            @if(Auth::User()->designation_id != 2)
                                             <div class="form-group row">
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
-                                                    @if (Auth::user()->designation == 'Head' ) 
+                                                    @if (Auth::User()->designation_id == 3) 
                                                     <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required>{{ ($emp_resignation->comment_dow_head != NULL) ? $emp_resignation->comment_dow_head : ' '}}</textarea>
                                                     @endif
                                                     @error('withdrawHeadComment')
@@ -323,7 +323,7 @@
                                                     </span>
                                                     @enderror
 
-                                                    @if(Auth::user()->designation == 'HR' )
+                                                    @if(Auth::User()->department_id == 2)
                                                     <p>{{ $emp_resignation->comment_dow_head }}</p>
                                                     @endif
 
@@ -331,7 +331,7 @@
                                             </div>
                                             @endif
 
-                                            @if (Auth::user()->designation == 'HR' ) 
+                                            @if (Auth::User()->department_id == 2) 
                                             <div class="form-group row">
                                                 <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
                                                 <div class="col-sm-4">
@@ -499,10 +499,10 @@
                                                 <tr>
                                                 <td rowspan="2"><h3 class="text-center">Present Skill Set</h3></td>
                                                 <td><label for="primary_skill" class="form-label">Primary</label></td></td>
-                                                @if(Auth::user()->designation == 'HR')
-                                                    <td>{{ (!$feedback) ? '' : $feedback->skill_set_primary }}</td>
+                                                @if(Auth::User()->department_id == 2)
+                                                    <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_primary }}</td>
                                                 @endif
-                                                @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                     <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_primary }}" required>
                                                         @error('primary_skill')
                                                         <br>
@@ -515,10 +515,10 @@
                                                 </tr>
                                                 <tr>
                                                 <td><label for="secondary_skill" class="form-label">Secondary</label</td>
-                                                @if(Auth::user()->designation == 'HR')
-                                                    <td>{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}</td>
+                                                @if(Auth::User()->department_id == 2)
+                                                    <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_secondary }}</td>
                                                 @endif
-                                                @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                     <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}" required>       
                                                         @error('secondary_skill')
                                                         <br>
@@ -535,10 +535,10 @@
                                                     <td>
                                                     <label for="last_worked_project" class="form-label">Project Name:</label</td>
                                                     </td>
-                                                    @if(Auth::user()->designation == 'HR')
-                                                        <td>{{ (!$feedback) ? '' : $feedback->last_worked_project }}</td>
+                                                    @if(Auth::User()->department_id == 2)
+                                                        <td>{{ (!$feedback) ? 'N/A' : $feedback->last_worked_project }}</td>
                                                     @endif
-                                                    @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                    @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                         <td colspan="2">
                                                             <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="{{ (!$feedback) ? '' : $feedback->last_worked_project }}" required>
                                                             @error('last_worked_project')
@@ -566,10 +566,10 @@
                                                 <tbody>
                                                     <tr>
                                                         <td><label for="attendance" class="form-label">Attendance</label></td>
-                                                        @if(Auth::user()->designation == 'HR')
-                                                            <td>{{ (!$feedback) ? '' : $feedback->attendance_rating }}</td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->attendance_rating }}</td>
                                                         @endif
-                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                             <td>
                                                                 <select name="attendance" id="attendance" class="form-control" required>
                                                                     <option value="{{ (!$feedback) ? '' : $feedback->attendance_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attendance_rating }}</option>
@@ -589,10 +589,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsiveness" class="form-label">Reponsiveness</label></td>
-                                                        @if(Auth::user()->designation == 'HR')
-                                                            <td>{{ (!$feedback) ? '' : $feedback->responsiveness_rating }}</td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->responsiveness_rating }}</td>
                                                         @endif
-                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                             <td>
                                                                 <select name="reponsiveness" id="reponsiveness" class="form-control" required>
                                                                     <option value="{{ (!$feedback) ? '' : $feedback->responsiveness_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsiveness_rating }}</option>
@@ -612,10 +612,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsibility" class="form-label">Reponsibility</label></td>
-                                                        @if(Auth::user()->designation == 'HR')
-                                                            <td>{{ (!$feedback) ? '' : $feedback->responsibility_rating }}</td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->responsibility_rating }}</td>
                                                         @endif
-                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                             <td>
                                                                 <select name="reponsibility" id="reponsibility" class="form-control" required>
                                                                     <option value="{{ (!$feedback) ? '' : $feedback->responsibility_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsibility_rating }}</option>
@@ -635,10 +635,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery</label></td>
-                                                        @if(Auth::user()->designation == 'HR')
-                                                            <td>{{ (!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating }}</td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating }}</td>
                                                         @endif
-                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                             <td>
                                                                 <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control" required>
                                                                     <option value="{{ (!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating }}">{{ (!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating }}</option>
@@ -658,10 +658,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td><label for="technical_knowledge" class="form-label">Technical Knowledge</label></td>
-                                                        @if(Auth::user()->designation == 'HR')
-                                                            <td>{{ (!$feedback) ? '' : $feedback->technical_knowledge_rating }}</td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating }}</td>
                                                         @endif
-                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                             <td>
                                                                 <select name="technical_knowledge" id="technical_knowledge" class="form-control" required>
                                                                     <option value="{{ (!$feedback) ? '' : $feedback->technical_knowledge_rating }}">{{ (!$feedback) ? 'Select' : $feedback->technical_knowledge_rating }}</option>
@@ -681,10 +681,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td><label for="logical_ablitiy" class="form-label">Logical Ability</label></td>
-                                                        @if(Auth::user()->designation == 'HR')
-                                                            <td>{{ (!$feedback) ? '' : $feedback->logical_ability_rating }}</td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->logical_ability_rating }}</td>
                                                         @endif
-                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                             <td>
                                                                 <select name="logical_ablitiy" id="logical_ablitiy" class="form-control" required>
                                                                     <option value="{{ (!$feedback) ? '' : $feedback->logical_ability_rating }}">{{ (!$feedback) ? 'Select' : $feedback->logical_ability_rating }}</option>
@@ -704,10 +704,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td><label for="attitude" class="form-label">Attitude</label></td>
-                                                        @if(Auth::user()->designation == 'HR')
-                                                            <td>{{ (!$feedback) ? '' : $feedback->attitude_rating }}</td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->attitude_rating }}</td>
                                                         @endif
-                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                             <td>
                                                                 <select name="attitude" id="attitude" class="form-control" required>
                                                                     <option value="{{ (!$feedback) ? '' : $feedback->attitude_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attitude_rating }}</option>
@@ -727,10 +727,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software</label></td>
-                                                        @if(Auth::user()->designation == 'HR')
-                                                            <td>{{ (!$feedback) ? '' : $feedback->overall_rating }}</td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->overall_rating }}</td>
                                                         @endif
-                                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                             <td>
                                                                 <select name="overall_performance" id="overall_performance" class="form-control" required>
                                                                     <option value="{{ (!$feedback) ? '' : $feedback->overall_rating }}">{{ (!$feedback) ? 'Select' : $feedback->overall_rating }}</option>
@@ -752,22 +752,22 @@
                                             </table>
                                             
                                             </br>
-                                            @if((Auth::user()->designation == 'Head') OR (Auth::user()->designation == 'HR'))
+                                            @if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3))
                                                 <div class="form-group">
                                                     <label class="form-label">Lead Comments</label>
                                                     <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->lead_comment  }}</textarea>
                                                 </div>
                                             @endif
-                                            @if(Auth::user()->designation == 'HR')
+                                            @if(Auth::User()->department_id == 2)
                                                 <div class="form-group">
                                                     <label class="form-label">Head Comments</label>
                                                     <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->head_comment  }}</textarea>
                                                 </div>
                                             @endif
-                                            @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                            @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                 <div class="form-group">
                                                     <label for="feedback_comments" class="form-label">Comments</label>
-                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required>{{ (!$feedback) ? '' : ((Auth::user()->designation == 'Lead') ? $feedback->lead_comment : $feedback->head_comment) }}</textarea>
+                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required>{{ (!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment) }}</textarea>
                                                     @error('feedback_comments')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
@@ -789,9 +789,9 @@
                                             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}"> 
                                             <input type="hidden" id="feedbackId" name="feedbackId" value="{{ (!$feedback) ? '' : $feedback->id }}"> 
                                         </div>
-                                        @if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head'))
+                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                             <div class="box-footer">
-                                                <button type="submit" class="btn btn-primary" id="myBtn" @if(Auth::user()->designation == 'Lead') {{ (!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')}} @endif >{{ (!$feedback) ? 'Submit' : 'Update' }} </button>
+                                                <button type="submit" class="btn btn-primary" id="myBtn" @if(Auth::User()->designation_id == 2) {{ (!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')}} @endif >{{ (!$feedback) ? 'Submit' : 'Update' }} </button>
                                             </div>
                                         @endif
                                     </div>

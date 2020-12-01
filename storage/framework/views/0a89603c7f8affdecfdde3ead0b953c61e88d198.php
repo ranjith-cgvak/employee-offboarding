@@ -19,13 +19,13 @@
         <div class="box-body">
             <div class="row">
                 <div class="col-xs-4">
-                    <p><b>Employee Name: </b><?php echo e($emp_resignation->name); ?></p>
+                    <p><b>Employee Name: </b><?php echo e($emp_resignation->display_name); ?></p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Employee ID: </b><?php echo e($emp_resignation->user_id); ?></p>
+                    <p><b>Employee ID: </b><?php echo e($emp_resignation->employee_id); ?></p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Date of joinig: </b><?php echo e($emp_resignation->created_at); ?></p>
+                    <p><b>Date of joinig: </b><?php echo e($emp_resignation->joining_date); ?></p>
                 </div>
             </div>
             <div class="row">
@@ -33,7 +33,7 @@
                     <p><b>Designation: </b><?php echo e($emp_resignation->designation); ?></p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Department: </b>IT</p>
+                    <p><b>Department: </b><?php echo e($emp_resignation->department_name); ?></p>
                 </div>
                 <div class="col-xs-4">
                     <p><b>Lead: </b><?php echo e($emp_resignation->lead); ?></p>
@@ -82,7 +82,7 @@ unset($__errorArgs, $__bag); ?>
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e((Auth::user()->designation != 'Lead' ) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead); ?></textarea>
+                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e((Auth::User()->designation_id != 2) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead); ?></textarea>
                     <?php $__errorArgs = ['dateOfLeaving'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -198,7 +198,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
-                                                <?php if(Auth::user()->designation == 'Lead' ): ?>
+                                                <?php if(Auth::User()->designation_id == 2): ?>
                                                 <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '); ?></textarea>
                                                 <?php endif; ?>
                                                     <?php $__errorArgs = ['leadComment'];
@@ -214,16 +214,16 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                    <?php if(Auth::user()->designation != 'Lead' ): ?>
-                                                    <p><?php echo e($emp_resignation->comment_lead); ?></p>
+                                                    <?php if(Auth::User()->designation_id != 2): ?>
+                                                    <p><?php echo e(($emp_resignation->comment_lead == NULL)  ? 'N/A' : $emp_resignation->comment_lead); ?></p>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
-                                            <?php if(Auth::user()->designation != 'Lead'): ?>
+                                            <?php if(Auth::User()->designation_id != 2): ?>
                                             <div class="form-group row">
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
-                                                    <?php if(Auth::user()->designation == 'Head' ): ?>
+                                                    <?php if(Auth::User()->designation_id == 3 ): ?>
                                                     <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_head != NULL) ? $emp_resignation->comment_head : ' '); ?></textarea>
                                                     <?php endif; ?>
                                                     <?php $__errorArgs = ['headComment'];
@@ -239,14 +239,14 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                    <?php if(Auth::user()->designation == 'HR'): ?>
+                                                    <?php if(Auth::User()->department_id == 2): ?>
                                                     <p><?php echo e($emp_resignation->comment_head); ?></p>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
                                             <?php endif; ?>
 
-                                            <?php if(Auth::user()->designation == 'HR' ): ?>
+                                            <?php if(Auth::User()->department_id == 2 ): ?>
                                             <div class="form-group row">
                                                 <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
                                                 <div class="col-sm-6">
@@ -331,7 +331,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label for="withdrawLeadComment" class="col-sm-2 form-label">Lead Comment on Withdraw </label>
                                                 <div class="col-sm-6">
-                                                    <?php if(Auth::user()->designation == 'Lead' ): ?>
+                                                    <?php if(Auth::User()->designation_id == 2 ): ?>
                                                     <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '); ?></textarea>
                                                     <?php endif; ?>
 
@@ -349,17 +349,17 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-                                                    <?php if(Auth::user()->designation != 'Lead' ): ?>
+                                                    <?php if(Auth::User()->designation_id != 2): ?>
                                                     <p><?php echo e($emp_resignation->comment_dow_lead); ?></p>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
 
-                                            <?php if(Auth::user()->designation != 'Lead'): ?>
+                                            <?php if(Auth::User()->designation_id != 2): ?>
                                             <div class="form-group row">
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
-                                                    <?php if(Auth::user()->designation == 'Head' ): ?> 
+                                                    <?php if(Auth::User()->designation_id == 3): ?> 
                                                     <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required><?php echo e(($emp_resignation->comment_dow_head != NULL) ? $emp_resignation->comment_dow_head : ' '); ?></textarea>
                                                     <?php endif; ?>
                                                     <?php $__errorArgs = ['withdrawHeadComment'];
@@ -376,7 +376,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-                                                    <?php if(Auth::user()->designation == 'HR' ): ?>
+                                                    <?php if(Auth::User()->department_id == 2): ?>
                                                     <p><?php echo e($emp_resignation->comment_dow_head); ?></p>
                                                     <?php endif; ?>
 
@@ -384,7 +384,7 @@ unset($__errorArgs, $__bag); ?>
                                             </div>
                                             <?php endif; ?>
 
-                                            <?php if(Auth::user()->designation == 'HR' ): ?> 
+                                            <?php if(Auth::User()->department_id == 2): ?> 
                                             <div class="form-group row">
                                                 <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
                                                 <div class="col-sm-4">
@@ -559,10 +559,10 @@ unset($__errorArgs, $__bag); ?>
                                                 <tr>
                                                 <td rowspan="2"><h3 class="text-center">Present Skill Set</h3></td>
                                                 <td><label for="primary_skill" class="form-label">Primary</label></td></td>
-                                                <?php if(Auth::user()->designation == 'HR'): ?>
-                                                    <td><?php echo e((!$feedback) ? '' : $feedback->skill_set_primary); ?></td>
+                                                <?php if(Auth::User()->department_id == 2): ?>
+                                                    <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_primary); ?></td>
                                                 <?php endif; ?>
-                                                <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                     <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_primary); ?>" required>
                                                         <?php $__errorArgs = ['primary_skill'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -582,10 +582,10 @@ unset($__errorArgs, $__bag); ?>
                                                 </tr>
                                                 <tr>
                                                 <td><label for="secondary_skill" class="form-label">Secondary</label</td>
-                                                <?php if(Auth::user()->designation == 'HR'): ?>
-                                                    <td><?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?></td>
+                                                <?php if(Auth::User()->department_id == 2): ?>
+                                                    <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_secondary); ?></td>
                                                 <?php endif; ?>
-                                                <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                     <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?>" required>       
                                                         <?php $__errorArgs = ['secondary_skill'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -609,10 +609,10 @@ unset($__errorArgs, $__bag); ?>
                                                     <td>
                                                     <label for="last_worked_project" class="form-label">Project Name:</label</td>
                                                     </td>
-                                                    <?php if(Auth::user()->designation == 'HR'): ?>
-                                                        <td><?php echo e((!$feedback) ? '' : $feedback->last_worked_project); ?></td>
+                                                    <?php if(Auth::User()->department_id == 2): ?>
+                                                        <td><?php echo e((!$feedback) ? 'N/A' : $feedback->last_worked_project); ?></td>
                                                     <?php endif; ?>
-                                                    <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                    <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                         <td colspan="2">
                                                             <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->last_worked_project); ?>" required>
                                                             <?php $__errorArgs = ['last_worked_project'];
@@ -647,10 +647,10 @@ unset($__errorArgs, $__bag); ?>
                                                 <tbody>
                                                     <tr>
                                                         <td><label for="attendance" class="form-label">Attendance</label></td>
-                                                        <?php if(Auth::user()->designation == 'HR'): ?>
-                                                            <td><?php echo e((!$feedback) ? '' : $feedback->attendance_rating); ?></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attendance_rating); ?></td>
                                                         <?php endif; ?>
-                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="attendance" id="attendance" class="form-control" required>
                                                                     <option value="<?php echo e((!$feedback) ? '' : $feedback->attendance_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attendance_rating); ?></option>
@@ -677,10 +677,10 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsiveness" class="form-label">Reponsiveness</label></td>
-                                                        <?php if(Auth::user()->designation == 'HR'): ?>
-                                                            <td><?php echo e((!$feedback) ? '' : $feedback->responsiveness_rating); ?></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsiveness_rating); ?></td>
                                                         <?php endif; ?>
-                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="reponsiveness" id="reponsiveness" class="form-control" required>
                                                                     <option value="<?php echo e((!$feedback) ? '' : $feedback->responsiveness_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsiveness_rating); ?></option>
@@ -707,10 +707,10 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsibility" class="form-label">Reponsibility</label></td>
-                                                        <?php if(Auth::user()->designation == 'HR'): ?>
-                                                            <td><?php echo e((!$feedback) ? '' : $feedback->responsibility_rating); ?></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsibility_rating); ?></td>
                                                         <?php endif; ?>
-                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="reponsibility" id="reponsibility" class="form-control" required>
                                                                     <option value="<?php echo e((!$feedback) ? '' : $feedback->responsibility_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsibility_rating); ?></option>
@@ -737,10 +737,10 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery</label></td>
-                                                        <?php if(Auth::user()->designation == 'HR'): ?>
-                                                            <td><?php echo e((!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating); ?></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating); ?></td>
                                                         <?php endif; ?>
-                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control" required>
                                                                     <option value="<?php echo e((!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating); ?></option>
@@ -767,10 +767,10 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="technical_knowledge" class="form-label">Technical Knowledge</label></td>
-                                                        <?php if(Auth::user()->designation == 'HR'): ?>
-                                                            <td><?php echo e((!$feedback) ? '' : $feedback->technical_knowledge_rating); ?></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating); ?></td>
                                                         <?php endif; ?>
-                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="technical_knowledge" id="technical_knowledge" class="form-control" required>
                                                                     <option value="<?php echo e((!$feedback) ? '' : $feedback->technical_knowledge_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->technical_knowledge_rating); ?></option>
@@ -797,10 +797,10 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="logical_ablitiy" class="form-label">Logical Ability</label></td>
-                                                        <?php if(Auth::user()->designation == 'HR'): ?>
-                                                            <td><?php echo e((!$feedback) ? '' : $feedback->logical_ability_rating); ?></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->logical_ability_rating); ?></td>
                                                         <?php endif; ?>
-                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="logical_ablitiy" id="logical_ablitiy" class="form-control" required>
                                                                     <option value="<?php echo e((!$feedback) ? '' : $feedback->logical_ability_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->logical_ability_rating); ?></option>
@@ -827,10 +827,10 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="attitude" class="form-label">Attitude</label></td>
-                                                        <?php if(Auth::user()->designation == 'HR'): ?>
-                                                            <td><?php echo e((!$feedback) ? '' : $feedback->attitude_rating); ?></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attitude_rating); ?></td>
                                                         <?php endif; ?>
-                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="attitude" id="attitude" class="form-control" required>
                                                                     <option value="<?php echo e((!$feedback) ? '' : $feedback->attitude_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attitude_rating); ?></option>
@@ -857,10 +857,10 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software</label></td>
-                                                        <?php if(Auth::user()->designation == 'HR'): ?>
-                                                            <td><?php echo e((!$feedback) ? '' : $feedback->overall_rating); ?></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->overall_rating); ?></td>
                                                         <?php endif; ?>
-                                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="overall_performance" id="overall_performance" class="form-control" required>
                                                                     <option value="<?php echo e((!$feedback) ? '' : $feedback->overall_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->overall_rating); ?></option>
@@ -889,22 +889,22 @@ unset($__errorArgs, $__bag); ?>
                                             </table>
                                             
                                             </br>
-                                            <?php if((Auth::user()->designation == 'Head') OR (Auth::user()->designation == 'HR')): ?>
+                                            <?php if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                 <div class="form-group">
                                                     <label class="form-label">Lead Comments</label>
                                                     <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->lead_comment); ?></textarea>
                                                 </div>
                                             <?php endif; ?>
-                                            <?php if(Auth::user()->designation == 'HR'): ?>
+                                            <?php if(Auth::User()->department_id == 2): ?>
                                                 <div class="form-group">
                                                     <label class="form-label">Head Comments</label>
                                                     <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->head_comment); ?></textarea>
                                                 </div>
                                             <?php endif; ?>
-                                            <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                            <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                 <div class="form-group">
                                                     <label for="feedback_comments" class="form-label">Comments</label>
-                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((!$feedback) ? '' : ((Auth::user()->designation == 'Lead') ? $feedback->lead_comment : $feedback->head_comment)); ?></textarea>
+                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment)); ?></textarea>
                                                     <?php $__errorArgs = ['feedback_comments'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -933,9 +933,9 @@ unset($__errorArgs, $__bag); ?>
                                             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>"> 
                                             <input type="hidden" id="feedbackId" name="feedbackId" value="<?php echo e((!$feedback) ? '' : $feedback->id); ?>"> 
                                         </div>
-                                        <?php if((Auth::user()->designation == 'Lead') OR (Auth::user()->designation == 'Head')): ?>
+                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                             <div class="box-footer">
-                                                <button type="submit" class="btn btn-primary" id="myBtn" <?php if(Auth::user()->designation == 'Lead'): ?> <?php echo e((!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')); ?> <?php endif; ?> ><?php echo e((!$feedback) ? 'Submit' : 'Update'); ?> </button>
+                                                <button type="submit" class="btn btn-primary" id="myBtn" <?php if(Auth::User()->designation_id == 2): ?> <?php echo e((!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')); ?> <?php endif; ?> ><?php echo e((!$feedback) ? 'Submit' : 'Update'); ?> </button>
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -946,6 +946,7 @@ unset($__errorArgs, $__bag); ?>
                 
                 </div>
                 <!-- /.tab-pane -->
+                <!-- /End of feedback -->
 
             </div>
             <!-- /.tab-content -->

@@ -25,23 +25,23 @@
                   <th>DOL</th>
                   <th>Status</th>
                   <th>View</th>
-                  <?php if(Auth::user()->designation == 'Head'): ?>
+                  <?php if(Auth::user()->designation_id == 3): ?>
                   <th>&nbsp;&nbsp;&nbsp;&nbsp; Assign Lead</th>
                   <?php endif; ?>
                 </tr>
                 <?php $__currentLoopData = $emp_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $emp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
-                  <td><?php echo e($emp->user_id); ?></td>
-                  <td><?php echo e($emp->name); ?></td>
+                  <td><?php echo e($emp->employee_id); ?></td>
+                  <td><?php echo e($emp->display_name); ?></td>
                   <td><?php echo e($emp->designation); ?></td>
                   <td><?php echo e($emp->date_of_resignation); ?></td>
                   <td><?php echo e(($emp->changed_dol == NULL) ? $emp->date_of_leaving : $emp->changed_dol); ?></td>
                   <td><span class="label <?php echo e(($emp->date_of_withdraw != NULL) ? 'label-danger' : 'label-primary'); ?>"><?php echo e(($emp->date_of_withdraw != NULL) ? 'Withdrawn' : 'New'); ?></span></td>
                   <td><a href="<?php echo e(route('process.edit', $emp->id )); ?>">View</a></td>
-                  <?php if(Auth::user()->designation == 'Head'): ?>
+                  <?php if(Auth::user()->designation_id == 3): ?>
                   <td>
                     <?php if($emp->lead == NULL): ?>
-                    <form method="post" action="<?php echo e(route('process.update' , $emp->user_id )); ?>">
+                    <form method="post" action="<?php echo e(route('process.update' , $emp->employee_id )); ?>">
                       <?php echo csrf_field(); ?>
                       <?php echo e(method_field('PUT')); ?>
 
@@ -50,7 +50,7 @@
                         <select class="form-control" name="lead" id="lead">
                           <option value="">Select</option>
                           <?php $__currentLoopData = $lead_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lead): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <option value="<?php echo e($lead->name); ?>"><?php echo e($lead->name); ?></option>
+                          <option value="<?php echo e($lead->display_name); ?>"><?php echo e($lead->display_name); ?></option>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                         </div>

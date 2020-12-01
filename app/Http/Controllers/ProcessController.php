@@ -17,28 +17,28 @@ class ProcessController extends Controller
      */
     public function index()
     {
-        if(\Auth::User()->designation == "Head") {
+        if(\Auth::User()->designation_id == 3) {
         $emp_list = \DB::table('resignations')
-        ->select('resignations.id','user_id','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
-        ->join('users', 'resignations.user_id', '=', 'users.id')
+        ->select('resignations.id','employee_id','display_name','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
+        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
         ->get();
         }
-        else if(\Auth::User()->designation == "HR" || \Auth::User()->designation == "SA") {
+        else if(\Auth::User()->department_id == 2) {
             $emp_list = \DB::table('resignations')
-            ->select('resignations.id','user_id','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
-            ->join('users', 'resignations.user_id', '=', 'users.id')
+            ->select('resignations.id','employee_id','display_name','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
+            ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
             ->get();
         }
         else {
-            $leadName = \Auth::User()->name;
+            $leadName = \Auth::User()->display_name;
             $emp_list = \DB::table('resignations')
-            ->select('resignations.id','user_id','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
-            ->join('users', 'resignations.user_id', '=', 'users.id')
+            ->select('resignations.id','employee_id','display_name','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
+            ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
             ->where('lead', $leadName)
             ->get();
         }
         $lead_list = \DB::table('users')
-        ->where('designation','Lead')
+        ->where('designation_id',2)
         ->get();
         
         return view('process.resignationList', compact('emp_list','lead_list'));
@@ -85,8 +85,8 @@ class ProcessController extends Controller
     public function edit($id)
     {
         $emp_resignation = \DB::table('resignations')
-        ->select('resignations.id','user_id','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','users.created_at','reason','comment','comment_head','comment_dol_head','comment_lead','comment_dol_lead','comment_hr','comment_dol_hr','comment_dow_lead','comment_dow_head','comment_dow_hr','changed_dol','other_reason')
-        ->join('users', 'resignations.user_id', '=', 'users.id')
+        ->select('resignations.id','employee_id','display_name','department_name','name','designation','joining_date','date_of_resignation','date_of_leaving','date_of_withdraw','lead','users.created_at','reason','comment','comment_head','comment_dol_head','comment_lead','comment_dol_lead','comment_hr','comment_dol_hr','comment_dow_lead','comment_dow_head','comment_dow_hr','changed_dol','other_reason')
+        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
         ->where('resignations.id',$id)
         ->first();
         $commenterId = auth()->id();
@@ -111,7 +111,7 @@ class ProcessController extends Controller
         $request->validate([
             'lead'=>'required'
         ]);
-        $user = User::find($id);
+        $user = User::where('emp_id',$id)->first();
         $user->lead = $request->get('lead');
         $user->save();
 
@@ -125,10 +125,10 @@ class ProcessController extends Controller
         $resignationId = $request->get('resignationId');
         $resignation = Resignation::find($resignationId);
         $resignation->changed_dol = $request->get('dateOfLeaving');
-        if(\Auth::User()->designation == "Head") {
+        if(\Auth::User()->designation_id == 3) {
             $resignation->comment_dol_head = $request->get('commentDol');
         }
-        else if(\Auth::User()->designation == "HR") {
+        else if(\Auth::User()->department_id == 2) {
             $resignation->comment_dol_hr = $request->get('commentDol');
         }
         else {
@@ -141,13 +141,13 @@ class ProcessController extends Controller
     public function updateResignationComment(Request $request) {
         $resignationId = $request->get('resignationId');
         $resignation = Resignation::find($resignationId);
-        if(\Auth::User()->designation == "Head") {
+        if(\Auth::User()->designation_id == 3) {
             $request->validate([
                 'headComment'=>'required'
             ]);
             $resignation->comment_head = $request->get('headComment');
         }
-        else if(\Auth::User()->designation == "HR") {
+        else if(\Auth::User()->department_id == 2) {
             $request->validate([
                 'hrComment'=>'required'
             ]);
@@ -166,13 +166,13 @@ class ProcessController extends Controller
     public function updateDowComment(Request $request) {
         $resignationId = $request->get('resignationId');
         $resignation = Resignation::find($resignationId);
-        if(\Auth::User()->designation == "Head") {
+        if(\Auth::User()->designation_id == 3) {
             $request->validate([
                 'withdrawHeadComment'=>'required'
             ]);
             $resignation->comment_dow_head = $request->get('withdrawHeadComment');
         }
-        else if(\Auth::User()->designation == "HR") {
+        else if(\Auth::User()->department_id == 2) {
             $request->validate([
                 'withdrawHrComment'=>'required'
             ]);
@@ -219,7 +219,7 @@ class ProcessController extends Controller
             'attitude_rating' => $request->get('attitude'),
             'overall_rating' => $request->get('overall_performance')
         ]);
-        if(\Auth::User()->designation == "Head") {
+        if(\Auth::User()->designation_id == 3) {
             $feedback->head_comment = $request->get('feedback_comments');
         }
         else {
@@ -261,7 +261,7 @@ class ProcessController extends Controller
         $updateFeedback->overall_rating = $request->get('overall_performance');
         $updateFeedback->feedback_date = $feedbackDate;
 
-        if(\Auth::User()->designation == "Head") {
+        if(\Auth::User()->designation_id == 3) {
             $updateFeedback->head_comment = $request->get('feedback_comments');
         }
         else {

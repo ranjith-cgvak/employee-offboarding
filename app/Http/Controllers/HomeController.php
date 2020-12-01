@@ -26,35 +26,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $employee = \Auth::User()->designation == "Software Engineer";
-        $head = \Auth::User()->designation == "Head";
-        $lead = \Auth::User()->designation == "Lead";
-        $Hr = \Auth::User()->designation == "HR";
-        $SA = \Auth::User()->designation == "SA";
-        $userId = auth()->id();
+        $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
         ->where([
-            ['user_id', '=', $userId],
+            ['employee_id', '=', $empId],
             ['date_of_withdraw', '=', NULL],
         ])
         ->count();
-        if($myResignation == 0 && $employee) {
-         return redirect()->route('resignation.create');
-        }
-        else if($employee){
-             return redirect()->route('resignation.index');
-        }
-        else if($lead) {
+        
+        if((\Auth::User()->designation_id == 2) || (\Auth::User()->designation_id == 3) || (\Auth::User()->department_id == 2)) {
             return redirect()->route('process.index');
         }
-        else if($head) {
-            return redirect()->route('process.index');
-        }
-        else if($Hr) {
-            return redirect()->route('process.index');
-        }
-        else if($SA) {
-            return redirect()->route('process.index');
-        }
+        else if($myResignation == 0) {
+            return redirect()->route('resignation.create');
+           }
+        else{
+            return redirect()->route('resignation.index');
+       }
     }
 }

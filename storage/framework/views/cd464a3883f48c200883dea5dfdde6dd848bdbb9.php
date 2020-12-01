@@ -13,15 +13,15 @@
 <!-- Employee details -->
 <div class="container-fluid">
     <div class="box box-primary box-body">
-        <div class="row">
+    <div class="row">
             <div class="col-xs-4">
-                <p><b>Employee Name: </b><?php echo e($user->name); ?></p>
+                <p><b>Employee Name: </b><?php echo e($user->display_name); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Employee ID: </b><?php echo e($user->id); ?></p>
+                <p><b>Employee ID: </b><?php echo e($user->emp_id); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joinig: </b><?php echo e($user->created_at); ?></p>
+                <p><b>Date of joinig: </b><?php echo e($user->joining_date); ?></p>
             </div>
         </div>
         <div class="row">
@@ -29,10 +29,10 @@
                 <p><b>Designation: </b><?php echo e($user->designation); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Department: </b>IT</p>
+                <p><b>Department: </b><?php echo e($user->department_name); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Lead: </b><?php echo e(($user->lead_id == NULL) ? 'Not Assigned' : $user->lead); ?></p>
+                <p><b>Lead: </b><?php echo e(($user->lead == NULL) ? 'Not Assigned' : $user->lead); ?></p>
             </div>
         </div>
     </div>
