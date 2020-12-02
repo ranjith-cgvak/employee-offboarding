@@ -40,14 +40,13 @@
                   <td><a href="{{ route('process.edit', $emp->id )}}">View</a></td>
                   @if(Auth::user()->designation_id == 3)
                   <td>
-                    @if($emp->lead == NULL)
                     <form method="post" action="{{ route('process.update' , $emp->employee_id ) }}">
                       @csrf
                       {{ method_field('PUT') }}
                       <div class="form-group">
                         <div class="col-sm-6">
                         <select class="form-control" name="lead" id="lead">
-                          <option value="">Select</option>
+                        <option value="{{ ($emp->lead == NULL) ? '' : $emp->lead }}">{{ ($emp->lead == NULL) ? 'Select' : $emp->lead }}</option>
                           @foreach($lead_list as $lead)
                           <option value="{{ $lead->display_name }}">{{ $lead->display_name }}</option>
                           @endforeach
@@ -58,8 +57,6 @@
                         </div>
                       </div>
                     </form>
-                    @endif
-                    {{ $emp->lead }}
                   </td>
                   @endif
                 </tr>

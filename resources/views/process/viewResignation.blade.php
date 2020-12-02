@@ -24,7 +24,7 @@
                     <p><b>Employee ID: </b>{{ $emp_resignation->employee_id }}</p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Date of joinig: </b>{{ $emp_resignation->joining_date }}</p>
+                    <p><b>Date of joinig: </b>{{ $converted_dates['joining_date'] }}</p>
                 </div>
             </div>
             <div class="row">
@@ -61,7 +61,7 @@
             <div class="form-group row">
                 <label for="dateOfLeaving" class="col-sm-4 form-label">Change DOL: </label>
                 <div class="col-sm-6">
-                    <input type="date" class="form-control disablePast" value="{{ $emp_resignation->date_of_leaving }}" id="dateOfLeaving" name="dateOfLeaving">
+                    <input type="date" class="form-control disablePast" value="{{ $emp_resignation->changed_dol }}" id="dateOfLeaving" name="dateOfLeaving">
                     @error('dateOfLeaving')
                     <br>
                     <span class="invalid-feedback" role="alert">
@@ -125,34 +125,50 @@
                                     <!-- form start -->
                                     <div class="box-body">
                                         <div class="form-group row">
-                                            <label for="reason" class="col-sm-2 form-label">Reason For Leaving the job</label>
+                                            <label class="col-sm-2 form-label">Reason For Leaving the job</label>
                                             <div class="col-sm-6">
                                                 <p>{{ $emp_resignation->reason }}</p>
                                             </div>
                                         </div>
                                         @if($emp_resignation->other_reason != NULL)
                                         <div class="form-group row">
-                                            <label for="reason" class="col-sm-2 form-label">Other Reasons </label>
+                                            <label class="col-sm-2 form-label">Other Reasons </label>
                                             <div class="col-sm-6">
                                                 <p>{{ $emp_resignation->other_reason }}</p>
                                             </div>
                                         </div>
                                         @endif
                                         <div class="form-group row">
-                                            <label for="dateOfResignation" class="col-sm-2 form-label">Date Of Resignation</label>
-                                            <div class="col-sm-4">
-                                                <p>{{ $emp_resignation->date_of_resignation }}</p>
+                                            <label class="col-sm-2 form-label">Comments on leaving</label>
+                                            <div class="col-sm-6">
+                                                <p>{{ $emp_resignation->comment_on_resignation }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="dateOfLeaving" class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
+                                            <label class="col-sm-2 form-label">Date Of Resignation</label>
+                                            <div class="col-sm-4">
+                                                <p>{{ $converted_dates['date_of_resignation'] }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
                                             <div class="col-sm-10">
                                                 <div class="row">
                                                     <div class="col-sm-1">
-                                                    <p>{{ ($emp_resignation->changed_dol == NULL) ? $emp_resignation->date_of_leaving : $emp_resignation->changed_dol }}</p>
+                                                    <p>{{ $converted_dates['date_of_leaving'] }}</p>
                                                     </div>
-                                                    <div class="col-sm-4" style="display:{{ ($emp_resignation->date_of_withdraw != NULL || $emp_resignation->changed_dol != NULL ) ? 'none' : ' ' }};">
-                                                    <button type="button" class="btn btn-primary modelBtn" data-toggle="modal" data-target="#exampleModalCenter"><i style='font-size:17px' class='fa fa-edit'></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 form-label">Date Of Leaving </label>
+                                            <div class="col-sm-10">
+                                                <div class="row">
+                                                    <div class="col-sm-1">
+                                                    <p>{{ $converted_dates['changed_dol'] }}</p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                    <button type="button" class="btn modelBtn" data-toggle="modal" data-target="#exampleModalCenter"><i style='font-size:17px' class='fa fa-edit'></i></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -392,7 +408,7 @@
                                                     <td class="{{ ($emp_resignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_lead == NULL) ? 'Pending' : 'Accepted' }}</td>
                                                     @if(Auth::user()->designation != 'SA')
                                                     <td>{{ $emp_resignation->comment_lead }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $emp_resignation->changed_dol : ' ' }}</td>
+                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
                                                     <td>{{ $emp_resignation->comment_dol_lead }}</td>
                                                     @endif
                                                 </tr>
@@ -401,7 +417,7 @@
                                                     <td class="{{ ($emp_resignation->comment_head == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_head == NULL) ? 'Pending' : 'Accepted' }}</td>
                                                     @if(Auth::user()->designation != 'SA')
                                                     <td>{{ $emp_resignation->comment_head }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $emp_resignation->changed_dol : ' ' }}</td>
+                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
                                                     <td>{{ $emp_resignation->comment_dol_head }}</td>
                                                     @endif
                                                 </tr>
@@ -410,7 +426,7 @@
                                                     <td class="{{ ($emp_resignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_hr == NULL) ? 'Pending' : 'Accepted' }}</td>
                                                     @if(Auth::user()->designation != 'SA')
                                                     <td>{{ $emp_resignation->comment_hr }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $emp_resignation->changed_dol : ' ' }}</td>
+                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
                                                     <td>{{ $emp_resignation->comment_dol_hr }}</td>
                                                     @endif
                                                 </tr>

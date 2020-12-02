@@ -85,10 +85,23 @@ class ProcessController extends Controller
     public function edit($id)
     {
         $emp_resignation = \DB::table('resignations')
-        ->select('resignations.id','employee_id','display_name','department_name','name','designation','joining_date','date_of_resignation','date_of_leaving','date_of_withdraw','lead','users.created_at','reason','comment','comment_head','comment_dol_head','comment_lead','comment_dol_lead','comment_hr','comment_dol_hr','comment_dow_lead','comment_dow_head','comment_dow_hr','changed_dol','other_reason')
+        ->select('resignations.id','employee_id','display_name','department_name','comment_on_resignation','name','designation','joining_date','date_of_resignation','date_of_leaving','date_of_withdraw','lead','users.created_at','reason','comment','comment_head','comment_dol_head','comment_lead','comment_dol_lead','comment_hr','comment_dol_hr','comment_dow_lead','comment_dow_head','comment_dow_hr','changed_dol','other_reason')
         ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
         ->where('resignations.id',$id)
         ->first();
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($emp_resignation->joining_date);
+        $date_of_resignation = strtotime($emp_resignation->date_of_resignation);
+        $date_of_leaving = strtotime($emp_resignation->date_of_leaving);
+        $changed_dol = strtotime($emp_resignation->changed_dol);
+
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_resignation_date = date("d-m-Y", $date_of_resignation);
+        $converted_leaving_date = date("d-m-Y", $date_of_leaving);
+        $converted_changed_dol = date("d-m-Y", $changed_dol);
+
+        $converted_dates = array("joining_date"=>$converted_joining_date,"date_of_resignation"=>$converted_resignation_date,"date_of_leaving"=>$converted_leaving_date,"changed_dol"=>$converted_changed_dol);
+
         $commenterId = auth()->id();
         $loggedUser = \DB::table('users')
         ->where('id',$commenterId)
@@ -96,7 +109,7 @@ class ProcessController extends Controller
         $feedback = \DB::table('feedback')
         ->where('feedback.resignation_id',$id)
         ->first();
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','loggedUser','feedback'));
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','loggedUser','feedback','converted_dates'));
     }
 
     /**

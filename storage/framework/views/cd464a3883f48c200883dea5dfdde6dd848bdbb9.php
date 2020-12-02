@@ -21,7 +21,7 @@
                 <p><b>Employee ID: </b><?php echo e($user->emp_id); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joinig: </b><?php echo e($user->joining_date); ?></p>
+                <p><b>Date of joinig: </b><?php echo e($converted_dates['joining_date']); ?></p>
             </div>
         </div>
         <div class="row">

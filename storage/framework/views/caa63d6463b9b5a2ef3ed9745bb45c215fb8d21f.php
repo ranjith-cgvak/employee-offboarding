@@ -20,7 +20,7 @@
                 <p><b>Employee ID: </b><?php echo e($user->emp_id); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joinig: </b><?php echo e($user->joining_date); ?></p>
+                <p><b>Date of joinig: </b><?php echo e($converted_dates['joining_date']); ?></p>
             </div>
         </div>
         <div class="row">
@@ -68,13 +68,13 @@
             <div class="form-group row">
                 <label for="dateOfResignation" class="col-sm-2 form-label">Date Of Resignation </label>
                 <div class="col-sm-4">
-                    <p><?php echo e($myResignation->date_of_resignation); ?></p>
+                    <p><?php echo e($converted_dates['date_of_resignation']); ?></p>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="dateOfLeaving" class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
                 <div class="col-sm-4">
-                    <p><?php echo e($myResignation->date_of_leaving); ?></p>
+                    <p><?php echo e($converted_dates['date_of_leaving']); ?></p>
                 </div>     
             </div>
         </div>

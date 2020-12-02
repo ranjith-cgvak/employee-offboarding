@@ -4,8 +4,10 @@
 .modelBtn {
     width: 25px;
     height: 25px;
+    background-color: transparent;
 }
 .modelBtn i {
+    
     margin-left: -10px;
 }
 

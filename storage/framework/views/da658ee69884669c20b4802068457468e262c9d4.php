@@ -40,7 +40,6 @@
                   <td><a href="<?php echo e(route('process.edit', $emp->id )); ?>">View</a></td>
                   <?php if(Auth::user()->designation_id == 3): ?>
                   <td>
-                    <?php if($emp->lead == NULL): ?>
                     <form method="post" action="<?php echo e(route('process.update' , $emp->employee_id )); ?>">
                       <?php echo csrf_field(); ?>
                       <?php echo e(method_field('PUT')); ?>
@@ -48,7 +47,7 @@
                       <div class="form-group">
                         <div class="col-sm-6">
                         <select class="form-control" name="lead" id="lead">
-                          <option value="">Select</option>
+                        <option value="<?php echo e(($emp->lead == NULL) ? '' : $emp->lead); ?>"><?php echo e(($emp->lead == NULL) ? 'Select' : $emp->lead); ?></option>
                           <?php $__currentLoopData = $lead_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lead): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                           <option value="<?php echo e($lead->display_name); ?>"><?php echo e($lead->display_name); ?></option>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -59,9 +58,6 @@
                         </div>
                       </div>
                     </form>
-                    <?php endif; ?>
-                    <?php echo e($emp->lead); ?>
-
                   </td>
                   <?php endif; ?>
                 </tr>

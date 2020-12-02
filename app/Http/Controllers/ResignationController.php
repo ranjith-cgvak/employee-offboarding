@@ -22,7 +22,21 @@ class ResignationController extends Controller
         ])
         ->first();
         $user = \DB::table('users')->where('emp_id',$empId)->first();
-        return view('resignation.resignationDetails', compact('myResignation','user'));
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $date_of_resignation = strtotime($myResignation->date_of_resignation);
+        $date_of_leaving = strtotime($myResignation->date_of_leaving);
+        $changed_dol = strtotime($myResignation->changed_dol);
+
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_resignation_date = date("d-m-Y", $date_of_resignation);
+        $converted_leaving_date = date("d-m-Y", $date_of_leaving);
+        $converted_changed_dol = date("d-m-Y", $changed_dol);
+
+        $converted_dates = array("joining_date"=>$converted_joining_date,"date_of_resignation"=>$converted_resignation_date,"date_of_leaving"=>$converted_leaving_date,"changed_dol"=>$converted_changed_dol);
+
+        
+        return view('resignation.resignationDetails', compact('myResignation','user','converted_dates'));
     }
 
     public function showAcceptanceStatus() {
@@ -34,7 +48,12 @@ class ResignationController extends Controller
         ])
         ->first();
         $user = \DB::table('users')->where('emp_id',$empId)->first();
-        return view('resignation.acceptanceStatus', compact('myResignation','user'));
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_dates = array("joining_date"=>$converted_joining_date);
+        
+        return view('resignation.acceptanceStatus', compact('myResignation','user','converted_dates'));
     }
 
     public function showWithdrawForm() {
@@ -46,7 +65,12 @@ class ResignationController extends Controller
         ])
         ->first();
         $user = \DB::table('users')->where('emp_id',$empId)->first();
-        return view('resignation.withdrawForm', compact('myResignation','user'));
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_dates = array("joining_date"=>$converted_joining_date);
+
+        return view('resignation.withdrawForm', compact('myResignation','user','converted_dates'));
     }
 
     /**
@@ -64,7 +88,12 @@ class ResignationController extends Controller
         ])
         ->first();
         $user = \DB::table('users')->where('emp_id',$empId)->first();
-        return view('resignation.create', compact('myResignation','user'));
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_dates = array("joining_date"=>$converted_joining_date);
+
+        return view('resignation.create', compact('myResignation','user','converted_dates'));
     }
 
     /**
@@ -90,6 +119,7 @@ class ResignationController extends Controller
         } 
         $resignation->employee_id = $empId;
         $resignation->date_of_leaving = $dateofleaving;
+        $resignation->changed_dol = $dateofleaving;
         $resignation->save();
         return redirect('/resignation')->with('success','Details saved!');
     }
