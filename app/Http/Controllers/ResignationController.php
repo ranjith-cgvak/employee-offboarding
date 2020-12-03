@@ -55,6 +55,25 @@ class ResignationController extends Controller
         
         return view('resignation.acceptanceStatus', compact('myResignation','user','converted_dates'));
     }
+    public function noDueStatus() {
+        $empId = \Auth::User()->emp_id;
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['employee_id', '=', $empId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
+        $nodue = \DB::table('no_dues')
+        ->where('no_dues.resignation_id',$myResignation->id)
+        ->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_dates = array("joining_date"=>$converted_joining_date);
+        
+        return view('resignation.noDueStatus', compact('myResignation','user','converted_dates','nodue'));
+    }
 
     public function showWithdrawForm() {
         $empId = \Auth::User()->emp_id;

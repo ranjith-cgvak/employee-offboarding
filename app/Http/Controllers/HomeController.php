@@ -34,7 +34,7 @@ class HomeController extends Controller
         ])
         ->count();
         
-        if((\Auth::User()->designation_id == 2) || (\Auth::User()->designation_id == 3) || (\Auth::User()->department_id == 2)) {
+        if((\Auth::User()->designation_id == 2) || (\Auth::User()->designation_id == 3) || (\Auth::User()->department_id == 2) || (\Auth::User()->department_id == 7)) {
             return redirect()->route('process.index');
         }
         else if($myResignation == 0) {

@@ -1,7 +1,13 @@
 <section class="sidebar">
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
-    <?php if(Auth::user()->designation == 'Software Engineer'): ?>
+    <?php if((Auth::User()->department_id == 7) || (Auth::User()->department_id == 2) || (Auth::User()->designation_id == 2) || (Auth::User()->designation_id == 3) ): ?>
+    <li class=" <?php echo e((request()->segment(1) == 'process') ? 'active' : ''); ?>">
+        <a href="<?php echo e(route('process.index')); ?>">
+        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+    </li>
+    <?php else: ?>
     <li data-toggle="tooltip" data-placement="right" <?php if($myResignation): ?> title= 'Applied Already' <?php endif; ?> class=" <?php echo e(((request()->segment(1) == 'resignation') && (request()->segment(2) == 'create')) ? 'active' : ''); ?>">
         <a class="<?php echo e(($myResignation != NULL) ? 'isDisabled' : ' '); ?>" href="<?php echo e(route('resignation.create')); ?>">
         <i class="fa fa-file-text-o"></i> <span>Resignation Form</span>
@@ -17,16 +23,14 @@
         <i class="fa fa-check-square-o"></i> <span>Acceptance Details</span>
         </a>
     </li>
+    <li data-toggle="tooltip" data-placement="right" <?php if(!$myResignation): ?> title= 'Apply resignation to enable' <?php endif; ?> class=" <?php echo e((request()->segment(1) == 'noDueStatus') ? 'active' : ''); ?>">
+        <a class="<?php echo e(($myResignation == NULL) ? 'isDisabled' : ' '); ?>" href="<?php echo e(route('noDueStatus')); ?>">
+        <i class="fa fa-check-square-o"></i> <span>Acceptance Details</span>
+        </a>
+    </li>
     <li data-toggle="tooltip" data-placement="right" <?php if(!$myResignation): ?> title= 'Apply resignation to enable' <?php endif; ?> class=" <?php echo e((request()->segment(1) == 'withdrawForm') ? 'active' : ''); ?>">
         <a class="<?php echo e(($myResignation == NULL) ? 'isDisabled' : ' '); ?>" href="<?php echo e(route('withdrawForm')); ?>">
         <i class="fa fa-file-text-o"></i> <span>Withdraw Form</span>
-        </a>
-    </li>
-    <?php endif; ?>
-    <?php if(Auth::user()->designation != 'Software Engineer'): ?>
-    <li class=" <?php echo e((request()->segment(1) == 'process') ? 'active' : ''); ?>">
-        <a href="<?php echo e(route('process.index')); ?>">
-        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
     </li>
     <?php endif; ?>

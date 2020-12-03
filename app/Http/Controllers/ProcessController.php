@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Resignation;
 use App\User;
 use App\Feedback;
+use App\NoDue;
 use App\Support\Facades\DB;
 
 class ProcessController extends Controller
@@ -23,7 +24,7 @@ class ProcessController extends Controller
         ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
         ->get();
         }
-        else if(\Auth::User()->department_id == 2) {
+        else if((\Auth::User()->department_id == 2) || (\Auth::User()->department_id == 7)) {
             $emp_list = \DB::table('resignations')
             ->select('resignations.id','employee_id','display_name','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
             ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
@@ -109,7 +110,10 @@ class ProcessController extends Controller
         $feedback = \DB::table('feedback')
         ->where('feedback.resignation_id',$id)
         ->first();
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','loggedUser','feedback','converted_dates'));
+        $nodue = \DB::table('no_dues')
+        ->where('no_dues.resignation_id',$id)
+        ->first();
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','loggedUser','feedback','converted_dates','nodue'));
     }
 
     /**
@@ -281,6 +285,115 @@ class ProcessController extends Controller
             $updateFeedback->lead_comment = $request->get('feedback_comments');
         }
         $updateFeedback->save();
+        return redirect()->route('process.edit', ['process' => $resignationId]);
+    }
+
+    public function storeNodue(Request $request) {
+
+        $resignationId = $request->get('resignationId');
+        $nodue = new NoDue([
+            'resignation_id' => $request->get('resignationId')
+        ]);
+        if((\Auth::User()->designation_id == 3) || (\Auth::User()->designation_id == 2)) {
+            $request->validate([
+                'knowledge_transfer'=>'required',
+                'knowledge_transfer_comment'=>'required',
+                'mail_id_closure'=>'required',
+                'mail_id_closure_comment'=>'required'
+            ]);
+            if(\Auth::User()->designation_id == 2) {
+                $nodue->knowledge_transfer_lead = $request->get('knowledge_transfer');
+                $nodue->knowledge_transfer_lead_comment =  $request->get('knowledge_transfer_comment');
+                $nodue->mail_id_closure_lead = $request->get('mail_id_closure');
+                $nodue->mail_id_closure_lead_comment = $request->get('mail_id_closure_comment');
+            }
+            if(\Auth::User()->designation_id == 3) {
+                $nodue->knowledge_transfer_head = $request->get('knowledge_transfer');
+                $nodue->knowledge_transfer_head_comment =  $request->get('knowledge_transfer_comment');
+                $nodue->mail_id_closure_head = $request->get('mail_id_closure');
+                $nodue->mail_id_closure_head_comment = $request->get('mail_id_closure_comment');
+            }
+        }
+        if(\Auth::User()->department_id == 2) {
+            $request->validate([
+                'id_card'=>'required',
+                'id_card_comment'=>'required',
+                'nda'=>'required',
+                'nda_comment'=>'required'
+            ]);
+
+            $nodue->id_card = $request->get('id_card');
+            $nodue->id_card_comment =  $request->get('id_card_comment');
+            $nodue->nda = $request->get('nda');
+            $nodue->nda_comment = $request->get('nda_comment');
+        }
+        if(\Auth::User()->department_id == 7) {
+            $request->validate([
+                'official_email_id'=>'required',
+                'official_email_id_comment'=>'required',
+                'skype_account'=>'required',
+                'skype_account_comment'=>'required'
+            ]);
+
+            $nodue->official_email_id = $request->get('official_email_id');
+            $nodue->official_email_id_comment =  $request->get('official_email_id_comment');
+            $nodue->skype_account = $request->get('skype_account');
+            $nodue->skype_account_comment = $request->get('skype_account_comment');
+        }
+        $nodue->save();
+        return redirect()->route('process.edit', ['process' => $resignationId]);
+    }
+    public function updateNodue(Request $request) {
+        $nodueId = $request->get('nodueId');
+        $resignationId = $request->get('resignationId');
+        $updateNodue = NoDue::find($nodueId);
+        if((\Auth::User()->designation_id == 3) || (\Auth::User()->designation_id == 2)) {
+            $request->validate([
+                'knowledge_transfer'=>'required',
+                'knowledge_transfer_comment'=>'required',
+                'mail_id_closure'=>'required',
+                'mail_id_closure_comment'=>'required'
+            ]);
+            if(\Auth::User()->designation_id == 2) {
+                $updateNodue->knowledge_transfer_lead = $request->get('knowledge_transfer');
+                $updateNodue->knowledge_transfer_lead_comment =  $request->get('knowledge_transfer_comment');
+                $updateNodue->mail_id_closure_lead = $request->get('mail_id_closure');
+                $updateNodue->mail_id_closure_lead_comment = $request->get('mail_id_closure_comment');
+            }
+            if(\Auth::User()->designation_id == 3) {
+                $updateNodue->knowledge_transfer_head = $request->get('knowledge_transfer');
+                $updateNodue->knowledge_transfer_head_comment =  $request->get('knowledge_transfer_comment');
+                $updateNodue->mail_id_closure_head = $request->get('mail_id_closure');
+                $updateNodue->mail_id_closure_head_comment = $request->get('mail_id_closure_comment');
+            }
+        }
+        if(\Auth::User()->department_id == 2) {
+            $request->validate([
+                'id_card'=>'required',
+                'id_card_comment'=>'required',
+                'nda'=>'required',
+                'nda_comment'=>'required'
+            ]);
+
+            $updateNodue->id_card = $request->get('id_card');
+            $updateNodue->id_card_comment =  $request->get('id_card_comment');
+            $updateNodue->nda = $request->get('nda');
+            $updateNodue->nda_comment = $request->get('nda_comment');
+        }
+        if(\Auth::User()->department_id == 7) {
+            $request->validate([
+                'official_email_id'=>'required',
+                'official_email_id_comment'=>'required',
+                'skype_account'=>'required',
+                'skype_account_comment'=>'required'
+            ]);
+
+            $updateNodue->official_email_id = $request->get('official_email_id');
+            $updateNodue->official_email_id_comment =  $request->get('official_email_id_comment');
+            $updateNodue->skype_account = $request->get('skype_account');
+            $updateNodue->skype_account_comment = $request->get('skype_account_comment');
+        }
+        $updateNodue->save();
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
     /**

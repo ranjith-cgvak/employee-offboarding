@@ -124,7 +124,9 @@ unset($__errorArgs, $__bag); ?>
                 <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
                 <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
                 <li><a href="#tab_3-2" data-toggle="tab">No Due</a></li>
+                <?php if(\Auth::User()->department_id != 7): ?>
                 <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
+                <?php endif; ?>
                 <?php endif; ?>
             </ul>
             <div class="tab-content">
@@ -194,7 +196,7 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         
-                        <?php if(Auth::user()->designation != 'SA'): ?>
+                        <?php if(\Auth::User()->department_id != 7): ?>
                         <?php if($emp_resignation->date_of_withdraw == NULL): ?>
                         <!-- Comments on the resignation -->
                         <div class="row">
@@ -329,7 +331,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
-                        <?php if(Auth::user()->designation != 'SA'): ?>
+                        <?php if(\Auth::User()->department_id != 7): ?>
                         <!-- comments on withdraw details -->
                         <div class="row">
                             <div class="col-xs-12">
@@ -456,7 +458,7 @@ unset($__errorArgs, $__bag); ?>
                                             <thead>
                                                 <th></th>
                                                 <th>Resignation Details</th>
-                                                <?php if(Auth::user()->designation != 'SA'): ?>
+                                                <?php if(\Auth::User()->department_id != 7): ?>
                                                 <th title="General Comment">Comment</th>
                                                 <th>Date of leaving</th>
                                                 <th title="Comment on date of leaving">Comment DOL</th>
@@ -466,7 +468,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <tr>
                                                     <td>Lead</td>
                                                     <td class="<?php echo e(($emp_resignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_lead == NULL) ? 'Pending' : 'Accepted'); ?></td>
-                                                    <?php if(Auth::user()->designation != 'SA'): ?>
+                                                    <?php if(\Auth::User()->department_id != 7): ?>
                                                     <td><?php echo e($emp_resignation->comment_lead); ?></td>
                                                     <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
                                                     <td><?php echo e($emp_resignation->comment_dol_lead); ?></td>
@@ -475,7 +477,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <tr>
                                                     <td>Department Head / Unit Head</td>
                                                     <td class="<?php echo e(($emp_resignation->comment_head == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_head == NULL) ? 'Pending' : 'Accepted'); ?></td>
-                                                    <?php if(Auth::user()->designation != 'SA'): ?>
+                                                    <?php if(\Auth::User()->department_id != 7): ?>
                                                     <td><?php echo e($emp_resignation->comment_head); ?></td>
                                                     <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
                                                     <td><?php echo e($emp_resignation->comment_dol_head); ?></td>
@@ -484,7 +486,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <tr>
                                                     <td>HR</td>
                                                     <td class="<?php echo e(($emp_resignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_hr == NULL) ? 'Pending' : 'Accepted'); ?></td>
-                                                    <?php if(Auth::user()->designation != 'SA'): ?>
+                                                    <?php if(\Auth::User()->department_id != 7): ?>
                                                     <td><?php echo e($emp_resignation->comment_hr); ?></td>
                                                     <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
                                                     <td><?php echo e($emp_resignation->comment_dol_hr); ?></td>
@@ -510,56 +512,398 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="box-header with-border">
                                         <h3 class="box-title">No Due</h3>
                                     </div>
+                                    <form method="get" action="<?php echo e((!$nodue) ? route('storeNodue') : route('updateNodue')); ?>">
+                                        <div class="box-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <th>Attributes</th>
+                                                    <th>Comments</th>
+                                                </thead>
+                                                <tbody>
+                                                    <?php if(Auth::User()->designation_id == 2): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->knowledge_transfer_lead != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Knowledge Transfer
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['knowledge_transfer'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->knowledge_transfer_lead_comment); ?></textarea>
+                                                                    <?php $__errorArgs = ['knowledge_transfer_comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->mail_id_closure_lead != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Mail ID closure
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['mail_id_closure'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->mail_id_closure_lead_comment); ?></textarea>
+                                                                    <?php $__errorArgs = ['mail_id_closure_comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    <?php endif; ?>
+                                                    <?php if(Auth::User()->designation_id == 3): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->knowledge_transfer_head != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Knowledge Transfer
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['knowledge_transfer'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->knowledge_transfer_head_comment); ?></textarea>
+                                                                    <?php $__errorArgs = ['knowledge_transfer_comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->mail_id_closure_head != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Mail ID closure
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['mail_id_closure'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->mail_id_closure_head_comment); ?></textarea>
+                                                                    <?php $__errorArgs = ['mail_id_closure_comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    <?php endif; ?>
+                                                    <?php if(Auth::User()->department_id == 2): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="id_card" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->id_card != NULL) ? 'checked' : ''); ?> <?php endif; ?>> ID Card
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['id_card'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="id_card_comment" class="form-control" id="id_card_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->id_card_comment); ?></textarea>
+                                                                    <?php $__errorArgs = ['id_card_comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="nda" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->nda != NULL) ? 'checked' : ''); ?> <?php endif; ?>> NDA
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['nda'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="nda_comment" class="form-control" id="nda_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->nda_comment); ?></textarea>
+                                                                    <?php $__errorArgs = ['nda_comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    <?php endif; ?>
+                                                    <?php if(Auth::User()->department_id == 7): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="official_email_id" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->official_email_id != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Official Email ID
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['official_email_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="official_email_id_comment" class="form-control" id="official_email_id_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->official_email_id_comment); ?></textarea>
+                                                                    <?php $__errorArgs = ['official_email_id_comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="skype_account" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->skype_account != NULL) ? 'checked' : ''); ?> <?php endif; ?>> NDA
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['skype_account'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="skype_account_comment" class="form-control" id="skype_account_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->skype_account_comment); ?></textarea>
+                                                                    <?php $__errorArgs = ['skype_account_comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    <?php endif; ?>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div class="box-footer">
+                                            <input type="hidden" id="nodueId" name="nodueId" value="<?php echo e((!$nodue) ? '' : $nodue->id); ?>">
+                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
+                                            <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php if(Auth::User()->department_id == 2): ?>
+                    <!-- No Due status -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">No Due Status</h3>
+                                    </div>
                                     <div class="box-body">
-                                        
                                         <table class="table table-bordered">
                                             <thead>
-                                                <th>Attributes</th>
-                                                <th>Comments</th>
+                                                <th>Lead</th>
+                                                <th>Department Head / Unit Head</th>
+                                                <th>HR</th>
+                                                <th>SA</th>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"> Official Email Account
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <textarea name="commentMailAccount" class="form-control" id="commentMailAccount" cols="30" rows="3"></textarea>
-                                                        </div>
-                                                    </td>
+                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->knowledge_transfer_lead == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Knowledge Transfer</td>
+                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->knowledge_transfer_head == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Knowledge Transfer</td>
+                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->id_card == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>ID Card</td>
+                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->official_email_id == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Official Email ID</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"> Skype Account
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <textarea name="commentSkypeAccount" class="form-control" id="commentSkypeAccount" cols="30" rows="3"></textarea>
-                                                        </div>
-                                                    </td> 
+                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->mail_id_closure_lead == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Mail ID Closure</td>
+                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->mail_id_closure_head == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Mail ID Closure</td>
+                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->nda == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>NDA</td>
+                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->skype_account == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Skype Account</td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
-                                    <div class="box-footer">
-                                        <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                
+                    <?php endif; ?>
                 </div>
                 <!-- /.tab-pane -->
 
+                <?php if(\Auth::User()->department_id != 7): ?>
                 <!-- Feedback form -->
                 <div class="tab-pane" id="tab_4-2">
                     <div class="container-fluid">
@@ -963,7 +1307,7 @@ unset($__errorArgs, $__bag); ?>
                 </div>
                 <!-- /.tab-pane -->
                 <!-- /End of feedback -->
-
+                <?php endif; ?>
             </div>
             <!-- /.tab-content -->
             </div>
