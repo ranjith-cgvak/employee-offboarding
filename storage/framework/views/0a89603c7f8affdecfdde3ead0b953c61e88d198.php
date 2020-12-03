@@ -1,13 +1,14 @@
-@extends('layouts.app_home')
-
-@section('content')
 
 
-@if(session()->get('success'))
+<?php $__env->startSection('content'); ?>
+
+
+<?php if(session()->get('success')): ?>
 <div class="alert alert-success">
-{{ session()->get('success') }}
+<?php echo e(session()->get('success')); ?>
+
 </div>
-@endif
+<?php endif; ?>
 
 <!-- Employee details -->
 <div class="container-fluid">
@@ -18,24 +19,24 @@
         <div class="box-body">
             <div class="row">
                 <div class="col-xs-4">
-                    <p><b>Employee Name: </b>{{ $emp_resignation->display_name }}</p>
+                    <p><b>Employee Name: </b><?php echo e($emp_resignation->display_name); ?></p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Employee ID: </b>{{ $emp_resignation->employee_id }}</p>
+                    <p><b>Employee ID: </b><?php echo e($emp_resignation->employee_id); ?></p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Date of joinig: </b>{{ $converted_dates['joining_date'] }}</p>
+                    <p><b>Date of joinig: </b><?php echo e($converted_dates['joining_date']); ?></p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-4">
-                    <p><b>Designation: </b>{{ $emp_resignation->designation }}</p>
+                    <p><b>Designation: </b><?php echo e($emp_resignation->designation); ?></p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Department: </b>{{ $emp_resignation->department_name }}</p>
+                    <p><b>Department: </b><?php echo e($emp_resignation->department_name); ?></p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Lead: </b>{{ $emp_resignation->lead }}</p>
+                    <p><b>Lead: </b><?php echo e($emp_resignation->lead); ?></p>
                 </div>
             </div>
         </div>
@@ -55,34 +56,49 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="get" action="{{ route('updateDol')}}">
-            @csrf
-            {{ method_field('PUT') }}
+        <form method="get" action="<?php echo e(route('updateDol')); ?>">
+            <?php echo csrf_field(); ?>
+            <?php echo e(method_field('PUT')); ?>
+
             <div class="form-group row">
                 <label for="dateOfLeaving" class="col-sm-4 form-label">Change DOL: </label>
                 <div class="col-sm-6">
-                    <input type="date" class="form-control disablePast" value="{{ $emp_resignation->changed_dol }}" id="dateOfLeaving" name="dateOfLeaving">
-                    @error('dateOfLeaving')
+                    <input type="date" class="form-control disablePast" value="<?php echo e($emp_resignation->changed_dol); ?>" id="dateOfLeaving" name="dateOfLeaving">
+                    <?php $__errorArgs = ['dateOfLeaving'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                     <br>
                     <span class="invalid-feedback" role="alert">
-                        <strong class="text-danger">{{ $message }}</strong>
+                        <strong class="text-danger"><?php echo e($message); ?></strong>
                     </span>
-                    @enderror
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>     
             </div>
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{ (Auth::User()->designation_id != 2) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead}}</textarea>
-                    @error('dateOfLeaving')
+                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e((Auth::User()->designation_id != 2) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead); ?></textarea>
+                    <?php $__errorArgs = ['dateOfLeaving'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                     <br>
                     <span class="invalid-feedback" role="alert">
-                        <strong class="text-danger">{{ $message }}</strong>
+                        <strong class="text-danger"><?php echo e($message); ?></strong>
                     </span>
-                    @enderror
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>     
             </div>
-            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
+            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -102,14 +118,14 @@
             <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_1-1" data-toggle="tab">Resignation Details</a></li>
-                @if($emp_resignation->date_of_withdraw != NULL )
+                <?php if($emp_resignation->date_of_withdraw != NULL ): ?>
                 <li><a href="#tab_1-2" data-toggle="tab">Withdraw Details</a></li>
-                @endif
-                @if($emp_resignation->date_of_withdraw == NULL )
+                <?php endif; ?>
+                <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
                 <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
                 <li><a href="#tab_3-2" data-toggle="tab">No Due</a></li>
                 <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
-                @endif
+                <?php endif; ?>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1-1">
@@ -127,27 +143,27 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 form-label">Reason For Leaving the job</label>
                                             <div class="col-sm-6">
-                                                <p>{{ $emp_resignation->reason }}</p>
+                                                <p><?php echo e($emp_resignation->reason); ?></p>
                                             </div>
                                         </div>
-                                        @if($emp_resignation->other_reason != NULL)
+                                        <?php if($emp_resignation->other_reason != NULL): ?>
                                         <div class="form-group row">
                                             <label class="col-sm-2 form-label">Other Reasons </label>
                                             <div class="col-sm-6">
-                                                <p>{{ $emp_resignation->other_reason }}</p>
+                                                <p><?php echo e($emp_resignation->other_reason); ?></p>
                                             </div>
                                         </div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="form-group row">
                                             <label class="col-sm-2 form-label">Comments on leaving</label>
                                             <div class="col-sm-6">
-                                                <p>{{ $emp_resignation->comment_on_resignation }}</p>
+                                                <p><?php echo e($emp_resignation->comment_on_resignation); ?></p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 form-label">Date Of Resignation</label>
                                             <div class="col-sm-4">
-                                                <p>{{ $converted_dates['date_of_resignation'] }}</p>
+                                                <p><?php echo e($converted_dates['date_of_resignation']); ?></p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -155,7 +171,7 @@
                                             <div class="col-sm-10">
                                                 <div class="row">
                                                     <div class="col-sm-1">
-                                                    <p>{{ $converted_dates['date_of_leaving'] }}</p>
+                                                    <p><?php echo e($converted_dates['date_of_leaving']); ?></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -165,7 +181,7 @@
                                             <div class="col-sm-10">
                                                 <div class="row">
                                                     <div class="col-sm-1">
-                                                    <p>{{ $converted_dates['changed_dol'] }}</p>
+                                                    <p><?php echo e($converted_dates['changed_dol']); ?></p>
                                                     </div>
                                                     <div class="col-sm-4">
                                                     <button type="button" class="btn modelBtn" data-toggle="modal" data-target="#exampleModalCenter"><i style='font-size:17px' class='fa fa-edit'></i></button>
@@ -178,8 +194,8 @@
                             </div>
                         </div>
                         
-                        @if(Auth::user()->designation != 'SA')
-                        @if($emp_resignation->date_of_withdraw == NULL)
+                        <?php if(Auth::user()->designation != 'SA'): ?>
+                        <?php if($emp_resignation->date_of_withdraw == NULL): ?>
                         <!-- Comments on the resignation -->
                         <div class="row">
                             <div class="col-xs-12">
@@ -190,63 +206,85 @@
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="{{ route('updateResignationComment') }}">
-                                        @csrf
-                                        {{ method_field('PUT') }}
+                                    <form method="get" action="<?php echo e(route('updateResignationComment')); ?>">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo e(method_field('PUT')); ?>
+
                                         <div class="box-body">
                                             <div class="form-group row">
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
-                                                @if(Auth::User()->designation_id == 2)
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '}}</textarea>
-                                                @endif
-                                                    @error('leadComment')
+                                                <?php if(Auth::User()->designation_id == 2): ?>
+                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '); ?></textarea>
+                                                <?php endif; ?>
+                                                    <?php $__errorArgs = ['leadComment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
                                                     </span>
-                                                    @enderror
-                                                    @if(Auth::User()->designation_id != 2)
-                                                    <p>{{ ($emp_resignation->comment_lead == NULL)  ? 'N/A' : $emp_resignation->comment_lead }}</p>
-                                                    @endif
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                    <?php if(Auth::User()->designation_id != 2): ?>
+                                                    <p><?php echo e(($emp_resignation->comment_lead == NULL)  ? 'N/A' : $emp_resignation->comment_lead); ?></p>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
-                                            @if(Auth::User()->designation_id != 2)
+                                            <?php if(Auth::User()->designation_id != 2): ?>
                                             <div class="form-group row">
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
-                                                    @if(Auth::User()->designation_id == 3 )
-                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_head != NULL) ? $emp_resignation->comment_head : ' '}}</textarea>
-                                                    @endif
-                                                    @error('headComment')
+                                                    <?php if(Auth::User()->designation_id == 3 ): ?>
+                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_head != NULL) ? $emp_resignation->comment_head : ' '); ?></textarea>
+                                                    <?php endif; ?>
+                                                    <?php $__errorArgs = ['headComment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
                                                     </span>
-                                                    @enderror
-                                                    @if(Auth::User()->department_id == 2)
-                                                    <p>{{ $emp_resignation->comment_head }}</p>
-                                                    @endif
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                    <?php if(Auth::User()->department_id == 2): ?>
+                                                    <p><?php echo e($emp_resignation->comment_head); ?></p>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
-                                            @endif
+                                            <?php endif; ?>
 
-                                            @if(Auth::User()->department_id == 2 )
+                                            <?php if(Auth::User()->department_id == 2 ): ?>
                                             <div class="form-group row">
                                                 <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
                                                 <div class="col-sm-6">
-                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_hr != NULL) ? $emp_resignation->comment_hr : ' '}}</textarea>
-                                                    @error('hrComment')
+                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_hr != NULL) ? $emp_resignation->comment_hr : ' '); ?></textarea>
+                                                    <?php $__errorArgs = ['hrComment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
                                                     </span>
-                                                    @enderror
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
-                                            @endif
+                                            <?php endif; ?>
 
-                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
+                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
@@ -256,12 +294,12 @@
                                 </div>
                             </div>
                         </div>
-                        @endif
-                        @endif
+                        <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <!-- /.tab-pane -->
-                @if($emp_resignation->date_of_withdraw != NULL )
+                <?php if($emp_resignation->date_of_withdraw != NULL ): ?>
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="tab_1-2">
 
@@ -278,20 +316,20 @@
                                         <div class="form-group row">
                                             <label for="withdrawDate" class="col-sm-2 form-label">Withdraw Date </label>
                                             <div class="col-sm-4">
-                                                <p>{{ $emp_resignation->date_of_withdraw }}</p>
+                                                <p><?php echo e($emp_resignation->date_of_withdraw); ?></p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="comment" class="col-sm-2 form-label">Comment </label>
                                             <div class="col-sm-4">
-                                                <p>{{ $emp_resignation->comment }}</p>
+                                                <p><?php echo e($emp_resignation->comment); ?></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @if(Auth::user()->designation != 'SA')
+                        <?php if(Auth::user()->designation != 'SA'): ?>
                         <!-- comments on withdraw details -->
                         <div class="row">
                             <div class="col-xs-12">
@@ -301,68 +339,90 @@
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="{{ route('updateDowComment') }}">
-                                        @csrf
-                                        {{ method_field('PUT') }}
+                                    <form method="get" action="<?php echo e(route('updateDowComment')); ?>">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo e(method_field('PUT')); ?>
+
                                         <div class="box-body">
                                             <div class="form-group row">
                                                 <label for="withdrawLeadComment" class="col-sm-2 form-label">Lead Comment on Withdraw </label>
                                                 <div class="col-sm-6">
-                                                    @if(Auth::User()->designation_id == 2 )
-                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required>{{ ($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '}}</textarea>
-                                                    @endif
+                                                    <?php if(Auth::User()->designation_id == 2 ): ?>
+                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '); ?></textarea>
+                                                    <?php endif; ?>
 
-                                                    @error('withdrawLeadComment')
+                                                    <?php $__errorArgs = ['withdrawLeadComment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
                                                     </span>
-                                                    @enderror
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
 
-                                                    @if(Auth::User()->designation_id != 2)
-                                                    <p>{{ $emp_resignation->comment_dow_lead }}</p>
-                                                    @endif
+                                                    <?php if(Auth::User()->designation_id != 2): ?>
+                                                    <p><?php echo e($emp_resignation->comment_dow_lead); ?></p>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
 
-                                            @if(Auth::User()->designation_id != 2)
+                                            <?php if(Auth::User()->designation_id != 2): ?>
                                             <div class="form-group row">
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
-                                                    @if (Auth::User()->designation_id == 3) 
-                                                    <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required>{{ ($emp_resignation->comment_dow_head != NULL) ? $emp_resignation->comment_dow_head : ' '}}</textarea>
-                                                    @endif
-                                                    @error('withdrawHeadComment')
+                                                    <?php if(Auth::User()->designation_id == 3): ?> 
+                                                    <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required><?php echo e(($emp_resignation->comment_dow_head != NULL) ? $emp_resignation->comment_dow_head : ' '); ?></textarea>
+                                                    <?php endif; ?>
+                                                    <?php $__errorArgs = ['withdrawHeadComment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
                                                     </span>
-                                                    @enderror
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
 
-                                                    @if(Auth::User()->department_id == 2)
-                                                    <p>{{ $emp_resignation->comment_dow_head }}</p>
-                                                    @endif
+                                                    <?php if(Auth::User()->department_id == 2): ?>
+                                                    <p><?php echo e($emp_resignation->comment_dow_head); ?></p>
+                                                    <?php endif; ?>
 
                                                 </div>
                                             </div>
-                                            @endif
+                                            <?php endif; ?>
 
-                                            @if (Auth::User()->department_id == 2) 
+                                            <?php if(Auth::User()->department_id == 2): ?> 
                                             <div class="form-group row">
                                                 <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
                                                 <div class="col-sm-4">
-                                                    <textarea name="withdrawHrComment" id="withdrawHrComment" cols="30" rows="10" class="form-control" required>{{ ($emp_resignation->comment_dow_hr != NULL) ? $emp_resignation->comment_dow_hr : ' '}}</textarea>
-                                                    @error('withdrawHrComment')
+                                                    <textarea name="withdrawHrComment" id="withdrawHrComment" cols="30" rows="10" class="form-control" required><?php echo e(($emp_resignation->comment_dow_hr != NULL) ? $emp_resignation->comment_dow_hr : ' '); ?></textarea>
+                                                    <?php $__errorArgs = ['withdrawHrComment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
                                                     </span>
-                                                    @enderror
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
-                                            @endif
+                                            <?php endif; ?>
 
-                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
+                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
@@ -372,15 +432,15 @@
                                 </div>
                             </div>
                         </div>
-                        @endif
+                        <?php endif; ?>
                         
                     </div>
                 
                 </div>
                 <!-- /.tab-pane -->
-                @endif
+                <?php endif; ?>
 
-                @if($emp_resignation->date_of_withdraw == NULL )
+                <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
                 <div class="tab-pane" id="tab_2-2">
                     <!-- Acceptance details -->
                     <div class="container-fluid">
@@ -396,39 +456,39 @@
                                             <thead>
                                                 <th></th>
                                                 <th>Resignation Details</th>
-                                                @if(Auth::user()->designation != 'SA')
+                                                <?php if(Auth::user()->designation != 'SA'): ?>
                                                 <th title="General Comment">Comment</th>
                                                 <th>Date of leaving</th>
                                                 <th title="Comment on date of leaving">Comment DOL</th>
-                                                @endif
+                                                <?php endif; ?>
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <td>Lead</td>
-                                                    <td class="{{ ($emp_resignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_lead == NULL) ? 'Pending' : 'Accepted' }}</td>
-                                                    @if(Auth::user()->designation != 'SA')
-                                                    <td>{{ $emp_resignation->comment_lead }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
-                                                    <td>{{ $emp_resignation->comment_dol_lead }}</td>
-                                                    @endif
+                                                    <td class="<?php echo e(($emp_resignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_lead == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                                                    <?php if(Auth::user()->designation != 'SA'): ?>
+                                                    <td><?php echo e($emp_resignation->comment_lead); ?></td>
+                                                    <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
+                                                    <td><?php echo e($emp_resignation->comment_dol_lead); ?></td>
+                                                    <?php endif; ?>
                                                 </tr>
                                                 <tr>
                                                     <td>Department Head / Unit Head</td>
-                                                    <td class="{{ ($emp_resignation->comment_head == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_head == NULL) ? 'Pending' : 'Accepted' }}</td>
-                                                    @if(Auth::user()->designation != 'SA')
-                                                    <td>{{ $emp_resignation->comment_head }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
-                                                    <td>{{ $emp_resignation->comment_dol_head }}</td>
-                                                    @endif
+                                                    <td class="<?php echo e(($emp_resignation->comment_head == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_head == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                                                    <?php if(Auth::user()->designation != 'SA'): ?>
+                                                    <td><?php echo e($emp_resignation->comment_head); ?></td>
+                                                    <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
+                                                    <td><?php echo e($emp_resignation->comment_dol_head); ?></td>
+                                                    <?php endif; ?>
                                                 </tr>
                                                 <tr>
                                                     <td>HR</td>
-                                                    <td class="{{ ($emp_resignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_hr == NULL) ? 'Pending' : 'Accepted' }}</td>
-                                                    @if(Auth::user()->designation != 'SA')
-                                                    <td>{{ $emp_resignation->comment_hr }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
-                                                    <td>{{ $emp_resignation->comment_dol_hr }}</td>
-                                                    @endif
+                                                    <td class="<?php echo e(($emp_resignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_hr == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                                                    <?php if(Auth::user()->designation != 'SA'): ?>
+                                                    <td><?php echo e($emp_resignation->comment_hr); ?></td>
+                                                    <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
+                                                    <td><?php echo e($emp_resignation->comment_dol_hr); ?></td>
+                                                    <?php endif; ?>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -441,7 +501,7 @@
 
                 </div>
                 <!-- /.tab-pane -->
-                @endif
+                <?php endif; ?>
                 <div class="tab-pane" id="tab_3-2">
                     <div class="container-fluid">
                         <div class="row">
@@ -505,7 +565,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
-                                <form method="get" action="{{ (!$feedback) ? route('storeFeedback') : route('updateFeedback') }}">
+                                <form method="get" action="<?php echo e((!$feedback) ? route('storeFeedback') : route('updateFeedback')); ?>">
                                     <div class="box box-secondary">
                                         <div class="box-header with-border">
                                             <h3 class="box-title">Feedback</h3>
@@ -515,35 +575,49 @@
                                                 <tr>
                                                 <td rowspan="2"><h3 class="text-center">Present Skill Set</h3></td>
                                                 <td><label for="primary_skill" class="form-label">Primary</label></td></td>
-                                                @if(Auth::User()->department_id == 2)
-                                                    <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_primary }}</td>
-                                                @endif
-                                                @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
-                                                    <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_primary }}" required>
-                                                        @error('primary_skill')
+                                                <?php if(Auth::User()->department_id == 2): ?>
+                                                    <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_primary); ?></td>
+                                                <?php endif; ?>
+                                                <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                    <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_primary); ?>" required>
+                                                        <?php $__errorArgs = ['primary_skill'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                         <br>
                                                         <span class="invalid-feedback" role="alert">
-                                                            <strong class="text-danger">{{ $message }}</strong>
+                                                            <strong class="text-danger"><?php echo e($message); ?></strong>
                                                         </span>
-                                                        @enderror
+                                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                     </td>
-                                                @endif
+                                                <?php endif; ?>
                                                 </tr>
                                                 <tr>
                                                 <td><label for="secondary_skill" class="form-label">Secondary</label</td>
-                                                @if(Auth::User()->department_id == 2)
-                                                    <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_secondary }}</td>
-                                                @endif
-                                                @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
-                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}" required>       
-                                                        @error('secondary_skill')
+                                                <?php if(Auth::User()->department_id == 2): ?>
+                                                    <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_secondary); ?></td>
+                                                <?php endif; ?>
+                                                <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?>" required>       
+                                                        <?php $__errorArgs = ['secondary_skill'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                         <br>
                                                         <span class="invalid-feedback" role="alert">
-                                                            <strong class="text-danger">{{ $message }}</strong>
+                                                            <strong class="text-danger"><?php echo e($message); ?></strong>
                                                         </span>
-                                                        @enderror
+                                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                     </td>
-                                                @endif
+                                                <?php endif; ?>
                                                 </tr>
 
                                                 <tr>
@@ -551,20 +625,27 @@
                                                     <td>
                                                     <label for="last_worked_project" class="form-label">Project Name:</label</td>
                                                     </td>
-                                                    @if(Auth::User()->department_id == 2)
-                                                        <td>{{ (!$feedback) ? 'N/A' : $feedback->last_worked_project }}</td>
-                                                    @endif
-                                                    @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                    <?php if(Auth::User()->department_id == 2): ?>
+                                                        <td><?php echo e((!$feedback) ? 'N/A' : $feedback->last_worked_project); ?></td>
+                                                    <?php endif; ?>
+                                                    <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                         <td colspan="2">
-                                                            <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="{{ (!$feedback) ? '' : $feedback->last_worked_project }}" required>
-                                                            @error('last_worked_project')
+                                                            <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->last_worked_project); ?>" required>
+                                                            <?php $__errorArgs = ['last_worked_project'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                             <br>
                                                             <span class="invalid-feedback" role="alert">
-                                                                <strong class="text-danger">{{ $message }}</strong>
+                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
                                                             </span>
-                                                            @enderror
+                                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                         </td>
-                                                    @endif
+                                                    <?php endif; ?>
                                                     
                                                 </tr>
 
@@ -582,214 +663,277 @@
                                                 <tbody>
                                                     <tr>
                                                         <td><label for="attendance" class="form-label">Attendance</label></td>
-                                                        @if(Auth::User()->department_id == 2)
-                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->attendance_rating }}</td>
-                                                        @endif
-                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attendance_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="attendance" id="attendance" class="form-control" required>
-                                                                    <option value="{{ (!$feedback) ? '' : $feedback->attendance_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attendance_rating }}</option>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attendance_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attendance_rating); ?></option>
                                                                     <option value="Excellent">Excellent</option>
                                                                     <option value="Good">Good</option>
                                                                     <option value="Satisfactory">Satisfactory</option>
                                                                     <option value="Poor">Poor</option>
                                                                 </select>
-                                                                @error('attendance')
+                                                                <?php $__errorArgs = ['attendance'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                                 <br>
                                                                 <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                                                 </span>
-                                                                @enderror
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </td>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsiveness" class="form-label">Reponsiveness</label></td>
-                                                        @if(Auth::User()->department_id == 2)
-                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->responsiveness_rating }}</td>
-                                                        @endif
-                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsiveness_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="reponsiveness" id="reponsiveness" class="form-control" required>
-                                                                    <option value="{{ (!$feedback) ? '' : $feedback->responsiveness_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsiveness_rating }}</option>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsiveness_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsiveness_rating); ?></option>
                                                                     <option value="Excellent">Excellent</option>
                                                                     <option value="Good">Good</option>
                                                                     <option value="Satisfactory">Satisfactory</option>
                                                                     <option value="Poor">Poor</option>
                                                                 </select>
-                                                                @error('reponsiveness')
+                                                                <?php $__errorArgs = ['reponsiveness'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                                 <br>
                                                                 <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                                                 </span>
-                                                                @enderror
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </td>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsibility" class="form-label">Reponsibility</label></td>
-                                                        @if(Auth::User()->department_id == 2)
-                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->responsibility_rating }}</td>
-                                                        @endif
-                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsibility_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="reponsibility" id="reponsibility" class="form-control" required>
-                                                                    <option value="{{ (!$feedback) ? '' : $feedback->responsibility_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsibility_rating }}</option>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsibility_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsibility_rating); ?></option>
                                                                     <option value="Excellent">Excellent</option>
                                                                     <option value="Good">Good</option>
                                                                     <option value="Satisfactory">Satisfactory</option>
                                                                     <option value="Poor">Poor</option>
                                                                 </select>
-                                                                @error('reponsibility')
+                                                                <?php $__errorArgs = ['reponsibility'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                                 <br>
                                                                 <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                                                 </span>
-                                                                @enderror
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </td>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery</label></td>
-                                                        @if(Auth::User()->department_id == 2)
-                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating }}</td>
-                                                        @endif
-                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control" required>
-                                                                    <option value="{{ (!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating }}">{{ (!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating }}</option>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating); ?></option>
                                                                     <option value="Excellent">Excellent</option>
                                                                     <option value="Good">Good</option>
                                                                     <option value="Satisfactory">Satisfactory</option>
                                                                     <option value="Poor">Poor</option>
                                                                 </select>
-                                                                @error('commit_on_task_delivery')
+                                                                <?php $__errorArgs = ['commit_on_task_delivery'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                                 <br>
                                                                 <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                                                 </span>
-                                                                @enderror
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </td>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="technical_knowledge" class="form-label">Technical Knowledge</label></td>
-                                                        @if(Auth::User()->department_id == 2)
-                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating }}</td>
-                                                        @endif
-                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="technical_knowledge" id="technical_knowledge" class="form-control" required>
-                                                                    <option value="{{ (!$feedback) ? '' : $feedback->technical_knowledge_rating }}">{{ (!$feedback) ? 'Select' : $feedback->technical_knowledge_rating }}</option>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->technical_knowledge_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->technical_knowledge_rating); ?></option>
                                                                     <option value="Excellent">Excellent</option>
                                                                     <option value="Good">Good</option>
                                                                     <option value="Satisfactory">Satisfactory</option>
                                                                     <option value="Poor">Poor</option>
                                                                 </select>
-                                                                @error('technical_knowledge')
+                                                                <?php $__errorArgs = ['technical_knowledge'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                                 <br>
                                                                 <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                                                 </span>
-                                                                @enderror
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </td>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="logical_ablitiy" class="form-label">Logical Ability</label></td>
-                                                        @if(Auth::User()->department_id == 2)
-                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->logical_ability_rating }}</td>
-                                                        @endif
-                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->logical_ability_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="logical_ablitiy" id="logical_ablitiy" class="form-control" required>
-                                                                    <option value="{{ (!$feedback) ? '' : $feedback->logical_ability_rating }}">{{ (!$feedback) ? 'Select' : $feedback->logical_ability_rating }}</option>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->logical_ability_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->logical_ability_rating); ?></option>
                                                                     <option value="Excellent">Excellent</option>
                                                                     <option value="Good">Good</option>
                                                                     <option value="Satisfactory">Satisfactory</option>
                                                                     <option value="Poor">Poor</option>
                                                                 </select>
-                                                                @error('logical_ablitiy')
+                                                                <?php $__errorArgs = ['logical_ablitiy'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                                 <br>
                                                                 <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                                                 </span>
-                                                                @enderror
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </td>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="attitude" class="form-label">Attitude</label></td>
-                                                        @if(Auth::User()->department_id == 2)
-                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->attitude_rating }}</td>
-                                                        @endif
-                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attitude_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="attitude" id="attitude" class="form-control" required>
-                                                                    <option value="{{ (!$feedback) ? '' : $feedback->attitude_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attitude_rating }}</option>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attitude_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attitude_rating); ?></option>
                                                                     <option value="Excellent">Excellent</option>
                                                                     <option value="Good">Good</option>
                                                                     <option value="Satisfactory">Satisfactory</option>
                                                                     <option value="Poor">Poor</option>
                                                                 </select>
-                                                                @error('attitude')
+                                                                <?php $__errorArgs = ['attitude'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                                 <br>
                                                                 <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                                                 </span>
-                                                                @enderror
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </td>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software</label></td>
-                                                        @if(Auth::User()->department_id == 2)
-                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->overall_rating }}</td>
-                                                        @endif
-                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->overall_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
                                                                 <select name="overall_performance" id="overall_performance" class="form-control" required>
-                                                                    <option value="{{ (!$feedback) ? '' : $feedback->overall_rating }}">{{ (!$feedback) ? 'Select' : $feedback->overall_rating }}</option>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->overall_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->overall_rating); ?></option>
                                                                     <option value="Excellent">Excellent</option>
                                                                     <option value="Good">Good</option>
                                                                     <option value="Satisfactory">Satisfactory</option>
                                                                     <option value="Poor">Poor</option>
                                                                 </select>
-                                                                @error('overall_performance')
+                                                                <?php $__errorArgs = ['overall_performance'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                                 <br>
                                                                 <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                                                 </span>
-                                                                @enderror
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                             </td>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             
                                             </br>
-                                            @if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3))
+                                            <?php if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                 <div class="form-group">
                                                     <label class="form-label">Lead Comments</label>
-                                                    <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->lead_comment  }}</textarea>
+                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->lead_comment); ?></textarea>
                                                 </div>
-                                            @endif
-                                            @if(Auth::User()->department_id == 2)
+                                            <?php endif; ?>
+                                            <?php if(Auth::User()->department_id == 2): ?>
                                                 <div class="form-group">
                                                     <label class="form-label">Head Comments</label>
-                                                    <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->head_comment  }}</textarea>
+                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->head_comment); ?></textarea>
                                                 </div>
-                                            @endif
-                                            @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                            <?php endif; ?>
+                                            <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                 <div class="form-group">
                                                     <label for="feedback_comments" class="form-label">Comments</label>
-                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required>{{ (!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment) }}</textarea>
-                                                    @error('feedback_comments')
+                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment)); ?></textarea>
+                                                    <?php $__errorArgs = ['feedback_comments'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
                                                     </span>
-                                                    @enderror
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                                 
                                                 <div class="form-group row">
@@ -797,19 +941,19 @@
                                                         <label class="form-label">Thankyou for your valuable feedback</label>
                                                     </div>
                                                     <div class="col-xs-2">
-                                                        <input type="date" name="date_of_feedback" value="{{ Date('Y-m-d')}}" id="date_of_feedback" class="form-control disablePast">
+                                                        <input type="date" name="date_of_feedback" value="<?php echo e(Date('Y-m-d')); ?>" id="date_of_feedback" class="form-control disablePast">
                                                     </div>
                                                     
                                                 </div>
-                                            @endif
-                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}"> 
-                                            <input type="hidden" id="feedbackId" name="feedbackId" value="{{ (!$feedback) ? '' : $feedback->id }}"> 
+                                            <?php endif; ?>
+                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>"> 
+                                            <input type="hidden" id="feedbackId" name="feedbackId" value="<?php echo e((!$feedback) ? '' : $feedback->id); ?>"> 
                                         </div>
-                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                             <div class="box-footer">
-                                                <button type="submit" class="btn btn-primary" id="myBtn" @if(Auth::User()->designation_id == 2) {{ (!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')}} @endif >{{ (!$feedback) ? 'Submit' : 'Update' }} </button>
+                                                <button type="submit" class="btn btn-primary" id="myBtn" <?php if(Auth::User()->designation_id == 2): ?> <?php echo e((!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')); ?> <?php endif; ?> ><?php echo e((!$feedback) ? 'Submit' : 'Update'); ?> </button>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </form>
                             </div>
@@ -830,4 +974,6 @@
 </div>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/process/viewResignation.blade.php ENDPATH**/ ?>

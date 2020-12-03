@@ -25,28 +25,31 @@
                   <th>DOL</th>
                   <th>Status</th>
                   <th>View</th>
-                  <th style="display:<?php echo e((Auth::user()->designation == 'Lead' ) ? 'none' : ' '); ?>;">&nbsp;&nbsp;&nbsp;&nbsp; Assign Lead</th>
+                  <?php if(Auth::user()->designation_id == 3): ?>
+                  <th>&nbsp;&nbsp;&nbsp;&nbsp; Assign Lead</th>
+                  <?php endif; ?>
                 </tr>
                 <?php $__currentLoopData = $emp_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $emp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
-                  <td><?php echo e($emp->user_id); ?></td>
-                  <td><?php echo e($emp->name); ?></td>
+                  <td><?php echo e($emp->employee_id); ?></td>
+                  <td><?php echo e($emp->display_name); ?></td>
                   <td><?php echo e($emp->designation); ?></td>
                   <td><?php echo e($emp->date_of_resignation); ?></td>
                   <td><?php echo e(($emp->changed_dol == NULL) ? $emp->date_of_leaving : $emp->changed_dol); ?></td>
                   <td><span class="label <?php echo e(($emp->date_of_withdraw != NULL) ? 'label-danger' : 'label-primary'); ?>"><?php echo e(($emp->date_of_withdraw != NULL) ? 'Withdrawn' : 'New'); ?></span></td>
                   <td><a href="<?php echo e(route('process.edit', $emp->id )); ?>">View</a></td>
-                  <td style="display:<?php echo e((Auth::user()->designation == 'Lead' ) ? 'none' : ' '); ?>;">
-                    <form method="post" action="<?php echo e(route('process.update' , $emp->user_id )); ?>" style="display: <?php echo e(($emp->lead != NULL) ? 'none' : ' '); ?> ; ">
+                  <?php if(Auth::user()->designation_id == 3): ?>
+                  <td>
+                    <form method="post" action="<?php echo e(route('process.update' , $emp->employee_id )); ?>">
                       <?php echo csrf_field(); ?>
                       <?php echo e(method_field('PUT')); ?>
 
                       <div class="form-group">
                         <div class="col-sm-6">
                         <select class="form-control" name="lead" id="lead">
-                          <option value="">Select</option>
+                        <option value="<?php echo e(($emp->lead == NULL) ? '' : $emp->lead); ?>"><?php echo e(($emp->lead == NULL) ? 'Select' : $emp->lead); ?></option>
                           <?php $__currentLoopData = $lead_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lead): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <option value="<?php echo e($lead->name); ?>"><?php echo e($lead->name); ?></option>
+                          <option value="<?php echo e($lead->display_name); ?>"><?php echo e($lead->display_name); ?></option>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                         </div>
@@ -55,9 +58,8 @@
                         </div>
                       </div>
                     </form>
-                    <?php echo e($emp->lead); ?>
-
                   </td>
+                  <?php endif; ?>
                 </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
               </table>
@@ -70,4 +72,4 @@
 </div>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\gowthamraj\Documents\employee-offboarding\resources\views/process/resignationList.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/process/resignationList.blade.php ENDPATH**/ ?>

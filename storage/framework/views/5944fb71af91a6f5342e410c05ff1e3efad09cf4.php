@@ -1,0 +1,1 @@
+<h1>Hi</h1><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/resignation/questions.blade.php ENDPATH**/ ?>

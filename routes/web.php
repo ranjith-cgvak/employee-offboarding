@@ -19,13 +19,21 @@ Route::get('/', function () {
 Route::get('/welcome', function () {
     return view('welcome');
 });
+
+Route::get('/progress', function () {
+    return view('resignation.progress');
+}); 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('resignation', 'ResignationController');
-
+Route::resource('questions','QuestionsController');
 Route::get('updateDol' , 'ProcessController@updateDol')->name('updateDol');
 Route::get('updateResignationComment' , 'ProcessController@updateResignationComment')->name('updateResignationComment');
 Route::get('updateDowComment' , 'ProcessController@updateDowComment')->name('updateDowComment');
-
+Route::get('storeFeedback' , 'ProcessController@storeFeedback')->name('storeFeedback');
+Route::get('updateFeedback' , 'ProcessController@updateFeedback')->name('updateFeedback');
+Route::get('resignationDetails','ResignationController@index')->name('resignationDetails');
+Route::get('acceptanceStatus','ResignationController@showAcceptanceStatus')->name('acceptanceStatus');
+Route::get('withdrawForm','ResignationController@showWithdrawForm')->name('withdrawForm');
 Route::resource('process', 'ProcessController');

@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('content'); ?>
 
 <div class="login-box">
@@ -56,4 +58,4 @@ unset($__errorArgs, $__bag); ?>
 <!-- /.login-box -->
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app_login', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\gowthamraj\Documents\employee-offboarding\resources\views/auth/login.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app_login', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/auth/login.blade.php ENDPATH**/ ?>

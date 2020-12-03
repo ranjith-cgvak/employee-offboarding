@@ -25,27 +25,30 @@
                   <th>DOL</th>
                   <th>Status</th>
                   <th>View</th>
-                  <th style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">&nbsp;&nbsp;&nbsp;&nbsp; Assign Lead</th>
+                  @if(Auth::user()->designation_id == 3)
+                  <th>&nbsp;&nbsp;&nbsp;&nbsp; Assign Lead</th>
+                  @endif
                 </tr>
                 @foreach($emp_list as $emp)
                 <tr>
-                  <td>{{ $emp->user_id }}</td>
-                  <td>{{ $emp->name }}</td>
+                  <td>{{ $emp->employee_id }}</td>
+                  <td>{{ $emp->display_name }}</td>
                   <td>{{ $emp->designation }}</td>
                   <td>{{ $emp->date_of_resignation }}</td>
                   <td>{{ ($emp->changed_dol == NULL) ? $emp->date_of_leaving : $emp->changed_dol }}</td>
                   <td><span class="label {{ ($emp->date_of_withdraw != NULL) ? 'label-danger' : 'label-primary'}}">{{ ($emp->date_of_withdraw != NULL) ? 'Withdrawn' : 'New'}}</span></td>
                   <td><a href="{{ route('process.edit', $emp->id )}}">View</a></td>
-                  <td style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">
-                    <form method="post" action="{{ route('process.update' , $emp->user_id ) }}" style="display: {{ ($emp->lead != NULL) ? 'none' : ' ' }} ; ">
+                  @if(Auth::user()->designation_id == 3)
+                  <td>
+                    <form method="post" action="{{ route('process.update' , $emp->employee_id ) }}">
                       @csrf
                       {{ method_field('PUT') }}
                       <div class="form-group">
                         <div class="col-sm-6">
                         <select class="form-control" name="lead" id="lead">
-                          <option value="">Select</option>
+                        <option value="{{ ($emp->lead == NULL) ? '' : $emp->lead }}">{{ ($emp->lead == NULL) ? 'Select' : $emp->lead }}</option>
                           @foreach($lead_list as $lead)
-                          <option value="{{ $lead->name }}">{{ $lead->name }}</option>
+                          <option value="{{ $lead->display_name }}">{{ $lead->display_name }}</option>
                           @endforeach
                         </select>
                         </div>
@@ -54,8 +57,8 @@
                         </div>
                       </div>
                     </form>
-                    {{ $emp->lead }}
                   </td>
+                  @endif
                 </tr>
                 @endforeach
               </table>
