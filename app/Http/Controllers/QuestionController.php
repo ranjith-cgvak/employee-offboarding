@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Question;
 use App\Question_option;
-use App\QustionType;
+use App\questionType;
 use App\Answer;
 use App\User;
 use App\Support\Facades\DB;
@@ -55,13 +55,13 @@ class QuestionController extends Controller {
             public function edit( $id ) {
                 $Question_options = Question_option::where( 'question_id', $id )
                 ->get();
-                $QustionType = QustionType::all();
+                $questionType = questionType::all();
                 $questions = Question::select( 'questions.id', 'questions.questions', 'questions.question_number', 'questions.question_type', 'question_types.type', 'options.option_value' )
                 ->leftJoin( 'options', 'questions.id', '=', 'options.question_id' )
                 ->Join( 'question_types', 'questions.question_type', '=', 'question_types.id' )
                 ->where( 'questions.id', $id )
                 ->first();
-                return view( 'questions.edit', compact( 'questions', 'count', 'QustionType', 'Question_options' ) );
+                return view( 'questions.edit', compact( 'questions', 'count', 'questionType', 'Question_options' ) );
             }
 
             /**

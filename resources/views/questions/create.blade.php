@@ -50,8 +50,8 @@
                             <div class="col-sm-6">
                                 <select id="selectBox" class="form-control " name="question_type" onchange="changeFunc();">
                                     <option value="0">--Select--</option>
-                                    @foreach($QustionType as $QustionTypes)
-                                    <option value="{{$QustionTypes->id}}">{{$QustionTypes->type}}</option>
+                                    @foreach($questionType as $questionTypes)
+                                    <option value="{{$questionTypes->id}}">{{$questionTypes->type}}</option>
                                     @endforeach
                                 </select>
                                 @error('question_type')

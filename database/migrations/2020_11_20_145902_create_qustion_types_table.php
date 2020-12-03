@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQustionTypesTable extends Migration
+class CreatequestionTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -26,6 +26,6 @@ class CreateQustionTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('qustion_types');
+        Schema::dropIfExists('question_types');
     }
 }

@@ -7,7 +7,7 @@ use App\Question;
 use App\Question_option;
 use App\Answer;
 use App\User;
-use App\QustionType;
+use App\questionType;
 use App\Support\Facades\DB;
 
 class AddQuestionController extends Controller
@@ -24,8 +24,8 @@ class AddQuestionController extends Controller
         $count = 1 + (Question::all()->where('id')->count());
         $answer = Answer::all();
         $Question_option = Question_option::all();
-        $QustionType = QustionType::all();
-        return view('questions.create', compact('Question', 'answer', 'count', 'Question_option', 'QustionType'));
+        $questionType = questionType::all();
+        return view('questions.create', compact('Question', 'answer', 'count', 'Question_option', 'questionType'));
     }
 
     /**
