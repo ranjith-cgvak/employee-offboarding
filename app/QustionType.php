@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class questionType extends Model
+class QuestionType extends Model
 {
     protected $table = "question_types";
     protected $fillable = [
