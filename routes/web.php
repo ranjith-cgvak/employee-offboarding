@@ -24,8 +24,11 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('resignation', 'ResignationController');
 
-Route::get('updateDol' , 'ProcessController@updateDol')->name('updateDol');
-Route::get('updateResignationComment' , 'ProcessController@updateResignationComment')->name('updateResignationComment');
-Route::get('updateDowComment' , 'ProcessController@updateDowComment')->name('updateDowComment');
+Route::get('updateDol', 'ProcessController@updateDol')->name('updateDol');
+Route::get('updateResignationComment', 'ProcessController@updateResignationComment')->name('updateResignationComment');
+Route::get('updateDowComment', 'ProcessController@updateDowComment')->name('updateDowComment');
 
 Route::resource('process', 'ProcessController');
+Route::resource('questions', 'QuestionController');
+Route::get('/{key}','QuestionController@destroy');
+Route::resource('addquestions', 'AddQuestionController');
