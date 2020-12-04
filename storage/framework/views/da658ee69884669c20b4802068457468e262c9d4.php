@@ -2,6 +2,7 @@
 
 <?php $__env->startSection('content'); ?>
 
+<!-- Listing the resignations -->
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12">
@@ -25,6 +26,7 @@
                   <th>DOL</th>
                   <th>Status</th>
                   <th>View</th>
+                  <!-- Assiging lead by head -->
                   <?php if(Auth::user()->designation_id == 3): ?>
                   <th>&nbsp;&nbsp;&nbsp;&nbsp; Assign Lead</th>
                   <?php endif; ?>
@@ -38,6 +40,7 @@
                   <td><?php echo e(($emp->changed_dol == NULL) ? $emp->date_of_leaving : $emp->changed_dol); ?></td>
                   <td><span class="label <?php echo e(($emp->date_of_withdraw != NULL) ? 'label-danger' : 'label-primary'); ?>"><?php echo e(($emp->date_of_withdraw != NULL) ? 'Withdrawn' : 'New'); ?></span></td>
                   <td><a href="<?php echo e(route('process.edit', $emp->id )); ?>">View</a></td>
+                  <!-- Assiging lead form by head -->
                   <?php if(Auth::user()->designation_id == 3): ?>
                   <td>
                     <form method="post" action="<?php echo e(route('process.update' , $emp->employee_id )); ?>">

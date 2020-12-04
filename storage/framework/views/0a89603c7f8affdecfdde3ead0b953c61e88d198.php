@@ -178,6 +178,7 @@ unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php if($emp_resignation->date_of_withdraw == NULL): ?>
                                         <div class="form-group row">
                                             <label class="col-sm-2 form-label">Date Of Leaving </label>
                                             <div class="col-sm-10">
@@ -185,12 +186,15 @@ unset($__errorArgs, $__bag); ?>
                                                     <div class="col-sm-1">
                                                     <p><?php echo e($converted_dates['changed_dol']); ?></p>
                                                     </div>
+                                                    <?php if(\Auth::User()->department_id != 7): ?>
                                                     <div class="col-sm-4">
                                                     <button type="button" class="btn modelBtn" data-toggle="modal" data-target="#exampleModalCenter"><i style='font-size:17px' class='fa fa-edit'></i></button>
                                                     </div>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -504,6 +508,8 @@ unset($__errorArgs, $__bag); ?>
                 </div>
                 <!-- /.tab-pane -->
                 <?php endif; ?>
+
+                <!-- No due forms -->
                 <div class="tab-pane" id="tab_3-2">
                     <div class="container-fluid">
                         <div class="row">
@@ -520,6 +526,7 @@ unset($__errorArgs, $__bag); ?>
                                                     <th>Comments</th>
                                                 </thead>
                                                 <tbody>
+                                                <!-- No due forms for lead -->
                                                     <?php if(Auth::User()->designation_id == 2): ?>
                                                         <tr>
                                                             <td>
@@ -602,6 +609,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td> 
                                                         </tr>
                                                     <?php endif; ?>
+                                                    <!-- No due forms for head -->
                                                     <?php if(Auth::User()->designation_id == 3): ?>
                                                         <tr>
                                                             <td>
@@ -684,6 +692,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td> 
                                                         </tr>
                                                     <?php endif; ?>
+                                                    <!-- No due forms for HR -->
                                                     <?php if(Auth::User()->department_id == 2): ?>
                                                         <tr>
                                                             <td>
@@ -766,6 +775,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td> 
                                                         </tr>
                                                     <?php endif; ?>
+                                                    <!-- No due forms for SA -->
                                                     <?php if(Auth::User()->department_id == 7): ?>
                                                         <tr>
                                                             <td>

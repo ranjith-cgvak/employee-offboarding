@@ -1,12 +1,14 @@
 <section class="sidebar">
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
+    <!-- For Lead, Head, HR, SA -->
     <?php if((Auth::User()->department_id == 7) || (Auth::User()->department_id == 2) || (Auth::User()->designation_id == 2) || (Auth::User()->designation_id == 3) ): ?>
     <li class=" <?php echo e((request()->segment(1) == 'process') ? 'active' : ''); ?>">
         <a href="<?php echo e(route('process.index')); ?>">
         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
     </li>
+    <!-- For employees -->
     <?php else: ?>
     <li data-toggle="tooltip" data-placement="right" <?php if($myResignation): ?> title= 'Applied Already' <?php endif; ?> class=" <?php echo e(((request()->segment(1) == 'resignation') && (request()->segment(2) == 'create')) ? 'active' : ''); ?>">
         <a class="<?php echo e(($myResignation != NULL) ? 'isDisabled' : ' '); ?>" href="<?php echo e(route('resignation.create')); ?>">

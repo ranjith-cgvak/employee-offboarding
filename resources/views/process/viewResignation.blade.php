@@ -162,6 +162,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @if($emp_resignation->date_of_withdraw == NULL)
                                         <div class="form-group row">
                                             <label class="col-sm-2 form-label">Date Of Leaving </label>
                                             <div class="col-sm-10">
@@ -169,12 +170,15 @@
                                                     <div class="col-sm-1">
                                                     <p>{{ $converted_dates['changed_dol'] }}</p>
                                                     </div>
+                                                    @if(\Auth::User()->department_id != 7)
                                                     <div class="col-sm-4">
                                                     <button type="button" class="btn modelBtn" data-toggle="modal" data-target="#exampleModalCenter"><i style='font-size:17px' class='fa fa-edit'></i></button>
                                                     </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -444,6 +448,8 @@
                 </div>
                 <!-- /.tab-pane -->
                 @endif
+
+                <!-- No due forms -->
                 <div class="tab-pane" id="tab_3-2">
                     <div class="container-fluid">
                         <div class="row">
@@ -460,6 +466,7 @@
                                                     <th>Comments</th>
                                                 </thead>
                                                 <tbody>
+                                                <!-- No due forms for lead -->
                                                     @if(Auth::User()->designation_id == 2)
                                                         <tr>
                                                             <td>
@@ -514,6 +521,7 @@
                                                             </td> 
                                                         </tr>
                                                     @endif
+                                                    <!-- No due forms for head -->
                                                     @if(Auth::User()->designation_id == 3)
                                                         <tr>
                                                             <td>
@@ -568,6 +576,7 @@
                                                             </td> 
                                                         </tr>
                                                     @endif
+                                                    <!-- No due forms for HR -->
                                                     @if(Auth::User()->department_id == 2)
                                                         <tr>
                                                             <td>
@@ -622,6 +631,7 @@
                                                             </td> 
                                                         </tr>
                                                     @endif
+                                                    <!-- No due forms for SA -->
                                                     @if(Auth::User()->department_id == 7)
                                                         <tr>
                                                             <td>
