@@ -18,18 +18,21 @@ class ProcessController extends Controller
      */
     public function index()
     {
+        // Head 
         if(\Auth::User()->designation_id == 3) {
         $emp_list = \DB::table('resignations')
         ->select('resignations.id','employee_id','display_name','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
         ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
         ->get();
         }
+        //HR OR SA
         else if((\Auth::User()->department_id == 2) || (\Auth::User()->department_id == 7)) {
             $emp_list = \DB::table('resignations')
             ->select('resignations.id','employee_id','display_name','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','comment_head','comment_dol_head','changed_dol')
             ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
             ->get();
         }
+        //LEAD
         else {
             $leadName = \Auth::User()->display_name;
             $emp_list = \DB::table('resignations')
@@ -103,17 +106,13 @@ class ProcessController extends Controller
 
         $converted_dates = array("joining_date"=>$converted_joining_date,"date_of_resignation"=>$converted_resignation_date,"date_of_leaving"=>$converted_leaving_date,"changed_dol"=>$converted_changed_dol);
 
-        $commenterId = auth()->id();
-        $loggedUser = \DB::table('users')
-        ->where('id',$commenterId)
-        ->first();
         $feedback = \DB::table('feedback')
         ->where('feedback.resignation_id',$id)
         ->first();
         $nodue = \DB::table('no_dues')
         ->where('no_dues.resignation_id',$id)
         ->first();
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','loggedUser','feedback','converted_dates','nodue'));
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue'));
     }
 
     /**
@@ -123,6 +122,8 @@ class ProcessController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    //Updating lead for the user in process.resignationList blade
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -135,6 +136,7 @@ class ProcessController extends Controller
         return redirect('/process');
     }
 
+    //Updating date of leaving
     public function updateDol(Request $request) {
         $request->validate([
             'commentDol'=>'required'
@@ -142,9 +144,11 @@ class ProcessController extends Controller
         $resignationId = $request->get('resignationId');
         $resignation = Resignation::find($resignationId);
         $resignation->changed_dol = $request->get('dateOfLeaving');
+        //HEAD
         if(\Auth::User()->designation_id == 3) {
             $resignation->comment_dol_head = $request->get('commentDol');
         }
+        //LEAD
         else if(\Auth::User()->department_id == 2) {
             $resignation->comment_dol_hr = $request->get('commentDol');
         }
@@ -155,15 +159,18 @@ class ProcessController extends Controller
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
 
+    //updating resignation comment 
     public function updateResignationComment(Request $request) {
         $resignationId = $request->get('resignationId');
         $resignation = Resignation::find($resignationId);
+        //Head
         if(\Auth::User()->designation_id == 3) {
             $request->validate([
                 'headComment'=>'required'
             ]);
             $resignation->comment_head = $request->get('headComment');
         }
+        //HR
         else if(\Auth::User()->department_id == 2) {
             $request->validate([
                 'hrComment'=>'required'
@@ -180,15 +187,18 @@ class ProcessController extends Controller
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
 
+    //Updating date of withdraw comment
     public function updateDowComment(Request $request) {
         $resignationId = $request->get('resignationId');
         $resignation = Resignation::find($resignationId);
+        //Head
         if(\Auth::User()->designation_id == 3) {
             $request->validate([
                 'withdrawHeadComment'=>'required'
             ]);
             $resignation->comment_dow_head = $request->get('withdrawHeadComment');
         }
+        //HR
         else if(\Auth::User()->department_id == 2) {
             $request->validate([
                 'withdrawHrComment'=>'required'
@@ -205,6 +215,7 @@ class ProcessController extends Controller
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
 
+    //Storing feedback for the resignation
     public function storeFeedback(Request $request) {
         $request->validate([
             'primary_skill'=>'required',
@@ -236,9 +247,11 @@ class ProcessController extends Controller
             'attitude_rating' => $request->get('attitude'),
             'overall_rating' => $request->get('overall_performance')
         ]);
+        //Head login
         if(\Auth::User()->designation_id == 3) {
             $feedback->head_comment = $request->get('feedback_comments');
         }
+        //lead
         else {
             $feedback->lead_comment = $request->get('feedback_comments');
         }
@@ -246,6 +259,8 @@ class ProcessController extends Controller
         $feedback->save();
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
+
+    //Updating feedback for the resignation
     public function updateFeedback(Request $request) {
         $request->validate([
             'primary_skill'=>'required',
@@ -288,12 +303,14 @@ class ProcessController extends Controller
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
 
+    //Storing No Due forms for the resignation
     public function storeNodue(Request $request) {
 
         $resignationId = $request->get('resignationId');
         $nodue = new NoDue([
             'resignation_id' => $request->get('resignationId')
         ]);
+        //Head or lead login
         if((\Auth::User()->designation_id == 3) || (\Auth::User()->designation_id == 2)) {
             $request->validate([
                 'knowledge_transfer'=>'required',
@@ -301,12 +318,14 @@ class ProcessController extends Controller
                 'mail_id_closure'=>'required',
                 'mail_id_closure_comment'=>'required'
             ]);
+            //Lead login
             if(\Auth::User()->designation_id == 2) {
                 $nodue->knowledge_transfer_lead = $request->get('knowledge_transfer');
                 $nodue->knowledge_transfer_lead_comment =  $request->get('knowledge_transfer_comment');
                 $nodue->mail_id_closure_lead = $request->get('mail_id_closure');
                 $nodue->mail_id_closure_lead_comment = $request->get('mail_id_closure_comment');
             }
+            //Head login
             if(\Auth::User()->designation_id == 3) {
                 $nodue->knowledge_transfer_head = $request->get('knowledge_transfer');
                 $nodue->knowledge_transfer_head_comment =  $request->get('knowledge_transfer_comment');
@@ -314,6 +333,7 @@ class ProcessController extends Controller
                 $nodue->mail_id_closure_head_comment = $request->get('mail_id_closure_comment');
             }
         }
+        //HR Store 
         if(\Auth::User()->department_id == 2) {
             $request->validate([
                 'id_card'=>'required',
@@ -327,6 +347,7 @@ class ProcessController extends Controller
             $nodue->nda = $request->get('nda');
             $nodue->nda_comment = $request->get('nda_comment');
         }
+        //SA store
         if(\Auth::User()->department_id == 7) {
             $request->validate([
                 'official_email_id'=>'required',
@@ -343,10 +364,14 @@ class ProcessController extends Controller
         $nodue->save();
         return redirect()->route('process.edit', ['process' => $resignationId]);
     }
+
+    //Update No due forms for resignation
     public function updateNodue(Request $request) {
         $nodueId = $request->get('nodueId');
         $resignationId = $request->get('resignationId');
         $updateNodue = NoDue::find($nodueId);
+
+        //Head or Lead update 
         if((\Auth::User()->designation_id == 3) || (\Auth::User()->designation_id == 2)) {
             $request->validate([
                 'knowledge_transfer'=>'required',
@@ -367,6 +392,8 @@ class ProcessController extends Controller
                 $updateNodue->mail_id_closure_head_comment = $request->get('mail_id_closure_comment');
             }
         }
+
+        //HR update
         if(\Auth::User()->department_id == 2) {
             $request->validate([
                 'id_card'=>'required',
@@ -380,6 +407,8 @@ class ProcessController extends Controller
             $updateNodue->nda = $request->get('nda');
             $updateNodue->nda_comment = $request->get('nda_comment');
         }
+
+        //SA update
         if(\Auth::User()->department_id == 7) {
             $request->validate([
                 'official_email_id'=>'required',

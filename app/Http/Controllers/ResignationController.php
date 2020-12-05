@@ -39,6 +39,7 @@ class ResignationController extends Controller
         return view('resignation.resignationDetails', compact('myResignation','user','converted_dates'));
     }
 
+    //Acceptance status of the resignation
     public function showAcceptanceStatus() {
         $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
@@ -55,6 +56,8 @@ class ResignationController extends Controller
         
         return view('resignation.acceptanceStatus', compact('myResignation','user','converted_dates'));
     }
+
+    //No due status of the resignation
     public function noDueStatus() {
         $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
@@ -75,6 +78,7 @@ class ResignationController extends Controller
         return view('resignation.noDueStatus', compact('myResignation','user','converted_dates','nodue'));
     }
 
+    //Withdraw for the resignation
     public function showWithdrawForm() {
         $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
@@ -172,6 +176,8 @@ class ResignationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     //Updating the withdraw details
     public function update(Request $request, $id)
     {
         $request->validate([
