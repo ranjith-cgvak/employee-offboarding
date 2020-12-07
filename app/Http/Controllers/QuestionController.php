@@ -21,7 +21,7 @@ class QuestionController extends Controller {
 
         $Question = Question::all();
         $answer = Answer::all();
-        dd($Question);
+        
                 return view( 'resignation.questions', compact( 'Question', 'answer' ) );
             }
 
