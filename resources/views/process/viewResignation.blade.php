@@ -18,13 +18,13 @@
         <div class="box-body">
             <div class="row">
                 <div class="col-xs-4">
-                    <p><b>Employee Name: </b>{{ $emp_resignation->name }}</p>
+                    <p><b>Employee Name: </b>{{ $emp_resignation->display_name }}</p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Employee ID: </b>{{ $emp_resignation->user_id }}</p>
+                    <p><b>Employee ID: </b>{{ $emp_resignation->employee_id }}</p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Date of joinig: </b>{{ $emp_resignation->created_at }}</p>
+                    <p><b>Date of joinig: </b>{{ $converted_dates['joining_date'] }}</p>
                 </div>
             </div>
             <div class="row">
@@ -32,7 +32,7 @@
                     <p><b>Designation: </b>{{ $emp_resignation->designation }}</p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Department: </b>IT</p>
+                    <p><b>Department: </b>{{ $emp_resignation->department_name }}</p>
                 </div>
                 <div class="col-xs-4">
                     <p><b>Lead: </b>{{ $emp_resignation->lead }}</p>
@@ -41,10 +41,10 @@
         </div>
     </div>
 </div>
+<!-- end employee details -->
 
 
-
-<!-- Modal -->
+<!-- Modal box for change of date of leave -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -61,7 +61,7 @@
             <div class="form-group row">
                 <label for="dateOfLeaving" class="col-sm-4 form-label">Change DOL: </label>
                 <div class="col-sm-6">
-                    <input type="date" class="form-control disablePast" value="{{ $emp_resignation->date_of_leaving }}" id="dateOfLeaving" name="dateOfLeaving">
+                    <input type="date" class="form-control disablePast" value="{{ $emp_resignation->changed_dol }}" id="dateOfLeaving" name="dateOfLeaving">
                     @error('dateOfLeaving')
                     <br>
                     <span class="invalid-feedback" role="alert">
@@ -73,7 +73,7 @@
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{ (Auth::user()->designation != 'Lead' ) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead}}</textarea>
+                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{ (Auth::User()->designation_id != 2) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead}}</textarea>
                     @error('dateOfLeaving')
                     <br>
                     <span class="invalid-feedback" role="alert">
@@ -92,6 +92,7 @@
     </div>
   </div>
 </div>
+<!-- end of model change of date of leave -->
 
 <!-- START CUSTOM TABS -->
 <div class="container-fluid">
@@ -101,9 +102,16 @@
             <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_1-1" data-toggle="tab">Resignation Details</a></li>
-                <li style="display:{{ ($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' ' }};" ><a href="#tab_1-2" data-toggle="tab">Withdraw Details</a></li>
-                <li style="display:{{ ($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' ' }};"><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
-                <!-- <li style="display:{{ ($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' ' }};"><a href="#tab_3-2" data-toggle="tab">No Due</a></li> -->
+                @if($emp_resignation->date_of_withdraw != NULL )
+                <li><a href="#tab_1-2" data-toggle="tab">Withdraw Details</a></li>
+                @endif
+                @if($emp_resignation->date_of_withdraw == NULL )
+                <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
+                <li><a href="#tab_3-2" data-toggle="tab">No Due</a></li>
+                @if(\Auth::User()->department_id != 7)
+                <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
+                @endif
+                @endif
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1-1">
@@ -111,7 +119,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="box box-secondary formBox" @if(session()->get('success')) style="display: none;"  @endif >
+                                <div class="box box-secondary formBox" >
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Resignation Details</h3>
                                     </div>
@@ -119,38 +127,70 @@
                                     <!-- form start -->
                                     <div class="box-body">
                                         <div class="form-group row">
-                                            <label for="reason" class="col-sm-2 form-label">Reason For Leaving the job</label>
+                                            <label class="col-sm-2 form-label">Reason For Leaving the job</label>
                                             <div class="col-sm-6">
                                                 <p>{{ $emp_resignation->reason }}</p>
                                             </div>
                                         </div>
+                                        @if($emp_resignation->other_reason != NULL)
                                         <div class="form-group row">
-                                            <label for="dateOfResignation" class="col-sm-2 form-label">Date Of Resignation</label>
-                                            <div class="col-sm-4">
-                                                <p>{{ $emp_resignation->date_of_resignation }}</p>
+                                            <label class="col-sm-2 form-label">Other Reasons </label>
+                                            <div class="col-sm-6">
+                                                <p>{{ $emp_resignation->other_reason }}</p>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 form-label">Comments on leaving</label>
+                                            <div class="col-sm-6">
+                                                <p>{{ $emp_resignation->comment_on_resignation }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="dateOfLeaving" class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
+                                            <label class="col-sm-2 form-label">Date Of Resignation</label>
+                                            <div class="col-sm-4">
+                                                <p>{{ $converted_dates['date_of_resignation'] }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
                                             <div class="col-sm-10">
                                                 <div class="row">
                                                     <div class="col-sm-1">
-                                                    <p>{{ ($emp_resignation->changed_dol == NULL) ? $emp_resignation->date_of_leaving : $emp_resignation->changed_dol }}</p>
-                                                    </div>
-                                                    <div class="col-sm-4" style="display:{{ ($emp_resignation->date_of_withdraw != NULL || $emp_resignation->changed_dol != NULL ) ? 'none' : ' ' }};">
-                                                    <button type="button" class="btn btn-primary modelBtn" data-toggle="modal" data-target="#exampleModalCenter"><i style='font-size:17px' class='fa fa-edit'></i></button>
+                                                    <p>{{ $converted_dates['date_of_leaving'] }}</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        @if($emp_resignation->date_of_withdraw == NULL)
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 form-label">Date Of Leaving </label>
+                                            <div class="col-sm-10">
+                                                <div class="row">
+                                                    <div class="col-sm-1">
+                                                    <p>{{ $converted_dates['changed_dol'] }}</p>
+                                                    </div>
+                                                    @if(\Auth::User()->department_id != 7)
+                                                    <div class="col-sm-4">
+                                                    <button type="button" class="btn modelBtn" data-toggle="modal" data-target="#exampleModalCenter"><i style='font-size:17px' class='fa fa-edit'></i></button>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                        @if(\Auth::User()->department_id != 7)
+                        @if($emp_resignation->date_of_withdraw == NULL)
                         <!-- Comments on the resignation -->
-                        <div class="row" style="display:{{ ($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' ' }};">
+                        <div class="row">
                             <div class="col-xs-12">
-                                <div class="box box-secondary formBox" @if(session()->get('success')) style="display: none;"  @endif >
+                                <div class="box box-secondary formBox">
+                                    <!--box-header -->
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Comments</h3>
                                     </div>
@@ -163,21 +203,46 @@
                                             <div class="form-group row">
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" style="display:{{ (Auth::user()->designation != 'Lead' ) ? 'none' : ' ' }};" required>{{ ($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '}}</textarea>
+                                                @if(Auth::User()->designation_id == 2)
+                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '}}</textarea>
+                                                @endif
                                                     @error('leadComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
                                                     </span>
                                                     @enderror
-                                                    <p style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">{{ $emp_resignation->comment_lead }}</p>
+                                                    @if(Auth::User()->designation_id != 2)
+                                                    <p>{{ ($emp_resignation->comment_lead == NULL)  ? 'N/A' : $emp_resignation->comment_lead }}</p>
+                                                    @endif
                                                 </div>
                                             </div>
-                                            <div class="form-group row" style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">
+                                            @if(Auth::User()->designation_id != 2)
+                                            <div class="form-group row">
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
+                                                    @if(Auth::User()->designation_id == 3 )
                                                     <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_head != NULL) ? $emp_resignation->comment_head : ' '}}</textarea>
+                                                    @endif
                                                     @error('headComment')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                    @if(Auth::User()->department_id == 2)
+                                                    <p>{{ $emp_resignation->comment_head }}</p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                            @if(Auth::User()->department_id == 2 )
+                                            <div class="form-group row">
+                                                <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
+                                                <div class="col-sm-6">
+                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_hr != NULL) ? $emp_resignation->comment_hr : ' '}}</textarea>
+                                                    @error('hrComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -185,6 +250,8 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                            @endif
+
                                             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
                                         </div>
                                         <!-- /.box-body -->
@@ -195,15 +262,17 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
+                        @endif
                     </div>
                 </div>
                 <!-- /.tab-pane -->
-
+                @if($emp_resignation->date_of_withdraw != NULL )
                 <!-- /.tab-pane -->
-                <div class="tab-pane" id="tab_1-2" style="display:{{ ($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' ' }};">
+                <div class="tab-pane" id="tab_1-2">
 
                     <!-- Withdraw Details -->
-                    <div class="container-fluid" style="display:{{ ($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' ' }};">
+                    <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="box box-secondary formBox">
@@ -228,8 +297,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row" style="display:{{ ($emp_resignation->date_of_withdraw == NULL ) ? 'none' : ' ' }};">
+                        @if(\Auth::User()->department_id != 7)
+                        <!-- comments on withdraw details -->
+                        <div class="row">
                             <div class="col-xs-12">
                                 <div class="box box-secondary formBox">
                                     <div class="box-header with-border">
@@ -244,21 +314,51 @@
                                             <div class="form-group row">
                                                 <label for="withdrawLeadComment" class="col-sm-2 form-label">Lead Comment on Withdraw </label>
                                                 <div class="col-sm-6">
-                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" style="display:{{ (Auth::user()->designation != 'Lead' ) ? 'none' : ' ' }};" required>{{ ($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '}}</textarea>
+                                                    @if(Auth::User()->designation_id == 2 )
+                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required>{{ ($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '}}</textarea>
+                                                    @endif
+
                                                     @error('withdrawLeadComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
                                                     </span>
                                                     @enderror
-                                                    <p style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">{{ $emp_resignation->comment_dow_lead }}</p>
+
+                                                    @if(Auth::User()->designation_id != 2)
+                                                    <p>{{ $emp_resignation->comment_dow_lead }}</p>
+                                                    @endif
                                                 </div>
                                             </div>
-                                            <div class="form-group row" style="display:{{ (Auth::user()->designation == 'Lead' ) ? 'none' : ' ' }};">
+
+                                            @if(Auth::User()->designation_id != 2)
+                                            <div class="form-group row">
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
+                                                    @if (Auth::User()->designation_id == 3) 
                                                     <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required>{{ ($emp_resignation->comment_dow_head != NULL) ? $emp_resignation->comment_dow_head : ' '}}</textarea>
+                                                    @endif
                                                     @error('withdrawHeadComment')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+
+                                                    @if(Auth::User()->department_id == 2)
+                                                    <p>{{ $emp_resignation->comment_dow_head }}</p>
+                                                    @endif
+
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                            @if (Auth::User()->department_id == 2) 
+                                            <div class="form-group row">
+                                                <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
+                                                <div class="col-sm-4">
+                                                    <textarea name="withdrawHrComment" id="withdrawHrComment" cols="30" rows="10" class="form-control" required>{{ ($emp_resignation->comment_dow_hr != NULL) ? $emp_resignation->comment_dow_hr : ' '}}</textarea>
+                                                    @error('withdrawHrComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -266,6 +366,8 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                            @endif
+
                                             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
                                         </div>
                                         <!-- /.box-body -->
@@ -276,14 +378,18 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
+                        
                     </div>
                 
                 </div>
                 <!-- /.tab-pane -->
+                @endif
 
+                @if($emp_resignation->date_of_withdraw == NULL )
                 <div class="tab-pane" id="tab_2-2">
                     <!-- Acceptance details -->
-                    <div class="container-fluid" style="display:{{ ($emp_resignation->date_of_withdraw != NULL ) ? 'none' : ' ' }};" >
+                    <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="box box-secondary">
@@ -296,34 +402,39 @@
                                             <thead>
                                                 <th></th>
                                                 <th>Resignation Details</th>
+                                                @if(\Auth::User()->department_id != 7)
                                                 <th title="General Comment">Comment</th>
                                                 <th>Date of leaving</th>
                                                 <th title="Comment on date of leaving">Comment DOL</th>
-                                                
+                                                @endif
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <td>Lead</td>
                                                     <td class="{{ ($emp_resignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_lead == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    @if(\Auth::User()->department_id != 7)
                                                     <td>{{ $emp_resignation->comment_lead }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $emp_resignation->changed_dol : ' ' }}</td>
+                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
                                                     <td>{{ $emp_resignation->comment_dol_lead }}</td>
-                                                   
+                                                    @endif
                                                 </tr>
                                                 <tr>
                                                     <td>Department Head / Unit Head</td>
                                                     <td class="{{ ($emp_resignation->comment_head == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_head == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    @if(\Auth::User()->department_id != 7)
                                                     <td>{{ $emp_resignation->comment_head }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $emp_resignation->changed_dol : ' ' }}</td>
+                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
                                                     <td>{{ $emp_resignation->comment_dol_head }}</td>
-                                                    
+                                                    @endif
                                                 </tr>
                                                 <tr>
                                                     <td>HR</td>
                                                     <td class="{{ ($emp_resignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_hr == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    @if(\Auth::User()->department_id != 7)
                                                     <td>{{ $emp_resignation->comment_hr }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $emp_resignation->changed_dol : ' ' }}</td>
+                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
                                                     <td>{{ $emp_resignation->comment_dol_hr }}</td>
+                                                    @endif
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -336,12 +447,621 @@
 
                 </div>
                 <!-- /.tab-pane -->
-                <!-- <div class="tab-pane" id="tab_3-2">
+                @endif
 
-                
-                
-                </div> -->
+                <!-- No due forms -->
+                <div class="tab-pane" id="tab_3-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-secondary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">No Due</h3>
+                                    </div>
+                                    <form method="get" action="{{ (!$nodue) ? route('storeNodue') : route('updateNodue') }}">
+                                        <div class="box-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <th>Attributes</th>
+                                                    <th>Comments</th>
+                                                </thead>
+                                                <tbody>
+                                                <!-- No due forms for lead -->
+                                                    @if(Auth::User()->designation_id == 2)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required @if($nodue) {{ ($nodue->knowledge_transfer_lead != NULL) ? 'checked' : '' }} @endif> Knowledge Transfer
+                                                                    </label>
+                                                                    @error('knowledge_transfer')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->knowledge_transfer_lead_comment  }}</textarea>
+                                                                    @error('knowledge_transfer_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required @if($nodue) {{ ($nodue->mail_id_closure_lead != NULL) ? 'checked' : '' }} @endif> Mail ID closure
+                                                                    </label>
+                                                                    @error('mail_id_closure')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->mail_id_closure_lead_comment  }}</textarea>
+                                                                    @error('mail_id_closure_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for head -->
+                                                    @if(Auth::User()->designation_id == 3)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required @if($nodue) {{ ($nodue->knowledge_transfer_head != NULL) ? 'checked' : '' }} @endif> Knowledge Transfer
+                                                                    </label>
+                                                                    @error('knowledge_transfer')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->knowledge_transfer_head_comment  }}</textarea>
+                                                                    @error('knowledge_transfer_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required @if($nodue) {{ ($nodue->mail_id_closure_head != NULL) ? 'checked' : '' }} @endif> Mail ID closure
+                                                                    </label>
+                                                                    @error('mail_id_closure')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->mail_id_closure_head_comment  }}</textarea>
+                                                                    @error('mail_id_closure_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for HR -->
+                                                    @if(Auth::User()->department_id == 2)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="id_card" value="completed" required @if($nodue) {{ ($nodue->id_card != NULL) ? 'checked' : '' }} @endif> ID Card
+                                                                    </label>
+                                                                    @error('id_card')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="id_card_comment" class="form-control" id="id_card_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->id_card_comment  }}</textarea>
+                                                                    @error('id_card_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="nda" value="completed" required @if($nodue) {{ ($nodue->nda != NULL) ? 'checked' : '' }} @endif> NDA
+                                                                    </label>
+                                                                    @error('nda')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="nda_comment" class="form-control" id="nda_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->nda_comment  }}</textarea>
+                                                                    @error('nda_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for SA -->
+                                                    @if(Auth::User()->department_id == 7)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="official_email_id" value="completed" required @if($nodue) {{ ($nodue->official_email_id != NULL) ? 'checked' : '' }} @endif> Official Email ID
+                                                                    </label>
+                                                                    @error('official_email_id')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="official_email_id_comment" class="form-control" id="official_email_id_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->official_email_id_comment  }}</textarea>
+                                                                    @error('official_email_id_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="skype_account" value="completed" required @if($nodue) {{ ($nodue->skype_account != NULL) ? 'checked' : '' }} @endif> NDA
+                                                                    </label>
+                                                                    @error('skype_account')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="skype_account_comment" class="form-control" id="skype_account_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->skype_account_comment  }}</textarea>
+                                                                    @error('skype_account_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    @endif
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div class="box-footer">
+                                            <input type="hidden" id="nodueId" name="nodueId" value="{{ (!$nodue) ? '' : $nodue->id }}">
+                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
+                                            <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if(Auth::User()->department_id == 2)
+                    <!-- No Due status -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">No Due Status</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <th>Lead</th>
+                                                <th>Department Head / Unit Head</th>
+                                                <th>HR</th>
+                                                <th>SA</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td @if($nodue) class="{{ ($nodue->knowledge_transfer_lead == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Knowledge Transfer</td>
+                                                    <td @if($nodue) class="{{ ($nodue->knowledge_transfer_head == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Knowledge Transfer</td>
+                                                    <td @if($nodue) class="{{ ($nodue->id_card == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>ID Card</td>
+                                                    <td @if($nodue) class="{{ ($nodue->official_email_id == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Official Email ID</td>
+                                                </tr>
+                                                <tr>
+                                                    <td @if($nodue) class="{{ ($nodue->mail_id_closure_lead == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Mail ID Closure</td>
+                                                    <td @if($nodue) class="{{ ($nodue->mail_id_closure_head == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Mail ID Closure</td>
+                                                    <td @if($nodue) class="{{ ($nodue->nda == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>NDA</td>
+                                                    <td @if($nodue) class="{{ ($nodue->skype_account == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Skype Account</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
                 <!-- /.tab-pane -->
+
+                @if(\Auth::User()->department_id != 7)
+                <!-- Feedback form -->
+                <div class="tab-pane" id="tab_4-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form method="get" action="{{ (!$feedback) ? route('storeFeedback') : route('updateFeedback') }}">
+                                    <div class="box box-secondary">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">Feedback</h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                <td rowspan="2"><h3 class="text-center">Present Skill Set</h3></td>
+                                                <td><label for="primary_skill" class="form-label">Primary</label></td></td>
+                                                @if(Auth::User()->department_id == 2)
+                                                    <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_primary }}</td>
+                                                @endif
+                                                @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                    <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_primary }}" required>
+                                                        @error('primary_skill')
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger">{{ $message }}</strong>
+                                                        </span>
+                                                        @enderror
+                                                    </td>
+                                                @endif
+                                                </tr>
+                                                <tr>
+                                                <td><label for="secondary_skill" class="form-label">Secondary</label</td>
+                                                @if(Auth::User()->department_id == 2)
+                                                    <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_secondary }}</td>
+                                                @endif
+                                                @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}" required>       
+                                                        @error('secondary_skill')
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger">{{ $message }}</strong>
+                                                        </span>
+                                                        @enderror
+                                                    </td>
+                                                @endif
+                                                </tr>
+
+                                                <tr>
+                                                <td><h3 class="text-center">Last worked project</h3></td>
+                                                    <td>
+                                                    <label for="last_worked_project" class="form-label">Project Name:</label</td>
+                                                    </td>
+                                                    @if(Auth::User()->department_id == 2)
+                                                        <td>{{ (!$feedback) ? 'N/A' : $feedback->last_worked_project }}</td>
+                                                    @endif
+                                                    @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <td colspan="2">
+                                                            <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="{{ (!$feedback) ? '' : $feedback->last_worked_project }}" required>
+                                                            @error('last_worked_project')
+                                                            <br>
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong class="text-danger">{{ $message }}</strong>
+                                                            </span>
+                                                            @enderror
+                                                        </td>
+                                                    @endif
+                                                    
+                                                </tr>
+
+                                            </table>
+                                            </br>
+                                            <table class="table table-bordered">
+                                                
+                                            </table>
+                                            </br>
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <th><h3>Attributes</h3></th>
+                                                    <th><h3>Ratings</h3></th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label for="attendance" class="form-label">Attendance</label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->attendance_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="attendance" id="attendance" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->attendance_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attendance_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('attendance')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="reponsiveness" class="form-label">Reponsiveness</label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->responsiveness_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="reponsiveness" id="reponsiveness" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->responsiveness_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsiveness_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('reponsiveness')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="reponsibility" class="form-label">Reponsibility</label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->responsibility_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="reponsibility" id="reponsibility" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->responsibility_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsibility_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('reponsibility')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery</label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating }}">{{ (!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('commit_on_task_delivery')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="technical_knowledge" class="form-label">Technical Knowledge</label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="technical_knowledge" id="technical_knowledge" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->technical_knowledge_rating }}">{{ (!$feedback) ? 'Select' : $feedback->technical_knowledge_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('technical_knowledge')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="logical_ablitiy" class="form-label">Logical Ability</label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->logical_ability_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="logical_ablitiy" id="logical_ablitiy" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->logical_ability_rating }}">{{ (!$feedback) ? 'Select' : $feedback->logical_ability_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('logical_ablitiy')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="attitude" class="form-label">Attitude</label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->attitude_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="attitude" id="attitude" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->attitude_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attitude_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('attitude')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software</label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->overall_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="overall_performance" id="overall_performance" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->overall_rating }}">{{ (!$feedback) ? 'Select' : $feedback->overall_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('overall_performance')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            
+                                            </br>
+                                            @if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3))
+                                                <div class="form-group">
+                                                    <label class="form-label">Lead Comments</label>
+                                                    <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->lead_comment  }}</textarea>
+                                                </div>
+                                            @endif
+                                            @if(Auth::User()->department_id == 2)
+                                                <div class="form-group">
+                                                    <label class="form-label">Head Comments</label>
+                                                    <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->head_comment  }}</textarea>
+                                                </div>
+                                            @endif
+                                            @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                <div class="form-group">
+                                                    <label for="feedback_comments" class="form-label">Comments</label>
+                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required>{{ (!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment) }}</textarea>
+                                                    @error('feedback_comments')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                </div>
+                                                
+                                                <div class="form-group row">
+                                                    <div class="col-xs-12">
+                                                        <label class="form-label">Thankyou for your valuable feedback</label>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input type="date" name="date_of_feedback" value="{{ Date('Y-m-d')}}" id="date_of_feedback" class="form-control disablePast">
+                                                    </div>
+                                                    
+                                                </div>
+                                            @endif
+                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}"> 
+                                            <input type="hidden" id="feedbackId" name="feedbackId" value="{{ (!$feedback) ? '' : $feedback->id }}"> 
+                                        </div>
+                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                            <div class="box-footer">
+                                                <button type="submit" class="btn btn-primary" id="myBtn" @if(Auth::User()->designation_id == 2) {{ (!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')}} @endif >{{ (!$feedback) ? 'Submit' : 'Update' }} </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <!-- /.tab-pane -->
+                <!-- /End of feedback -->
+                @endif
             </div>
             <!-- /.tab-content -->
             </div>

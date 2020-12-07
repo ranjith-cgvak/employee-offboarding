@@ -14,15 +14,86 @@ class ResignationController extends Controller
      */
     public function index()
     {
-        $userId = auth()->id();
+        $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
         ->where([
-            ['user_id', '=', $userId],
+            ['employee_id', '=', $empId],
             ['date_of_withdraw', '=', NULL],
         ])
         ->first();
-        $user = \DB::table('users')->where('id',$userId)->first();
-        return view('resignation.index', compact('myResignation','user'));
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $date_of_resignation = strtotime($myResignation->date_of_resignation);
+        $date_of_leaving = strtotime($myResignation->date_of_leaving);
+        $changed_dol = strtotime($myResignation->changed_dol);
+
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_resignation_date = date("d-m-Y", $date_of_resignation);
+        $converted_leaving_date = date("d-m-Y", $date_of_leaving);
+        $converted_changed_dol = date("d-m-Y", $changed_dol);
+
+        $converted_dates = array("joining_date"=>$converted_joining_date,"date_of_resignation"=>$converted_resignation_date,"date_of_leaving"=>$converted_leaving_date,"changed_dol"=>$converted_changed_dol);
+
+        
+        return view('resignation.resignationDetails', compact('myResignation','user','converted_dates'));
+    }
+
+    //Acceptance status of the resignation
+    public function showAcceptanceStatus() {
+        $empId = \Auth::User()->emp_id;
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['employee_id', '=', $empId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_dates = array("joining_date"=>$converted_joining_date);
+        
+        return view('resignation.acceptanceStatus', compact('myResignation','user','converted_dates'));
+    }
+
+    //No due status of the resignation
+    public function noDueStatus() {
+        $empId = \Auth::User()->emp_id;
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['employee_id', '=', $empId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
+        $nodue = \DB::table('no_dues')
+        ->where('no_dues.resignation_id',$myResignation->id)
+        ->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_dates = array("joining_date"=>$converted_joining_date);
+        
+        return view('resignation.noDueStatus', compact('myResignation','user','converted_dates','nodue'));
+    }
+
+    //Withdraw for the resignation
+    public function showWithdrawForm() {
+        $empId = \Auth::User()->emp_id;
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['employee_id', '=', $empId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_dates = array("joining_date"=>$converted_joining_date);
+
+        return view('resignation.withdrawForm', compact('myResignation','user','converted_dates'));
     }
 
     /**
@@ -32,9 +103,20 @@ class ResignationController extends Controller
      */
     public function create()
     {
-        $userId = auth()->id();
-        $user = \DB::table('users')->where('id',$userId)->first();
-        return view('resignation.create', compact('user'));
+        $empId = \Auth::User()->emp_id;
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['employee_id', '=', $empId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
+        //Converting the dates to dd-mm-yyyy
+        $joining_date = strtotime($user->joining_date);
+        $converted_joining_date = date("d-m-Y", $joining_date);
+        $converted_dates = array("joining_date"=>$converted_joining_date);
+
+        return view('resignation.create', compact('myResignation','user','converted_dates'));
     }
 
     /**
@@ -48,15 +130,19 @@ class ResignationController extends Controller
         $request->validate([
             'reason'=>'required'
         ]);
-
-        $userId = auth()->id();
+        $empId = \Auth::User()->emp_id;
         $dateofleaving = date("Y-m-d",strtotime($request->get('dateOfLeaving')));
         $resignation = new resignation([
             'reason' => $request->get('reason'),
-            'date_of_resignation' => $request->get('dateOfResignation')
+            'date_of_resignation' => $request->get('dateOfResignation'),
+            'comment_on_resignation' => $request->get('comment_on_resignation')
         ]);
-        $resignation->user_id = $userId;
+        if($request->get('others') != NULL ) {
+            $resignation->other_reason = $request->get('others');
+        } 
+        $resignation->employee_id = $empId;
         $resignation->date_of_leaving = $dateofleaving;
+        $resignation->changed_dol = $dateofleaving;
         $resignation->save();
         return redirect('/resignation')->with('success','Details saved!');
     }
@@ -90,6 +176,8 @@ class ResignationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     //Updating the withdraw details
     public function update(Request $request, $id)
     {
         $request->validate([

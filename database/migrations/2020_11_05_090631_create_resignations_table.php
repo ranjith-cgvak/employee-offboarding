@@ -15,9 +15,10 @@ class CreateResignationsTable extends Migration
     {
         Schema::create('resignations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->text('reason');
+            $table->unsignedBigInteger('employee_id');
+            $table->string('reason');
+            $table->string('other_reason')->nullable();
+            $table->text('comment_on_resignation');
             $table->date('date_of_resignation');
             $table->date('date_of_leaving');
             $table->date('date_of_withdraw')->nullable();
