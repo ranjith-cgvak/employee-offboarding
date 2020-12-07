@@ -10,27 +10,27 @@
     </li>
     <!-- For employees -->
     @else
-    <li data-toggle="tooltip" data-placement="right" @if($myResignation) title= 'Applied Already' @endif class=" {{ ((request()->segment(1) == 'resignation') && (request()->segment(2) == 'create')) ? 'active' : '' }}">
+    <li data-toggle="tooltip" data-placement="right" @if($myResignation) title= 'Applied Already' style="cursor: not-allowed;" @endif class=" {{ ((request()->segment(1) == 'resignation') && (request()->segment(2) == 'create')) ? 'active' : '' }}">
         <a class="{{ ($myResignation != NULL) ? 'isDisabled' : ' ' }}" href="{{ route('resignation.create')}}">
         <i class="fa fa-file-text-o"></i> <span>Resignation Form</span>
         </a>
     </li>
-    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' @endif class=" {{ ((request()->segment(1) == 'resignation') && (request()->segment(2) == NULL)) ? 'active' : '' }}">
+    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' style="cursor: not-allowed;" @endif class=" {{ ((request()->segment(1) == 'resignation') && (request()->segment(2) == NULL)) ? 'active' : '' }}">
         <a class="{{ ($myResignation == NULL) ? 'isDisabled' : ' ' }}" href="{{ route('resignation.index')}}">
         <i class="fa fa-list-alt"></i> <span>My Resignation</span>
         </a>
     </li>
-    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' @endif class=" {{ (request()->segment(1) == 'acceptanceStatus') ? 'active' : '' }}">
+    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' style="cursor: not-allowed;" @endif class=" {{ (request()->segment(1) == 'acceptanceStatus') ? 'active' : '' }}">
         <a class="{{ ($myResignation == NULL) ? 'isDisabled' : ' ' }}" href="{{ route('acceptanceStatus')}}">
         <i class="fa fa-check-square-o"></i> <span>Acceptance Details</span>
         </a>
     </li>
-    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' @endif class=" {{ (request()->segment(1) == 'noDueStatus') ? 'active' : '' }}">
+    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' style="cursor: not-allowed;" @endif class=" {{ (request()->segment(1) == 'noDueStatus') ? 'active' : '' }}">
         <a class="{{ ($myResignation == NULL) ? 'isDisabled' : ' ' }}" href="{{ route('noDueStatus')}}">
-        <i class="fa fa-check-square-o"></i> <span>Acceptance Details</span>
+        <i class="fa fa-check-circle-o"></i> <span>No Due Status</span>
         </a>
     </li>
-    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' @endif class=" {{ (request()->segment(1) == 'withdrawForm') ? 'active' : '' }}">
+    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' style="cursor: not-allowed;" @endif class=" {{ (request()->segment(1) == 'withdrawForm') ? 'active' : '' }}">
         <a class="{{ ($myResignation == NULL) ? 'isDisabled' : ' ' }}" href="{{ route('withdrawForm')}}">
         <i class="fa fa-file-text-o"></i> <span>Withdraw Form</span>
         </a>
