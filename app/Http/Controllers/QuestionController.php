@@ -18,11 +18,16 @@ class QuestionController extends Controller {
     */
 
     public function index() {
-
+        $empId = \Auth::User()->emp_id;
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['employee_id', '=', $empId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
         $Question = Question::all();
         $answer = Answer::all();
-        dd($Question);
-                return view( 'resignation.questions', compact( 'Question', 'answer' ) );
+                return view( 'resignation.questions', compact( 'Question', 'answer','myResignation' ) );
             }
 
             /**
@@ -35,11 +40,11 @@ class QuestionController extends Controller {
                 $Question = Question::all();
 
                 foreach ( $Question as $questions ) {
-                    $user_id = auth()->id();
+                    $emp_id = \Auth::User()->emp_id;
                     $answers = new Answer( [
                         'answers' => $request->get( $questions->id )
                     ] );
-                    $answers->user_id = $user_id;
+                    $answers->emp_id = $emp_id;
                     $answers->question_id = $questions->id;
                     $answers->save();
                 }
@@ -221,13 +226,6 @@ class QuestionController extends Controller {
                 }
             }
 
-            public function show( $id ) {
-                $del = 'gegggggggggg';
-                $delete_question = Question::find( $id );
-                dd( $del );
-            }
-
-           
             /**
             * Show the form for deleting the specified resource.
             *
