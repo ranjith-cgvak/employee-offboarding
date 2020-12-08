@@ -79,7 +79,7 @@
                     ->get(); ?>
 
                 <div class="form-group row"><br>
-                    <label for="withdrawDate" class="col-sm-8  form-label"><?php echo e($questions->id); ?>. <?php echo e($questions->questions); ?> <span class="text-danger">*</span></label>
+                    <label for="withdrawDate" class="col-sm-8  form-label"><?php echo e($questions->question_number); ?>. <?php echo e($questions->questions); ?> <span class="text-danger">*</span></label>
                     <br>
                     <div class="col-sm-8">
                         <?php if($questions->question_type == 1): ?>
@@ -134,7 +134,7 @@ unset($__errorArgs, $__bag); ?>
 
             </div>
             <!-- /.box-body -->
-            <div class="box-footer">
+            <div class="box-footer"><input type="hidden" name="ResignationId"  value="<?php echo e($myResignation->id); ?>">
                 <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
             </div>
         </form>

@@ -7,6 +7,7 @@ use App\Question;
 use App\Question_option;
 use App\QuestionType;
 use App\Answer;
+use App\Resignation;
 use App\User;
 use App\Support\Facades\DB;
 
@@ -39,7 +40,9 @@ class QuestionController extends Controller {
 
     public function store( Request $request ) {
         $Question = Question::all();
-
+        $empId = \Auth::User()->emp_id;
+        $myResignation = $request->get( 'ResignationId' );
+       
         foreach ( $Question as $questions ) {
             $emp_id = \Auth::User()->emp_id;
             $answers = new Answer( [
@@ -47,9 +50,10 @@ class QuestionController extends Controller {
             ] );
             $answers->emp_id = $emp_id;
             $answers->question_id = $questions->id;
+            $answers->resignation_id = $myResignation;
             $answers->save();
         }
-        return redirect( '/questions' )->with( 'success', 'Details saved!' );
+        return redirect( '/noDueStatus' )->with( 'success', 'Details saved!' );
     }
     /**
     * Show the form for editing the specified resource.

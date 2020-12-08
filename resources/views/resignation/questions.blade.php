@@ -78,7 +78,7 @@
                     ->get(); ?>
 
                 <div class="form-group row"><br>
-                    <label for="withdrawDate" class="col-sm-8  form-label">{{$questions->id}}. {{$questions->questions}} <span class="text-danger">*</span></label>
+                    <label for="withdrawDate" class="col-sm-8  form-label">{{$questions->question_number}}. {{$questions->questions}} <span class="text-danger">*</span></label>
                     <br>
                     <div class="col-sm-8">
                         @if($questions->question_type == 1)
@@ -126,7 +126,7 @@
 
             </div>
             <!-- /.box-body -->
-            <div class="box-footer">
+            <div class="box-footer"><input type="hidden" name="ResignationId"  value="{{$myResignation->id}}">
                 <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
             </div>
         </form>

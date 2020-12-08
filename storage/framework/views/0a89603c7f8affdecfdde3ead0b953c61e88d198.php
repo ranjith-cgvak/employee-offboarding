@@ -127,6 +127,9 @@ unset($__errorArgs, $__bag); ?>
                 <?php if(\Auth::User()->department_id != 7): ?>
                 <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
                 <?php endif; ?>
+                <?php if(Auth::User()->department_id == 2): ?>
+                <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
+                <?php endif; ?>
                 <?php endif; ?>
             </ul>
             <div class="tab-content">
@@ -1318,6 +1321,47 @@ unset($__errorArgs, $__bag); ?>
                 <!-- /.tab-pane -->
                 <!-- /End of feedback -->
                 <?php endif; ?>
+
+<!-- No due forms -->
+<div class="tab-pane" id="tab_5-2">
+    <?php if(Auth::User()->department_id == 2): ?>
+    <!-- No Due status -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Exit Interview Answers</h3>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <th width="5%"> Q\N</th>
+                                <th width="65%">Exit Interview Question</th>
+                                <th>Exit Interview Answers</th>
+                                
+                            </thead>
+                            <tbody>
+                                <tr>
+                                <?php $__currentLoopData = $answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                
+                                <td ><?php echo e($answer->question_number); ?></td>
+                                <td ><?php echo e($answer->questions); ?></td>
+                                    <td ><?php echo e($answer->answers); ?></td>
+                                </tr>
+                                
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+<!-- /.tab-pane -->
+
             </div>
             <!-- /.tab-content -->
             </div>
