@@ -60,13 +60,16 @@ class QuestionController extends Controller {
             public function edit( $id ) {
                 $Question_options = Question_option::where( 'question_id', $id )
                 ->get();
+
                 $QuestionType = QuestionType::all();
                 $questions = Question::select( 'questions.id', 'questions.questions', 'questions.question_number', 'questions.question_type', 'question_types.type', 'options.option_value' )
                 ->leftJoin( 'options', 'questions.id', '=', 'options.question_id' )
                 ->Join( 'question_types', 'questions.question_type', '=', 'question_types.id' )
                 ->where( 'questions.id', $id )
                 ->first();
+
                 return view( 'questions.edit', compact( 'questions', 'count', 'QuestionType', 'Question_options' ) );
+
             }
 
             /**
