@@ -93,8 +93,8 @@
                         @elseif($questions->question_type == 3)
                         @foreach ($Question_options as $options)
                         <input type="radio" id="chk{{ $options->option_value }}" required name="{{ $questions->id }}" value="{{ $options->option_value }}" onclick="ShowHideDiv()">
-                        <label class="radio-custom-label" for="{{ $questions->question_id }}{{ $questions->id }}">
-                            <b> {{ $options->option_value }}</b>
+                        <label class="radio-custom-label "  for="{{ $questions->question_id }}{{ $questions->id }}">
+                            <b > {{ $options->option_value }}</b>
                         </label>
 
                         @endforeach

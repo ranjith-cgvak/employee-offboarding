@@ -8,6 +8,11 @@
         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
     </li>
+    <li class=" {{ (request()->segment(1) == 'questions') ? 'active' : '' }}">
+        <a href="{{ route('questions.index')}}">
+        <i class="fa fa-comments"></i> <span>Exit Interview</span>
+        </a>
+    </li>
     <!-- For employees -->
     @else
     <li data-toggle="tooltip" data-placement="right" @if($myResignation) title= 'Applied Already' style="cursor: not-allowed;" @endif class=" {{ ((request()->segment(1) == 'resignation') && (request()->segment(2) == 'create')) ? 'active' : '' }}">
