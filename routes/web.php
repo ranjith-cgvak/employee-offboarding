@@ -33,10 +33,9 @@ Route::get('updateResignationComment', 'ProcessController@updateResignationComme
 Route::get('updateDowComment', 'ProcessController@updateDowComment')->name('updateDowComment');
 
 Route::resource('process', 'ProcessController');
-Route::resource('questions', 'QuestionController');
-Route::get('/{key}','QuestionController@destroy');
+Route::get('deletequestion/{key}','QuestionController@destroy');
 Route::resource('addquestions', 'AddQuestionController');
-Route::resource('questions','QuestionsController');
+Route::resource('questions','QuestionController');
 Route::get('updateDol' , 'ProcessController@updateDol')->name('updateDol');
 Route::get('updateResignationComment' , 'ProcessController@updateResignationComment')->name('updateResignationComment');
 Route::get('updateDowComment' , 'ProcessController@updateDowComment')->name('updateDowComment');

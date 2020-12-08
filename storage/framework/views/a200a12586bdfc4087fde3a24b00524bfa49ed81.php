@@ -1,13 +1,14 @@
-@extends('layouts.app_home')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 
 <!-- Employee details -->
-@if(session()->get('success'))
+<?php if(session()->get('success')): ?>
 <div class="alert alert-success">
-    {{ session()->get('success') }}
+    <?php echo e(session()->get('success')); ?>
+
 </div>
-@endif
+<?php endif; ?>
 <!-- Leaving form -->
 <div class="container-fluid">
     <div class="row">
@@ -18,31 +19,45 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form method="post" action="{{ route('addquestions.store') }}">
-                    @csrf
+                <form method="post" action="<?php echo e(route('addquestions.store')); ?>">
+                    <?php echo csrf_field(); ?>
                     <div class="box-body">
                         <div class="form-group row">
                             <label for="question_number" class="col-sm-2 form-label">Question Number<span class="text-danger">*</span></label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" readonly="true" required name="question_number" id="question_number" value="{{$count}}">
-                                @error('question_number')
+                                <input type="text" class="form-control" readonly="true" required name="question_number" id="question_number" value="<?php echo e($count); ?>">
+                                <?php $__errorArgs = ['question_number'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger"></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="question" class="col-sm-2 form-label">Question <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" required name="question" id="question">
-                                @error('question')
+                                <?php $__errorArgs = ['question'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger"></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -51,64 +66,99 @@
                                 <select id="selectBox" class="form-control " name="question_type" onchange="changeFunc();">
                                     <option value="0">--Select--</option>
 
-                                    @foreach($QuestionType as $QuestionTypes)
-                                    <option value="{{$QuestionTypes->id}}">{{$QuestionTypes->type}}</option>
-                                    @endforeach
+                                    <?php $__currentLoopData = $QuestionType; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $QuestionTypes): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($QuestionTypes->id); ?>"><?php echo e($QuestionTypes->type); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
-                                @error('question_type')
+                                <?php $__errorArgs = ['question_type'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger"></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row" style="display: none" id="textboxe1">
                             <label for="question" class="col-sm-2 form-label">Option-1 <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control"  name="1" id="option-1">
-                                @error('question')
+                                <?php $__errorArgs = ['question'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger"></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row" style="display: none" id="textboxe2">
                             <label for="question" class="col-sm-2 form-label">Option-2 <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control"  name="2" id="option-2">
-                                @error('question')
+                                <?php $__errorArgs = ['question'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger"></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row" style="display: none" id="textboxe3">
                             <label for="question" class="col-sm-2 form-label">Option-3 <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control"  name="3" id="option-3">
-                                @error('question')
+                                <?php $__errorArgs = ['question'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger"></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row" style="display: none" id="textboxe4">
                             <label for="question" class="col-sm-2 form-label">Option-4 <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control"  name="4" id="option-4">
-                                @error('question')
+                                <?php $__errorArgs = ['question'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger"></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                     </div>
@@ -155,4 +205,5 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/questions/create.blade.php ENDPATH**/ ?>

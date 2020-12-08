@@ -8,6 +8,7 @@
     {{ session()->get('success') }}
 </div>
 @endif
+@if(\Auth::User()->department_id == 2)
 
 <!-- My resignation details -->
 <div class="container-fluid">
@@ -45,7 +46,7 @@
                                     <li>{{ $options->option_value }}</li>
                                 </ul></b>
                                 @endforeach</td>
-                            <td><a href="{{ route('questions.edit', $questions->id )}}" class="btn btn-primary">Edit</a>&nbsp;<a href="{{ url('/'.$questions->id) }}" class="btn btn-primary">Delete</a></td>
+                            <td><a href="{{ route('questions.edit', $questions->id )}}" class="btn btn-primary">Edit</a>&nbsp;<a href="{{ url('deletequestion/'.$questions->id) }}" class="btn btn-primary">Delete</a></td>
                         </tr> @endforeach
 
 
@@ -59,7 +60,7 @@
 </div>
 
 
-@if(Auth::user()->designation == 'Software Engineer' )
+@else
 <div class="container-fluid">
     <div class="box box-primary">
         <div class="box-header with-border">
