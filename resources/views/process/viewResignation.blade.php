@@ -1086,14 +1086,12 @@
                                 
                             </thead>
                             <tbody>
-                                <tr>
                                 @foreach($answers as $answer)
-                                
-                                <td >{{$answer->question_number}}</td>
-                                <td >{{$answer->questions}}</td>
+                                <tr>
+                                    <td >{{$answer->question_number}}</td>
+                                    <td >{{$answer->questions}}</td>
                                     <td >{{$answer->answers}}</td>
                                 </tr>
-                                
                                 @endforeach
                             </tbody>
                         </table>

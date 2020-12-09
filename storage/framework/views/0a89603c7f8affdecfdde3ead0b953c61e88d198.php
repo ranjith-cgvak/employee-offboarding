@@ -1342,11 +1342,11 @@ unset($__errorArgs, $__bag); ?>
                                 
                             </thead>
                             <tbody>
-                                <tr>
                                 <?php $__currentLoopData = $answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr>
                                 
-                                <td ><?php echo e($answer->question_number); ?></td>
-                                <td ><?php echo e($answer->questions); ?></td>
+                                    <td ><?php echo e($answer->question_number); ?></td>
+                                    <td ><?php echo e($answer->questions); ?></td>
                                     <td ><?php echo e($answer->answers); ?></td>
                                 </tr>
                                 
