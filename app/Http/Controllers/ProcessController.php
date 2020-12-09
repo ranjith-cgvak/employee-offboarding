@@ -112,7 +112,10 @@ class ProcessController extends Controller
         $nodue = \DB::table('no_dues')
         ->where('no_dues.resignation_id',$id)
         ->first();
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue'));
+        $finalCheckList = \DB::table('final_exit_checklists')
+        ->where('final_exit_checklists.resignation_id',$id)
+        ->first();
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList'));
     }
 
     /**
@@ -424,6 +427,15 @@ class ProcessController extends Controller
         }
         $updateNodue->save();
         return redirect()->route('process.edit', ['process' => $resignationId]);
+    }
+
+
+    public function storeFinalCheckList(Request $request){
+        dd($request->all());
+    }
+
+    public function updateFinalCheckList(Request $request){
+
     }
     /**
      * Remove the specified resource from storage.
