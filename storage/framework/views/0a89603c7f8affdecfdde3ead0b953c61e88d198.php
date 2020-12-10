@@ -1340,76 +1340,206 @@ unset($__errorArgs, $__bag); ?>
                                                 <label class="control-label col-sm-2" for="type_of_exit">Type Of Exit</label>
                                                 <div class="col-sm-4">
                                                     <select name="type_of_exit" id="type_of_exit"  class="form-control">
-                                                        <option value="">Select</option>
+                                                        <option value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->type_of_exit); ?>"><?php echo e((!$finalCheckList) ? 'Select' : $finalCheckList->type_of_exit); ?></option>
                                                         <option value="Voluntary">Voluntary</option>
                                                         <option value="Involuntary">Involuntary</option>
                                                     </select>
+                                                    <?php $__errorArgs = ['type_of_exit'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="date_of_leaving">Date Of Leaving</label>
                                                 <div class="col-sm-4">
                                                 <input type="date" class="form-control" id="date_of_leaving" name="date_of_leaving" value="<?php echo e(($emp_resignation->changed_dol == NULL) ? $emp_resignation->date_of_leaving : $emp_resignation->changed_dol); ?>" readonly>
+                                                <?php $__errorArgs = ['date_of_leaving'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="reason_for_leaving">Reason For Leaving</label>
                                                 <div class="col-sm-4">
                                                 <input type="text" class="form-control" id="reason_for_leaving" name="reason_for_leaving" value="<?php echo e(($emp_resignation->other_reason == NULL) ? $emp_resignation->reason : $emp_resignation->other_reason); ?>" readonly>
+                                                <?php $__errorArgs = ['reason_for_leaving'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="last_drawn_salary">Last Drawn Salary</label>
                                                 <div class="col-sm-4">
-                                                <input type="number" class="form-control" id="last_drawn_salary" name="last_drawn_salary">
+                                                <input type="number" class="form-control" id="last_drawn_salary" name="last_drawn_salary" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->last_drawn_salary); ?>">
+                                                <?php $__errorArgs = ['last_drawn_salary'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="consider_for_rehire">Can Be Considered For Rehire</label>
                                                 <div class="col-sm-4">
-                                                <input type="text" class="form-control" id="consider_for_rehire" name="consider_for_rehire">
+                                                <input type="text" class="form-control" id="consider_for_rehire" name="consider_for_rehire" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->consider_for_rehire); ?>">
+                                                <?php $__errorArgs = ['consider_for_rehire'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="overall_feedback">Overall Feedback</label>
                                                 <div class="col-sm-4">
-                                                <input type="text" class="form-control" id="overall_feedback" name="overall_feedback">
+                                                <input type="text" class="form-control" id="overall_feedback" name="overall_feedback" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->overall_feedback); ?>">
+                                                <?php $__errorArgs = ['overall_feedback'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="relieving_letter">Relieving Letter</label>
                                                 <div class="col-sm-4">
                                                     <select name="relieving_letter" id="relieving_letter"  class="form-control">
-                                                        <option value="">Select</option>
+                                                        <option value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->relieving_letter); ?>"><?php echo e((!$finalCheckList) ? 'Select' : $finalCheckList->relieving_letter); ?></option>
                                                         <option value="Given">Given</option>
                                                         <option value="Pending">Pending</option>
                                                     </select>
+                                                    <?php $__errorArgs = ['relieving_letter'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                        </span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="experience_letter">Experience Letter</label>
                                                 <div class="col-sm-4">
                                                     <select name="experience_letter" id="experience_letter"  class="form-control">
-                                                        <option value="">Select</option>
+                                                        <option value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->experience_letter); ?>"><?php echo e((!$finalCheckList) ? 'Select' : $finalCheckList->experience_letter); ?></option>
                                                         <option value="Given">Given</option>
                                                         <option value="Pending">Pending</option>
                                                     </select>
+                                                    <?php $__errorArgs = ['experience_letter'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                        </span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="salary_certificate">Salary Certificate</label>
                                                 <div class="col-sm-4">
                                                     <select name="salary_certificate" id="salary_certificate"  class="form-control">
-                                                        <option value="">Select</option>
+                                                        <option value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->salary_certificate); ?>"><?php echo e((!$finalCheckList) ? 'Select' : $finalCheckList->salary_certificate); ?></option>
                                                         <option value="Given">Given</option>
                                                         <option value="Pending">Pending</option>
                                                     </select>
+                                                    <?php $__errorArgs = ['salary_certificate'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                        </span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="final_comment">Final Comment</label>
                                                 <div class="col-sm-4">
-                                                <textarea name="final_comment" id="final_comment" class="form-control" cols="30" rows="10"></textarea>
+                                                <textarea name="final_comment" id="final_comment" class="form-control" cols="30" rows="10"><?php echo e((!$finalCheckList) ? '' : $finalCheckList->final_comment); ?></textarea>
+                                                <?php $__errorArgs = ['final_comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
