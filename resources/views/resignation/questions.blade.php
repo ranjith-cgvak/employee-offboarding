@@ -8,7 +8,6 @@
     {{ session()->get('success') }}
 </div>
 @endif
-@if(\Auth::User()->department_id == 2)
 
 @if(Auth::User()->department_id == 2)
 <!-- My resignation details -->

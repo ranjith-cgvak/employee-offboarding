@@ -1375,8 +1375,8 @@ unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="<?php echo e((!$finalCheckList) ? route('storeFinalCheckList') : route('updateFinalCheckList')); ?>">
-                                        <div class="box-body">
+                                    <form method="post"  action="<?php echo e((!$finalCheckList) ? route('storeFinalCheckList') : route('updateFinalCheckList')); ?> " enctype="multipart/form-data">
+                                        <?php echo csrf_field(); ?> <div class="box-body">
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="type_of_exit">Type Of Exit</label>
                                                 <div class="col-sm-4">
@@ -1584,9 +1584,21 @@ unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="control-label col-sm-2" for="documents">Documents If Required</label>
+                                                <label class="control-label col-sm-2" for="documents">Relieving Letter</label>
                                                 <div class="col-sm-4">
-                                                <input type="file" name="documents" id="documents" class="form-control">
+                                                <input type="file" name="RelievingLetter" id="RelievingLetter" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="documents">Experience Letter</label>
+                                                <div class="col-sm-4">
+                                                <input type="file" name="ExperienceLetter" id="ExperienceLetter" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="documents">Salary Certificate</label>
+                                                <div class="col-sm-4">
+                                                <input type="file" name="SalaryCertificate" id="SalaryCertificate" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -1624,5 +1636,4 @@ unset($__errorArgs, $__bag); ?>
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/process/viewResignation.blade.php ENDPATH**/ ?> 
-@endif
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/process/viewResignation.blade.php ENDPATH**/ ?>
