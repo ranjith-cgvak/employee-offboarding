@@ -55,7 +55,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="get" action="{{ route('updateDol')}}">
+        <form method="get" action="{{ route('addOrUpdateDolComments')}}">
             @csrf
             {{ method_field('PUT') }}
             <div class="form-group row">
@@ -73,7 +73,9 @@
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{ (Auth::User()->designation_id != 2) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead}}</textarea>
+                    @if(\Auth::User()->designation_id == 2)<textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{($leadDolComment != NULL) ? $leadDolComment['comment'] : ' ' }}</textarea>@endif
+                    @if(\Auth::User()->designation_id == 3)<textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{  ($headDolComment != NULL) ? $headDolComment['comment'] : ' ' }}</textarea>@endif
+                    @if(\Auth::User()->department_id == 2)<textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{  ($hrDolComment != NULL) ? $hrDolComment['comment'] : ' ' }}</textarea>@endif
                     @error('dateOfLeaving')
                     <br>
                     <span class="invalid-feedback" role="alert">
@@ -83,6 +85,9 @@
                 </div>     
             </div>
             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
+            <input type="hidden" name="leadDolCommentId" value="{{ ($leadDolComment != NULL) ? $leadDolComment['id'] : NULL }} ">
+            <input type="hidden" name="headDolCommentId" value="{{ ($headDolComment != NULL) ? $headDolComment['id'] : NULL }} ">
+            <input type="hidden" name="hrDolCommentId" value="{{ ($hrDolComment != NULL) ? $hrDolComment['id'] : NULL }} ">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -199,7 +204,7 @@
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="{{ route('updateResignationComment') }}">
+                                    <form method="get" action="{{ route('addOrUpdateResignationComment') }}">
                                         @csrf
                                         {{ method_field('PUT') }}
                                         <div class="box-body">
@@ -207,7 +212,7 @@
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
                                                 @if(Auth::User()->designation_id == 2)
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '}}</textarea>
+                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required>{{ ($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ' '}}</textarea>
                                                 @endif
                                                     @error('leadComment')
                                                     <br>
@@ -216,7 +221,7 @@
                                                     </span>
                                                     @enderror
                                                     @if(Auth::User()->designation_id != 2)
-                                                    <p>{{ ($emp_resignation->comment_lead == NULL)  ? 'N/A' : $emp_resignation->comment_lead }}</p>
+                                                    <p>{{ ($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : 'N/A' }}</p>
                                                     @endif
                                                 </div>
                                             </div>
@@ -225,7 +230,7 @@
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
                                                     @if(Auth::User()->designation_id == 3 )
-                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_head != NULL) ? $emp_resignation->comment_head : ' '}}</textarea>
+                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required>{{ ($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ' '}}</textarea>
                                                     @endif
                                                     @error('headComment')
                                                     <br>
@@ -234,7 +239,7 @@
                                                     </span>
                                                     @enderror
                                                     @if(Auth::User()->department_id == 2)
-                                                    <p>{{ $emp_resignation->comment_head }}</p>
+                                                    <p>{{ ($headGeneralComment != NULL) ? $headGeneralComment['comment'] : 'N/A' }}</p>
                                                     @endif
                                                 </div>
                                             </div>
@@ -244,7 +249,7 @@
                                             <div class="form-group row">
                                                 <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
                                                 <div class="col-sm-6">
-                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required>{{ ($emp_resignation->comment_hr != NULL) ? $emp_resignation->comment_hr : ' '}}</textarea>
+                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required>{{ ($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : ' ' }}</textarea>
                                                     @error('hrComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
@@ -259,6 +264,9 @@
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
+                                        <input type="hidden" name="leadGeneralCommentId" value="{{ ($leadGeneralComment != NULL) ? $leadGeneralComment['id'] : NULL }} ">
+                                        <input type="hidden" name="headGeneralCommentId" value="{{ ($headGeneralComment != NULL) ? $headGeneralComment['id'] : NULL }} ">
+                                        <input type="hidden" name="hrGeneralCommentId" value="{{ ($hrGeneralComment != NULL) ? $hrGeneralComment['id'] : NULL }} ">
                                         <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                         </div>
                                     </form>
@@ -293,7 +301,7 @@
                                         <div class="form-group row">
                                             <label for="comment" class="col-sm-2 form-label">Comment </label>
                                             <div class="col-sm-4">
-                                                <p>{{ $emp_resignation->comment }}</p>
+                                                <p>{{ $emp_resignation->comment_on_withdraw }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -310,7 +318,7 @@
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="{{ route('updateDowComment') }}">
+                                    <form method="get" action="{{ route('addOrUpdateDowComment') }}">
                                         @csrf
                                         {{ method_field('PUT') }}
                                         <div class="box-body">
@@ -318,7 +326,7 @@
                                                 <label for="withdrawLeadComment" class="col-sm-2 form-label">Lead Comment on Withdraw </label>
                                                 <div class="col-sm-6">
                                                     @if(Auth::User()->designation_id == 2 )
-                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required>{{ ($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '}}</textarea>
+                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required>{{ ($leadDowComment != NULL) ? $leadDowComment['comment'] : '' }}</textarea>
                                                     @endif
 
                                                     @error('withdrawLeadComment')
@@ -329,7 +337,7 @@
                                                     @enderror
 
                                                     @if(Auth::User()->designation_id != 2)
-                                                    <p>{{ $emp_resignation->comment_dow_lead }}</p>
+                                                    <p>{{ ($leadDowComment != NULL) ? $leadDowComment['comment'] : 'N/A' }}</p>
                                                     @endif
                                                 </div>
                                             </div>
@@ -339,7 +347,7 @@
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
                                                     @if (Auth::User()->designation_id == 3) 
-                                                    <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required>{{ ($emp_resignation->comment_dow_head != NULL) ? $emp_resignation->comment_dow_head : ' '}}</textarea>
+                                                    <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required>{{ ($headDowComment != NULL) ? $headDowComment['comment'] : ''}}</textarea>
                                                     @endif
                                                     @error('withdrawHeadComment')
                                                     <br>
@@ -349,7 +357,7 @@
                                                     @enderror
 
                                                     @if(Auth::User()->department_id == 2)
-                                                    <p>{{ $emp_resignation->comment_dow_head }}</p>
+                                                    <p>{{ ($headDowComment != NULL) ? $headDowComment['comment'] : 'N/A' }}</p>
                                                     @endif
 
                                                 </div>
@@ -360,7 +368,7 @@
                                             <div class="form-group row">
                                                 <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
                                                 <div class="col-sm-4">
-                                                    <textarea name="withdrawHrComment" id="withdrawHrComment" cols="30" rows="10" class="form-control" required>{{ ($emp_resignation->comment_dow_hr != NULL) ? $emp_resignation->comment_dow_hr : ' '}}</textarea>
+                                                    <textarea name="withdrawHrComment" id="withdrawHrComment" cols="30" rows="10" class="form-control" required>{{ ($hrDowComment != NULL) ? $hrDowComment['comment'] : '' }}</textarea>
                                                     @error('withdrawHrComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
@@ -372,6 +380,9 @@
                                             @endif
 
                                             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
+                                            <input type="hidden" name="leadDowCommentId" value="{{ ($leadDowComment != NULL) ? $leadDowComment['id'] : NULL }} ">
+                                            <input type="hidden" name="headDowCommentId" value="{{ ($headDowComment != NULL) ? $headDowComment['id'] : NULL }} ">
+                                            <input type="hidden" name="hrDowCommentId" value="{{ ($hrDowComment != NULL) ? $hrDowComment['id'] : NULL }} ">
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
@@ -414,29 +425,29 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Lead</td>
-                                                    <td class="{{ ($emp_resignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_lead == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    <td class="{{ ($leadGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($leadGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
                                                     @if(\Auth::User()->department_id != 7)
-                                                    <td>{{ $emp_resignation->comment_lead }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
-                                                    <td>{{ $emp_resignation->comment_dol_lead }}</td>
+                                                    <td>{{ $leadGeneralComment['comment'] }}</td>
+                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $leadDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
+                                                    <td>{{ $leadDolComment['comment'] }}</td>
                                                     @endif
                                                 </tr>
                                                 <tr>
                                                     <td>Department Head / Unit Head</td>
-                                                    <td class="{{ ($emp_resignation->comment_head == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_head == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    <td class="{{ ($headGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($headGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
                                                     @if(\Auth::User()->department_id != 7)
-                                                    <td>{{ $emp_resignation->comment_head }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
-                                                    <td>{{ $emp_resignation->comment_dol_head }}</td>
+                                                    <td>{{ $headGeneralComment['comment'] }}</td>
+                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $headDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
+                                                    <td>{{ $headDolComment['comment'] }}</td>
                                                     @endif
                                                 </tr>
                                                 <tr>
                                                     <td>HR</td>
-                                                    <td class="{{ ($emp_resignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($emp_resignation->comment_hr == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    <td class="{{ ($hrGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($hrGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
                                                     @if(\Auth::User()->department_id != 7)
-                                                    <td>{{ $emp_resignation->comment_hr }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
-                                                    <td>{{ $emp_resignation->comment_dol_hr }}</td>
+                                                    <td>{{ $hrGeneralComment['comment'] }}</td>
+                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $hrDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
+                                                    <td>{{ $hrDolComment['comment'] }}</td>
                                                     @endif
                                                 </tr>
                                             </tbody>
