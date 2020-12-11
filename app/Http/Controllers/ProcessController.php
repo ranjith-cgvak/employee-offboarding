@@ -7,6 +7,7 @@ use App\Resignation;
 use App\User;
 use App\Feedback;
 use App\NoDue;
+use App\FinalExitChecklist;
 use App\Support\Facades\DB;
 
 class ProcessController extends Controller
@@ -122,7 +123,10 @@ class ProcessController extends Controller
         ->Join( 'questions', 'questions.id', '=', 'user_answers.question_id' )
         ->where( 'user_answers.resignation_id', $id )
         ->get();
-        return view( 'process.viewResignation', compact( 'emp_resignation', 'isFeedback', 'feedback', 'converted_dates', 'nodue','answers' ) );
+        $finalCheckList = \DB::table('final_exit_checklists')
+        ->where('final_exit_checklists.resignation_id',$id)
+        ->first();
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','answers'));
     }
 
     /**
@@ -438,6 +442,75 @@ class ProcessController extends Controller
         }
         $updateNodue->save();
         return redirect()->route( 'process.edit', ['process' => $resignationId] );
+    }
+
+
+    public function storeFinalCheckList(Request $request){
+        $request->validate([
+            'type_of_exit'=>'required',
+            'date_of_leaving'=>'required',
+            'reason_for_leaving'=>'required',
+            'last_drawn_salary'=>'required',
+            'consider_for_rehire'=>'required',
+            'overall_feedback'=>'required',
+            'relieving_letter'=>'required',
+            'experience_letter'=>'required',
+            'salary_certificate'=>'required',
+            'final_comment'=>'required'
+        ]);
+        $resignationId = $request->get('resignationId');
+        $finalCheckList = new FinalExitChecklist([
+            'resignation_id' => $request->get('resignationId'),
+            'type_of_exit' => $request->get('type_of_exit'),
+            'date_of_leaving' => $request->get('date_of_leaving'),
+            'reason_for_leaving' => $request->get('reason_for_leaving'),
+            'last_drawn_salary' => $request->get('last_drawn_salary'),
+            'consider_for_rehire' => $request->get('consider_for_rehire'),
+            'overall_feedback' => $request->get('overall_feedback'),
+            'relieving_letter' => $request->get('relieving_letter'),
+            'experience_letter' => $request->get('experience_letter'),
+            'salary_certificate' => $request->get('salary_certificate'),
+            'final_comment' => $request->get('final_comment'),
+            'documents' => $request->get('documents'),
+            'date_of_entry' => $request->get('date_of_entry'),
+            'updated_by' => $request->get('updated_by')
+        ]);
+        $finalCheckList->save();
+        return redirect()->route('process.edit', ['process' => $resignationId]);
+    }
+
+    public function updateFinalCheckList(Request $request){
+        $request->validate([
+            'type_of_exit'=>'required',
+            'date_of_leaving'=>'required',
+            'reason_for_leaving'=>'required',
+            'last_drawn_salary'=>'required',
+            'consider_for_rehire'=>'required',
+            'overall_feedback'=>'required',
+            'relieving_letter'=>'required',
+            'experience_letter'=>'required',
+            'salary_certificate'=>'required',
+            'final_comment'=>'required'
+        ]);
+        $finalCheckListId = $request->get('finalChecklistId');
+        $resignationId = $request->get('resignationId');
+        $updateFinalCheckList = FinalExitChecklist::find($finalCheckListId);
+        $updateFinalCheckList->resignation_id = $request->get('resignationId');
+        $updateFinalCheckList->type_of_exit = $request->get('type_of_exit');
+        $updateFinalCheckList->date_of_leaving = $request->get('date_of_leaving');
+        $updateFinalCheckList->reason_for_leaving = $request->get('reason_for_leaving');
+        $updateFinalCheckList->last_drawn_salary = $request->get('last_drawn_salary');
+        $updateFinalCheckList->consider_for_rehire = $request->get('consider_for_rehire');
+        $updateFinalCheckList->overall_feedback = $request->get('overall_feedback');
+        $updateFinalCheckList->relieving_letter = $request->get('relieving_letter');
+        $updateFinalCheckList->experience_letter = $request->get('experience_letter');
+        $updateFinalCheckList->salary_certificate = $request->get('salary_certificate');
+        $updateFinalCheckList->final_comment = $request->get('final_comment');
+        $updateFinalCheckList->documents = $request->get('documents');
+        $updateFinalCheckList->date_of_entry = $request->get('date_of_entry');
+        $updateFinalCheckList->updated_by = $request->get('updated_by');
+        $updateFinalCheckList->save();
+        return redirect()->route('process.edit', ['process' => $resignationId]);
     }
     /**
     * Remove the specified resource from storage.

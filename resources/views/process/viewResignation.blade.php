@@ -114,6 +114,9 @@
                 @if(Auth::User()->department_id == 2)
                 <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
                 @endif
+                @if(\Auth::User()->department_id == 2)
+                <li><a href="#tab_6-2" data-toggle="tab">Final Exit Checklist</a></li>
+                @endif
                 @endif
             </ul>
             <div class="tab-content">
@@ -1104,6 +1107,185 @@
 </div>
 <!-- /.tab-pane -->
 
+                @if(\Auth::User()->department_id == 2)
+                <!-- Final Exit check list -->
+                <div class="tab-pane" id="tab_6-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-secondary formBox" >
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Final Exit Checklist</h3>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <!-- form start -->
+                                    <form method="get" action="{{ (!$finalCheckList) ? route('storeFinalCheckList') : route('updateFinalCheckList') }}">
+                                        <div class="box-body">
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="type_of_exit">Type Of Exit</label>
+                                                <div class="col-sm-4">
+                                                    <select name="type_of_exit" id="type_of_exit"  class="form-control">
+                                                        <option value="{{ (!$finalCheckList) ? '' : $finalCheckList->type_of_exit }}">{{ (!$finalCheckList) ? 'Select' : $finalCheckList->type_of_exit }}</option>
+                                                        <option value="Voluntary">Voluntary</option>
+                                                        <option value="Involuntary">Involuntary</option>
+                                                    </select>
+                                                    @error('type_of_exit')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="date_of_leaving">Date Of Leaving</label>
+                                                <div class="col-sm-4">
+                                                <input type="date" class="form-control" id="date_of_leaving" name="date_of_leaving" value="{{ ($emp_resignation->changed_dol == NULL) ? $emp_resignation->date_of_leaving : $emp_resignation->changed_dol }}" readonly>
+                                                @error('date_of_leaving')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="reason_for_leaving">Reason For Leaving</label>
+                                                <div class="col-sm-4">
+                                                <input type="text" class="form-control" id="reason_for_leaving" name="reason_for_leaving" value="{{ ($emp_resignation->other_reason == NULL) ? $emp_resignation->reason : $emp_resignation->other_reason }}" readonly>
+                                                @error('reason_for_leaving')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="last_drawn_salary">Last Drawn Salary</label>
+                                                <div class="col-sm-4">
+                                                <input type="number" class="form-control" id="last_drawn_salary" name="last_drawn_salary" value="{{ (!$finalCheckList) ? '' : $finalCheckList->last_drawn_salary }}">
+                                                @error('last_drawn_salary')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="consider_for_rehire">Can Be Considered For Rehire</label>
+                                                <div class="col-sm-4">
+                                                <input type="text" class="form-control" id="consider_for_rehire" name="consider_for_rehire" value="{{ (!$finalCheckList) ? '' : $finalCheckList->consider_for_rehire }}">
+                                                @error('consider_for_rehire')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="overall_feedback">Overall Feedback</label>
+                                                <div class="col-sm-4">
+                                                <input type="text" class="form-control" id="overall_feedback" name="overall_feedback" value="{{ (!$finalCheckList) ? '' : $finalCheckList->overall_feedback }}">
+                                                @error('overall_feedback')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="relieving_letter">Relieving Letter</label>
+                                                <div class="col-sm-4">
+                                                    <select name="relieving_letter" id="relieving_letter"  class="form-control">
+                                                        <option value="{{ (!$finalCheckList) ? '' : $finalCheckList->relieving_letter }}">{{ (!$finalCheckList) ? 'Select' : $finalCheckList->relieving_letter }}</option>
+                                                        <option value="Given">Given</option>
+                                                        <option value="Pending">Pending</option>
+                                                    </select>
+                                                    @error('relieving_letter')
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger">{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="experience_letter">Experience Letter</label>
+                                                <div class="col-sm-4">
+                                                    <select name="experience_letter" id="experience_letter"  class="form-control">
+                                                        <option value="{{ (!$finalCheckList) ? '' : $finalCheckList->experience_letter }}">{{ (!$finalCheckList) ? 'Select' : $finalCheckList->experience_letter }}</option>
+                                                        <option value="Given">Given</option>
+                                                        <option value="Pending">Pending</option>
+                                                    </select>
+                                                    @error('experience_letter')
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger">{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="salary_certificate">Salary Certificate</label>
+                                                <div class="col-sm-4">
+                                                    <select name="salary_certificate" id="salary_certificate"  class="form-control">
+                                                        <option value="{{ (!$finalCheckList) ? '' : $finalCheckList->salary_certificate }}">{{ (!$finalCheckList) ? 'Select' : $finalCheckList->salary_certificate }}</option>
+                                                        <option value="Given">Given</option>
+                                                        <option value="Pending">Pending</option>
+                                                    </select>
+                                                    @error('salary_certificate')
+                                                        <br>
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong class="text-danger">{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="final_comment">Final Comment</label>
+                                                <div class="col-sm-4">
+                                                <textarea name="final_comment" id="final_comment" class="form-control" cols="30" rows="10">{{ (!$finalCheckList) ? '' : $finalCheckList->final_comment }}</textarea>
+                                                @error('final_comment')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="documents">Documents If Required</label>
+                                                <div class="col-sm-4">
+                                                <input type="file" name="documents" id="documents" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="date_of_entry">Date: {{ Date('Y-m-d') }}</label>
+                                                <input type="hidden" name="date_of_entry" value="{{ Date('Y-m-d') }}"> 
+                                                <div class="col-sm-4">
+                                                <label class="control-label pull-right" for="updated_by">Updated By: {{ Auth::User()->display_name }}</label>
+                                                <input type="hidden" name="updated_by" value="{{ Auth::User()->display_name }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="box-footer">
+                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}"> 
+                                            <input type="hidden" id="finalChecklistId" name="finalChecklistId" value="{{ (!$finalCheckList) ? '' : $finalCheckList->id }}">
+                                            <button type="submit" class="btn btn-primary" id="myBtn">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.tab-pane -->
+                <!-- /End of Final Exit check list -->
+                @endif
             </div>
             <!-- /.tab-content -->
             </div>

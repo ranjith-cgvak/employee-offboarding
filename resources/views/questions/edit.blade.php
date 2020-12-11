@@ -9,7 +9,8 @@
 </div>
 @endif
 <!-- Leaving form -->
-@if(\Auth::User()->department_id == 2)
+
+@if(Auth::User()->department_id == 2)
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12">

@@ -9,8 +9,13 @@
 
 </div>
 <?php endif; ?>
+<<<<<<< HEAD
 <?php if(\Auth::User()->department_id == 2): ?>
 
+=======
+
+<?php if(Auth::User()->department_id == 2): ?>
+>>>>>>> 5f052f90e1f1441637b5831174d6522833cba085
 <!-- My resignation details -->
 <div class="container-fluid">
     <div class="row">
@@ -47,7 +52,11 @@
                                     <li><?php echo e($options->option_value); ?></li>
                                 </ul></b>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></td>
+<<<<<<< HEAD
                             <td><a href="<?php echo e(route('questions.edit', $questions->id )); ?>" class="btn btn-primary">Edit</a>&nbsp;<a href="<?php echo e(url('deletequestion/'.$questions->id)); ?>" class="btn btn-primary">Delete</a></td>
+=======
+                            <td><a href="<?php echo e(route('questions.edit', $questions->id )); ?>" class="btn btn-primary">Edit</a>&nbsp;<a href="<?php echo e(url('deleteQuestion/'.$questions->id)); ?>" class="btn btn-primary">Delete</a></td>
+>>>>>>> 5f052f90e1f1441637b5831174d6522833cba085
                         </tr> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
@@ -59,9 +68,14 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 
 
 <?php else: ?>
+=======
+<?php else: ?>
+
+>>>>>>> 5f052f90e1f1441637b5831174d6522833cba085
 <div class="container-fluid">
     <div class="box box-primary">
         <div class="box-header with-border">
@@ -79,7 +93,11 @@
                     ->get(); ?>
 
                 <div class="form-group row"><br>
+<<<<<<< HEAD
                     <label for="withdrawDate" class="col-sm-8  form-label"><?php echo e($questions->question_number); ?>. <?php echo e($questions->questions); ?> <span class="text-danger">*</span></label>
+=======
+                    <label for="withdrawDate" class="col-sm-8  form-label"><?php echo e($questions->id); ?>. <?php echo e($questions->questions); ?> <span class="text-danger">*</span></label>
+>>>>>>> 5f052f90e1f1441637b5831174d6522833cba085
                     <br>
                     <div class="col-sm-8">
                         <?php if($questions->question_type == 1): ?>
@@ -94,8 +112,13 @@
                         <?php elseif($questions->question_type == 3): ?>
                         <?php $__currentLoopData = $Question_options; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $options): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <input type="radio" id="chk<?php echo e($options->option_value); ?>" required name="<?php echo e($questions->id); ?>" value="<?php echo e($options->option_value); ?>" onclick="ShowHideDiv()">
+<<<<<<< HEAD
                         <label class="radio-custom-label "  for="<?php echo e($questions->question_id); ?><?php echo e($questions->id); ?>">
                             <b > <?php echo e($options->option_value); ?></b>
+=======
+                        <label class="radio-custom-label" for="<?php echo e($questions->question_id); ?><?php echo e($questions->id); ?>">
+                            <b> <?php echo e($options->option_value); ?></b>
+>>>>>>> 5f052f90e1f1441637b5831174d6522833cba085
                         </label>
 
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -134,12 +157,21 @@ unset($__errorArgs, $__bag); ?>
 
             </div>
             <!-- /.box-body -->
+<<<<<<< HEAD
             <div class="box-footer"><input type="hidden" name="ResignationId"  value="<?php echo e($myResignation->id); ?>">
+=======
+            <div class="box-footer">
+>>>>>>> 5f052f90e1f1441637b5831174d6522833cba085
                 <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
             </div>
         </form>
     </div>
+<<<<<<< HEAD
 </div><?php endif; ?>
+=======
+</div>
+<?php endif; ?>
+>>>>>>> 5f052f90e1f1441637b5831174d6522833cba085
 
 <!-- Exit Interview questions -->
 <script>
