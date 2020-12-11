@@ -459,7 +459,7 @@ class ProcessController extends Controller
         ] );
 
         $resignationId = $request->get( 'resignationId' );
-        if ( $request->file( 'RelievingLetter' ) ) {
+        if ( ( $request->file( 'RelievingLetter' ) ) || ( $request->file( 'ExperienceLetter' ) ) || ( $request->file( 'SalaryCertificate' ) ) ) {
             $RelievingLetterPath = $request->file( 'RelievingLetter' );
             $RelievingLetterName = $RelievingLetterPath->getClientOriginalName();
 
@@ -511,19 +511,25 @@ class ProcessController extends Controller
         ] );
         $finalCheckListId = $request->get( 'finalChecklistId' );
         $resignationId = $request->get( 'resignationId' );
-        if ( $request->file( 'RelievingLetter' ) ) {
-            $RelievingLetterPath = $request->file( 'RelievingLetter' );
-            $RelievingLetterName = $RelievingLetterPath->getClientOriginalName();
+        if ( ( $request->file( 'RelievingLetter' ) ) || ( $request->file( 'ExperienceLetter' ) ) || ( $request->file( 'SalaryCertificate' ) ) ) {
+            if ( $request->file( 'RelievingLetter' ) ) {
+                $RelievingLetterPath = $request->file( 'RelievingLetter' );
+                $RelievingLetterName = $RelievingLetterPath->getClientOriginalName();
+                $RelievingLetterFilepath = $request->file( 'RelievingLetter' )->storeAs( 'uploads', $RelievingLetterName, 'public' );
 
-            $ExperienceLetterPath = $request->file( 'ExperienceLetter' );
-            $ExperienceLetterName = $ExperienceLetterPath->getClientOriginalName();
+            }
+            if ( $request->file( 'ExperienceLetter' ) ) {
+                $ExperienceLetterPath = $request->file( 'ExperienceLetter' );
+                $ExperienceLetterName = $ExperienceLetterPath->getClientOriginalName();
+                $ExperienceLetterFilepath = $request->file( 'ExperienceLetter' )->storeAs( 'uploads', $ExperienceLetterName, 'public' );
 
-            $SalaryCertificatePath = $request->file( 'SalaryCertificate' );
-            $SalaryCertificateName = $SalaryCertificatePath->getClientOriginalName();
+            }
+            if ( $request->file( 'SalaryCertificate' ) ) {
 
-            $RelievingLetterFilepath = $request->file( 'RelievingLetter' )->storeAs( 'uploads', $RelievingLetterName, 'public' );
-            $ExperienceLetterFilepath = $request->file( 'ExperienceLetter' )->storeAs( 'uploads', $ExperienceLetterName, 'public' );
-            $SalaryCertificateFilepath = $request->file( 'SalaryCertificate' )->storeAs( 'uploads', $SalaryCertificateName, 'public' );
+                $SalaryCertificatePath = $request->file( 'SalaryCertificate' );
+                $SalaryCertificateName = $SalaryCertificatePath->getClientOriginalName();
+                $SalaryCertificateFilepath = $request->file( 'SalaryCertificate' )->storeAs( 'uploads', $SalaryCertificateName, 'public' );
+            }
         }
         $updateFinalCheckList = FinalExitChecklist::find( $finalCheckListId );
         $updateFinalCheckList->resignation_id = $request->get( 'resignationId' );
@@ -537,9 +543,17 @@ class ProcessController extends Controller
         $updateFinalCheckList->experience_letter = $request->get( 'experience_letter' );
         $updateFinalCheckList->salary_certificate = $request->get( 'salary_certificate' );
         $updateFinalCheckList->final_comment = $request->get( 'final_comment' );
-        $updateFinalCheckList->relieving_document = $RelievingLetterFilepath;
-        $updateFinalCheckList->experience_document = $ExperienceLetterFilepath;
-        $updateFinalCheckList->salary_document = $SalaryCertificateFilepath;
+        if ( ( $request->file( 'RelievingLetter' ) ) || ( $request->file( 'ExperienceLetter' ) ) || ( $request->file( 'SalaryCertificate' ) ) ) {
+            if ( $request->file( 'RelievingLetter' ) ) {
+                $updateFinalCheckList->relieving_document = $RelievingLetterFilepath;
+            }
+            if ( $request->file( 'ExperienceLetter' ) ) {
+                $updateFinalCheckList->experience_document = $ExperienceLetterFilepath;
+            }
+            if ( $request->file( 'SalaryCertificate' ) ) {
+                $updateFinalCheckList->salary_document = $SalaryCertificateFilepath;
+            }
+        }
         $updateFinalCheckList->date_of_entry = $request->get( 'date_of_entry' );
         $updateFinalCheckList->updated_by = $request->get( 'updated_by' );
         $updateFinalCheckList->save();
