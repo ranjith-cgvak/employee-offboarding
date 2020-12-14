@@ -78,7 +78,7 @@
                     ->get(); ?>
 
                 <div class="form-group row"><br>
-                    <label for="withdrawDate" class="col-sm-8  form-label"><?php echo e($questions->id); ?>. <?php echo e($questions->questions); ?> <span class="text-danger">*</span></label>
+                    <label for="withdrawDate" class="col-sm-8  form-label"><?php echo e($questions->question_number); ?>. <?php echo e($questions->questions); ?> <span class="text-danger">*</span></label>
                     <br>
                     <div class="col-sm-8">
                         <?php if($questions->question_type == 1): ?>
@@ -93,8 +93,8 @@
                         <?php elseif($questions->question_type == 3): ?>
                         <?php $__currentLoopData = $Question_options; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $options): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <input type="radio" id="chk<?php echo e($options->option_value); ?>" required name="<?php echo e($questions->id); ?>" value="<?php echo e($options->option_value); ?>" onclick="ShowHideDiv()">
-                        <label class="radio-custom-label" for="<?php echo e($questions->question_id); ?><?php echo e($questions->id); ?>">
-                            <b> <?php echo e($options->option_value); ?></b>
+                        <label class="radio-custom-label "  for="<?php echo e($questions->question_id); ?><?php echo e($questions->id); ?>">
+                            <b > <?php echo e($options->option_value); ?></b>
                         </label>
 
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -133,7 +133,7 @@ unset($__errorArgs, $__bag); ?>
 
             </div>
             <!-- /.box-body -->
-            <div class="box-footer">
+            <div class="box-footer"><input type="hidden" name="ResignationId"  value="<?php echo e($myResignation->id); ?>">
                 <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
             </div>
         </form>

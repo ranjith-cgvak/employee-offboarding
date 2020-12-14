@@ -8,6 +8,11 @@
         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
     </li>
+    <li class=" {{ ((request()->segment(1) == 'questions') || (request()->segment(1) == 'addquestions') ) ? 'active' : '' }} ">
+        <a href="{{ route('questions.index')}}">
+        <i class="fa fa-comments"></i> <span>Exit Interview</span>
+        </a>
+    </li>
     <!-- For employees -->
     @else
     <li data-toggle="tooltip" data-placement="right" @if($myResignation) title= 'Applied Already' style="cursor: not-allowed;" @endif class=" {{ ((request()->segment(1) == 'resignation') && (request()->segment(2) == 'create')) ? 'active' : '' }}">
@@ -25,7 +30,7 @@
         <i class="fa fa-check-square-o"></i> <span>Acceptance Details</span>
         </a>
     </li>
-    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' style="cursor: not-allowed;" @endif class=" {{ (request()->segment(1) == 'noDueStatus') ? 'active' : '' }}">
+    <li data-toggle="tooltip" data-placement="right" @if(!$myResignation) title= 'Apply resignation to enable' style="cursor: not-allowed;" @endif class=" {{ ((request()->segment(1) == 'noDueStatus') || (request()->segment(1) == 'questions') ) ? 'active' : '' }}">
         <a class="{{ ($myResignation == NULL) ? 'isDisabled' : ' ' }}" href="{{ route('noDueStatus')}}">
         <i class="fa fa-check-circle-o"></i> <span>No Due Status</span>
         </a>

@@ -111,6 +111,9 @@
                 @if(\Auth::User()->department_id != 7)
                 <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
                 @endif
+                @if(Auth::User()->department_id == 2)
+                <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
+                @endif
                 @if(\Auth::User()->department_id == 2)
                 <li><a href="#tab_6-2" data-toggle="tab">Final Exit Checklist</a></li>
                 @endif
@@ -1066,6 +1069,44 @@
                 <!-- /End of feedback -->
                 @endif
 
+<!-- No due forms -->
+<div class="tab-pane" id="tab_5-2">
+    @if(Auth::User()->department_id == 2)
+    <!-- No Due status -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Exit Interview Answers</h3>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <th width="5%"> Q\N</th>
+                                <th width="65%">Exit Interview Question</th>
+                                <th>Exit Interview Answers</th>
+                                
+                            </thead>
+                            <tbody>
+                                @foreach($answers as $answer)
+                                <tr>
+                                    <td >{{$answer->question_number}}</td>
+                                    <td >{{$answer->questions}}</td>
+                                    <td >{{$answer->answers}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+</div>
+<!-- /.tab-pane -->
+
                 @if(\Auth::User()->department_id == 2)
                 <!-- Final Exit check list -->
                 <div class="tab-pane" id="tab_6-2">
@@ -1078,8 +1119,8 @@
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="{{ (!$finalCheckList) ? route('storeFinalCheckList') : route('updateFinalCheckList') }}">
-                                        <div class="box-body">
+                                    <form method="post"  action="{{ (!$finalCheckList) ? route('storeFinalCheckList') : route('updateFinalCheckList') }} " enctype="multipart/form-data">
+                                        @csrf <div class="box-body">
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="type_of_exit">Type Of Exit</label>
                                                 <div class="col-sm-4">
@@ -1217,9 +1258,21 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="control-label col-sm-2" for="documents">Documents If Required</label>
+                                                <label class="control-label col-sm-2" for="documents">Relieving Letter</label>
                                                 <div class="col-sm-4">
-                                                <input type="file" name="documents" id="documents" class="form-control">
+                                                <input type="file" name="RelievingLetter" id="RelievingLetter" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="documents">Experience Letter</label>
+                                                <div class="col-sm-4">
+                                                <input type="file" name="ExperienceLetter" id="ExperienceLetter" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="documents">Salary Certificate</label>
+                                                <div class="col-sm-4">
+                                                <input type="file" name="SalaryCertificate" id="SalaryCertificate" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="form-group row">

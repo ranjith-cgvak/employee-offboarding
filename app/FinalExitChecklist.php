@@ -18,7 +18,9 @@ class FinalExitChecklist extends Model
         'experience_letter',
         'salary_certificate',
         'final_comment',
-        'documents',
+        'relieving_document',
+        'experience_document',
+        'salary_document',
         'date_of_entry',
         'updated_by' 
     ];

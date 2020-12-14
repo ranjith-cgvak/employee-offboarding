@@ -127,6 +127,9 @@ unset($__errorArgs, $__bag); ?>
                 <?php if(\Auth::User()->department_id != 7): ?>
                 <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
                 <?php endif; ?>
+                <?php if(Auth::User()->department_id == 2): ?>
+                <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
+                <?php endif; ?>
                 <?php if(\Auth::User()->department_id == 2): ?>
                 <li><a href="#tab_6-2" data-toggle="tab">Final Exit Checklist</a></li>
                 <?php endif; ?>
@@ -1322,6 +1325,44 @@ unset($__errorArgs, $__bag); ?>
                 <!-- /End of feedback -->
                 <?php endif; ?>
 
+<!-- No due forms -->
+<div class="tab-pane" id="tab_5-2">
+    <?php if(Auth::User()->department_id == 2): ?>
+    <!-- No Due status -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Exit Interview Answers</h3>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <th width="5%"> Q\N</th>
+                                <th width="65%">Exit Interview Question</th>
+                                <th>Exit Interview Answers</th>
+                                
+                            </thead>
+                            <tbody>
+                                <?php $__currentLoopData = $answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr>
+                                    <td ><?php echo e($answer->question_number); ?></td>
+                                    <td ><?php echo e($answer->questions); ?></td>
+                                    <td ><?php echo e($answer->answers); ?></td>
+                                </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+<!-- /.tab-pane -->
+
                 <?php if(\Auth::User()->department_id == 2): ?>
                 <!-- Final Exit check list -->
                 <div class="tab-pane" id="tab_6-2">
@@ -1334,8 +1375,8 @@ unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="<?php echo e((!$finalCheckList) ? route('storeFinalCheckList') : route('updateFinalCheckList')); ?>">
-                                        <div class="box-body">
+                                    <form method="post"  action="<?php echo e((!$finalCheckList) ? route('storeFinalCheckList') : route('updateFinalCheckList')); ?> " enctype="multipart/form-data">
+                                        <?php echo csrf_field(); ?> <div class="box-body">
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="type_of_exit">Type Of Exit</label>
                                                 <div class="col-sm-4">
@@ -1543,9 +1584,21 @@ unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="control-label col-sm-2" for="documents">Documents If Required</label>
+                                                <label class="control-label col-sm-2" for="documents">Relieving Letter</label>
                                                 <div class="col-sm-4">
-                                                <input type="file" name="documents" id="documents" class="form-control">
+                                                <input type="file" name="RelievingLetter" id="RelievingLetter" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="documents">Experience Letter</label>
+                                                <div class="col-sm-4">
+                                                <input type="file" name="ExperienceLetter" id="ExperienceLetter" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2" for="documents">Salary Certificate</label>
+                                                <div class="col-sm-4">
+                                                <input type="file" name="SalaryCertificate" id="SalaryCertificate" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
