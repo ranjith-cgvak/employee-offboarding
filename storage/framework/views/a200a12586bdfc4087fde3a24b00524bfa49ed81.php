@@ -65,10 +65,7 @@ unset($__errorArgs, $__bag); ?>
                             <div class="col-sm-6">
                                 <select id="selectBox" class="form-control " name="question_type" onchange="changeFunc();">
                                     <option value="0">--Select--</option>
-<<<<<<< HEAD
 
-=======
->>>>>>> 5f052f90e1f1441637b5831174d6522833cba085
                                     <?php $__currentLoopData = $QuestionType; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $QuestionTypes): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option value="<?php echo e($QuestionTypes->id); ?>"><?php echo e($QuestionTypes->type); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

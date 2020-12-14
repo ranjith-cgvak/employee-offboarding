@@ -10,7 +10,8 @@
 </div>
 <?php endif; ?>
 <!-- Leaving form -->
-<?php if(\Auth::User()->department_id == 2): ?>
+
+<?php if(Auth::User()->department_id == 2): ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12">
@@ -68,10 +69,7 @@ unset($__errorArgs, $__bag); ?>
                             <div class="col-sm-6">
                                 <select id="selectBox" class="form-control " name="question_type" onchange="changeFunc();">
                                     <option value="<?php echo e($questions->question_type); ?>"><?php echo e($questions->type); ?></option>
-<<<<<<< HEAD
 
-=======
->>>>>>> 5f052f90e1f1441637b5831174d6522833cba085
                                     <?php $__currentLoopData = $QuestionType; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $QuestionTypes): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option value="<?php echo e($QuestionTypes->id); ?>"><?php echo e($QuestionTypes->type); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

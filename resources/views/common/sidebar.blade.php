@@ -8,13 +8,8 @@
         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
     </li>
-    <li class=" {{ ((request()->segment(1) == 'questions') || (request()->segment(1) == 'addquestions') ) ? 'active' : '' }} ">
-        <a href="{{ route('questions.index')}}">
-        <i class="fa fa-comments"></i> <span>Exit Interview</span>
-        </a>
-    </li>
-    <!-- For employees -->
     @else
+    <!-- For employees -->
     <li data-toggle="tooltip" data-placement="right" @if($myResignation) title= 'Applied Already' style="cursor: not-allowed;" @endif class=" {{ ((request()->segment(1) == 'resignation') && (request()->segment(2) == 'create')) ? 'active' : '' }}">
         <a class="{{ ($myResignation != NULL) ? 'isDisabled' : ' ' }}" href="{{ route('resignation.create')}}">
         <i class="fa fa-file-text-o"></i> <span>Resignation Form</span>
@@ -41,5 +36,14 @@
         </a>
     </li>
     @endif
+    <!-- Exit interview sidebar only for HR -->
+    @if(Auth::User()->department_id == 2)
+    <li class=" {{ ((request()->segment(1) == 'questions') || (request()->segment(1) == 'addquestions') ) ? 'active' : '' }} ">
+        <a href="{{ route('questions.index')}}">
+        <i class="fa fa-comments"></i> <span>Exit Interview</span>
+        </a>
+    </li>
+    @endif
+
     </ul>
 </section>
