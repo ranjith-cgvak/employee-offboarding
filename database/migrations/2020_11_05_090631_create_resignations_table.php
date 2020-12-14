@@ -22,17 +22,8 @@ class CreateResignationsTable extends Migration
             $table->date('date_of_resignation');
             $table->date('date_of_leaving');
             $table->date('date_of_withdraw')->nullable();
-            $table->string('comment')->nullable();
+            $table->text('comment_on_withdraw')->nullable();
             $table->date('changed_dol')->nullable();
-            $table->string('comment_dol_lead')->nullable();
-            $table->string('comment_dol_head')->nullable();
-            $table->string('comment_dol_hr')->nullable();
-            $table->string('comment_lead')->nullable();
-            $table->string('comment_head')->nullable();
-            $table->string('comment_hr')->nullable();
-            $table->string('comment_dow_lead')->nullable();
-            $table->string('comment_dow_head')->nullable();
-            $table->string('comment_dow_hr')->nullable();
             $table->timestamps();
         });
     }

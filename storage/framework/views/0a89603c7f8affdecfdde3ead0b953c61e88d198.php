@@ -56,7 +56,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="get" action="<?php echo e(route('updateDol')); ?>">
+        <form method="get" action="<?php echo e(route('addOrUpdateDolComments')); ?>">
             <?php echo csrf_field(); ?>
             <?php echo e(method_field('PUT')); ?>
 
@@ -82,7 +82,9 @@ unset($__errorArgs, $__bag); ?>
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e((Auth::User()->designation_id != 2) ? $emp_resignation->comment_dol_head : $emp_resignation->comment_dol_lead); ?></textarea>
+                    <?php if(\Auth::User()->designation_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($leadDolComment != NULL) ? $leadDolComment['comment'] : ' '); ?></textarea><?php endif; ?>
+                    <?php if(\Auth::User()->designation_id == 3): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($headDolComment != NULL) ? $headDolComment['comment'] : ' '); ?></textarea><?php endif; ?>
+                    <?php if(\Auth::User()->department_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($hrDolComment != NULL) ? $hrDolComment['comment'] : ' '); ?></textarea><?php endif; ?>
                     <?php $__errorArgs = ['dateOfLeaving'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -99,6 +101,9 @@ unset($__errorArgs, $__bag); ?>
                 </div>     
             </div>
             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
+            <input type="hidden" name="leadDolCommentId" value="<?php echo e(($leadDolComment != NULL) ? $leadDolComment['id'] : NULL); ?> ">
+            <input type="hidden" name="headDolCommentId" value="<?php echo e(($headDolComment != NULL) ? $headDolComment['id'] : NULL); ?> ">
+            <input type="hidden" name="hrDolCommentId" value="<?php echo e(($hrDolComment != NULL) ? $hrDolComment['id'] : NULL); ?> ">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -218,7 +223,7 @@ unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="<?php echo e(route('updateResignationComment')); ?>">
+                                    <form method="get" action="<?php echo e(route('addOrUpdateResignationComment')); ?>">
                                         <?php echo csrf_field(); ?>
                                         <?php echo e(method_field('PUT')); ?>
 
@@ -227,7 +232,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
                                                 <?php if(Auth::User()->designation_id == 2): ?>
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_lead != NULL) ? $emp_resignation->comment_lead : ' '); ?></textarea>
+                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ' '); ?></textarea>
                                                 <?php endif; ?>
                                                     <?php $__errorArgs = ['leadComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -243,7 +248,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                                     <?php if(Auth::User()->designation_id != 2): ?>
-                                                    <p><?php echo e(($emp_resignation->comment_lead == NULL)  ? 'N/A' : $emp_resignation->comment_lead); ?></p>
+                                                    <p><?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : 'N/A'); ?></p>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
@@ -252,7 +257,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
                                                     <?php if(Auth::User()->designation_id == 3 ): ?>
-                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_head != NULL) ? $emp_resignation->comment_head : ' '); ?></textarea>
+                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ' '); ?></textarea>
                                                     <?php endif; ?>
                                                     <?php $__errorArgs = ['headComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -268,7 +273,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                                     <?php if(Auth::User()->department_id == 2): ?>
-                                                    <p><?php echo e($emp_resignation->comment_head); ?></p>
+                                                    <p><?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['comment'] : 'N/A'); ?></p>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
@@ -278,7 +283,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
                                                 <div class="col-sm-6">
-                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_hr != NULL) ? $emp_resignation->comment_hr : ' '); ?></textarea>
+                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required><?php echo e(($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : ' '); ?></textarea>
                                                     <?php $__errorArgs = ['hrComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -300,6 +305,9 @@ unset($__errorArgs, $__bag); ?>
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
+                                        <input type="hidden" name="leadGeneralCommentId" value="<?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['id'] : NULL); ?> ">
+                                        <input type="hidden" name="headGeneralCommentId" value="<?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['id'] : NULL); ?> ">
+                                        <input type="hidden" name="hrGeneralCommentId" value="<?php echo e(($hrGeneralComment != NULL) ? $hrGeneralComment['id'] : NULL); ?> ">
                                         <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                         </div>
                                     </form>
@@ -334,7 +342,7 @@ unset($__errorArgs, $__bag); ?>
                                         <div class="form-group row">
                                             <label for="comment" class="col-sm-2 form-label">Comment </label>
                                             <div class="col-sm-4">
-                                                <p><?php echo e($emp_resignation->comment); ?></p>
+                                                <p><?php echo e($emp_resignation->comment_on_withdraw); ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -351,7 +359,7 @@ unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="<?php echo e(route('updateDowComment')); ?>">
+                                    <form method="get" action="<?php echo e(route('addOrUpdateDowComment')); ?>">
                                         <?php echo csrf_field(); ?>
                                         <?php echo e(method_field('PUT')); ?>
 
@@ -360,7 +368,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <label for="withdrawLeadComment" class="col-sm-2 form-label">Lead Comment on Withdraw </label>
                                                 <div class="col-sm-6">
                                                     <?php if(Auth::User()->designation_id == 2 ): ?>
-                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required><?php echo e(($emp_resignation->comment_dow_lead != NULL) ? $emp_resignation->comment_dow_lead : ' '); ?></textarea>
+                                                    <textarea name="withdrawLeadComment" id="withdrawLeadComment" class="form-control" cols="30" rows="10" required><?php echo e(($leadDowComment != NULL) ? $leadDowComment['comment'] : ''); ?></textarea>
                                                     <?php endif; ?>
 
                                                     <?php $__errorArgs = ['withdrawLeadComment'];
@@ -378,7 +386,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
 
                                                     <?php if(Auth::User()->designation_id != 2): ?>
-                                                    <p><?php echo e($emp_resignation->comment_dow_lead); ?></p>
+                                                    <p><?php echo e(($leadDowComment != NULL) ? $leadDowComment['comment'] : 'N/A'); ?></p>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
@@ -388,7 +396,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
                                                     <?php if(Auth::User()->designation_id == 3): ?> 
-                                                    <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required><?php echo e(($emp_resignation->comment_dow_head != NULL) ? $emp_resignation->comment_dow_head : ' '); ?></textarea>
+                                                    <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required><?php echo e(($headDowComment != NULL) ? $headDowComment['comment'] : ''); ?></textarea>
                                                     <?php endif; ?>
                                                     <?php $__errorArgs = ['withdrawHeadComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -405,7 +413,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
 
                                                     <?php if(Auth::User()->department_id == 2): ?>
-                                                    <p><?php echo e($emp_resignation->comment_dow_head); ?></p>
+                                                    <p><?php echo e(($headDowComment != NULL) ? $headDowComment['comment'] : 'N/A'); ?></p>
                                                     <?php endif; ?>
 
                                                 </div>
@@ -416,7 +424,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
                                                 <div class="col-sm-4">
-                                                    <textarea name="withdrawHrComment" id="withdrawHrComment" cols="30" rows="10" class="form-control" required><?php echo e(($emp_resignation->comment_dow_hr != NULL) ? $emp_resignation->comment_dow_hr : ' '); ?></textarea>
+                                                    <textarea name="withdrawHrComment" id="withdrawHrComment" cols="30" rows="10" class="form-control" required><?php echo e(($hrDowComment != NULL) ? $hrDowComment['comment'] : ''); ?></textarea>
                                                     <?php $__errorArgs = ['withdrawHrComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -435,6 +443,9 @@ unset($__errorArgs, $__bag); ?>
                                             <?php endif; ?>
 
                                             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
+                                            <input type="hidden" name="leadDowCommentId" value="<?php echo e(($leadDowComment != NULL) ? $leadDowComment['id'] : NULL); ?> ">
+                                            <input type="hidden" name="headDowCommentId" value="<?php echo e(($headDowComment != NULL) ? $headDowComment['id'] : NULL); ?> ">
+                                            <input type="hidden" name="hrDowCommentId" value="<?php echo e(($hrDowComment != NULL) ? $hrDowComment['id'] : NULL); ?> ">
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
@@ -477,29 +488,29 @@ unset($__errorArgs, $__bag); ?>
                                             <tbody>
                                                 <tr>
                                                     <td>Lead</td>
-                                                    <td class="<?php echo e(($emp_resignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_lead == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                                                    <td class="<?php echo e(($leadGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($leadGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted'); ?></td>
                                                     <?php if(\Auth::User()->department_id != 7): ?>
-                                                    <td><?php echo e($emp_resignation->comment_lead); ?></td>
-                                                    <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_lead != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
-                                                    <td><?php echo e($emp_resignation->comment_dol_lead); ?></td>
+                                                    <td><?php echo e($leadGeneralComment['comment']); ?></td>
+                                                    <td><?php echo e(( $emp_resignation->changed_dol != NULL && $leadDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
+                                                    <td><?php echo e($leadDolComment['comment']); ?></td>
                                                     <?php endif; ?>
                                                 </tr>
                                                 <tr>
                                                     <td>Department Head / Unit Head</td>
-                                                    <td class="<?php echo e(($emp_resignation->comment_head == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_head == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                                                    <td class="<?php echo e(($headGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($headGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted'); ?></td>
                                                     <?php if(\Auth::User()->department_id != 7): ?>
-                                                    <td><?php echo e($emp_resignation->comment_head); ?></td>
-                                                    <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_head != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
-                                                    <td><?php echo e($emp_resignation->comment_dol_head); ?></td>
+                                                    <td><?php echo e($headGeneralComment['comment']); ?></td>
+                                                    <td><?php echo e(( $emp_resignation->changed_dol != NULL && $headDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
+                                                    <td><?php echo e($headDolComment['comment']); ?></td>
                                                     <?php endif; ?>
                                                 </tr>
                                                 <tr>
                                                     <td>HR</td>
-                                                    <td class="<?php echo e(($emp_resignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($emp_resignation->comment_hr == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                                                    <td class="<?php echo e(($hrGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($hrGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted'); ?></td>
                                                     <?php if(\Auth::User()->department_id != 7): ?>
-                                                    <td><?php echo e($emp_resignation->comment_hr); ?></td>
-                                                    <td><?php echo e(( $emp_resignation->changed_dol != NULL && $emp_resignation->comment_dol_hr != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
-                                                    <td><?php echo e($emp_resignation->comment_dol_hr); ?></td>
+                                                    <td><?php echo e($hrGeneralComment['comment']); ?></td>
+                                                    <td><?php echo e(( $emp_resignation->changed_dol != NULL && $hrDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' '); ?></td>
+                                                    <td><?php echo e($hrDolComment['comment']); ?></td>
                                                     <?php endif; ?>
                                                 </tr>
                                             </tbody>

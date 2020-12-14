@@ -55,9 +55,9 @@
                             <th>HR</th>
                         </thead>
                         <tbody>
-                            <td class="<?php echo e(($myResignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($myResignation->comment_lead == NULL) ? 'Pending' : 'Accepted'); ?></td>
-                            <td class="<?php echo e(($myResignation->comment_head == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($myResignation->comment_head == NULL) ? 'Pending' : 'Accepted'); ?></td>
-                            <td class="<?php echo e(($myResignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($myResignation->comment_hr == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                            <td class="<?php echo e(($leadGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($leadGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                            <td class="<?php echo e(($headGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($headGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted'); ?></td>
+                            <td class="<?php echo e(($hrGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success'); ?>"><?php echo e(($hrGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted'); ?></td>
                         </tbody>
                     </table>
                 </div>

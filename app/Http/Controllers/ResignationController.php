@@ -35,7 +35,6 @@ class ResignationController extends Controller
 
         $converted_dates = array("joining_date"=>$converted_joining_date,"date_of_resignation"=>$converted_resignation_date,"date_of_leaving"=>$converted_leaving_date,"changed_dol"=>$converted_changed_dol);
 
-        
         return view('resignation.resignationDetails', compact('myResignation','user','converted_dates'));
     }
 
@@ -53,8 +52,28 @@ class ResignationController extends Controller
         $joining_date = strtotime($user->joining_date);
         $converted_joining_date = date("d-m-Y", $joining_date);
         $converted_dates = array("joining_date"=>$converted_joining_date);
+
+        $comments = \DB::table('comments')
+        ->where('comments.resignation_id',$myResignation->id)
+        ->get();
+
+        $leadGeneralComment = NULL;
+        $headGeneralComment = NULL;
+        $hrGeneralComment = NULL;
+
+        foreach($comments as $comment) {
+            if($comment->comment_type == 'general' && $comment->comment_by == 'lead') {
+                $leadGeneralComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            }
+            if($comment->comment_type == 'general' && $comment->comment_by == 'head') {
+                $headGeneralComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            }
+            if($comment->comment_type == 'general' && $comment->comment_by == 'hr') {
+                $hrGeneralComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            }
+        }
         
-        return view('resignation.acceptanceStatus', compact('myResignation','user','converted_dates'));
+        return view('resignation.acceptanceStatus', compact('myResignation','user','converted_dates','leadGeneralComment','headGeneralComment','hrGeneralComment'));
     }
 
     //No due status of the resignation
@@ -186,7 +205,7 @@ class ResignationController extends Controller
         $resignation = Resignation::find($id);
         $withdrawDate = date("Y-m-d",strtotime($request->get('withdrawDate')));
         $resignation->date_of_withdraw = $withdrawDate;
-        $resignation->comment = $request->get('comment');
+        $resignation->comment_on_withdraw = $request->get('comment');
         $resignation->save();
         return redirect('/resignation/create')->with('success','Details saved!');
     }

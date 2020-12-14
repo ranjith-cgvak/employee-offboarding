@@ -54,9 +54,9 @@
                             <th>HR</th>
                         </thead>
                         <tbody>
-                            <td class="{{ ($myResignation->comment_lead == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($myResignation->comment_lead == NULL) ? 'Pending' : 'Accepted' }}</td>
-                            <td class="{{ ($myResignation->comment_head == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($myResignation->comment_head == NULL) ? 'Pending' : 'Accepted' }}</td>
-                            <td class="{{ ($myResignation->comment_hr == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($myResignation->comment_hr == NULL) ? 'Pending' : 'Accepted' }}</td>
+                            <td class="{{ ($leadGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($leadGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
+                            <td class="{{ ($headGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($headGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
+                            <td class="{{ ($hrGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($hrGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
                         </tbody>
                     </table>
                 </div>
