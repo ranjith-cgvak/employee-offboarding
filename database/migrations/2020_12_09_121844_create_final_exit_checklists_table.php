@@ -27,7 +27,9 @@ class CreateFinalExitChecklistsTable extends Migration
             $table->string('experience_letter')->nullable();
             $table->string('salary_certificate')->nullable();
             $table->text('final_comment')->nullable();
-            $table->string('documents')->nullable();
+            $table->string('relieving_document')->nullable();
+            $table->string('experience_document')->nullable();
+            $table->string('salary_document')->nullable();
             $table->date('date_of_entry')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

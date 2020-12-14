@@ -70,6 +70,8 @@
                             </tr>
                         </tbody>
                     </table>
+                    <br>
+                    <a href="<?php echo e(route('questions.index')); ?>" class="btn btn-primary" style="float: right;">Exit Interview</a>
                 </div>
             </div>
         </div>

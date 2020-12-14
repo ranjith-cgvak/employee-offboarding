@@ -80,15 +80,22 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
+            'host' => env('SQL_DB_HOST', 'localhost'), // Provide IP address here
+            'database' => env('SQL_DB_DATABASE', 'forge'),
+            'username' => env('SQL_DB_USERNAME', 'forge'),
+            'password' => env('SQL_DB_PASSWORD', ''),
+            'port' => '1433',
             'prefix' => '',
-            'prefix_indexes' => true,
+        ],
+        'sqlsrv2' => [
+            'driver' => 'sqlsrv',
+            'host' => env('SQL_DB2_HOST', 'localhost'), // Provide IP address here
+            'database' => env('SQL_DB2_DATABASE', 'forge'),
+            'username' => env('SQL_DB2_USERNAME', 'forge'),
+            'password' => env('SQL_DB2_PASSWORD', ''),
+            'port' => '1433',
+            'strict' => false,
+            'prefix' => '',
         ],
 
     ],
@@ -123,7 +130,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [
