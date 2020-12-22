@@ -117,7 +117,7 @@
                 <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
                 @endif
                 @if(Auth::User()->department_id == 2)
-                <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
+                <li data-toggle="tooltip" data-placement="bottom" @if($resignation_id) title= 'User Not Attended The Exit Interview' style="cursor: not-allowed;" @endif><a href="#tab_5-2" class="{{ ($resignation_id != NULL) ? 'isDisabled' : ' ' }}"  data-toggle="tab">Exit Interview Answers</a></li>
                 @endif
                 @if(\Auth::User()->department_id == 2)
                 <li><a href="#tab_6-2" data-toggle="tab">Final Exit Checklist</a></li>

@@ -133,7 +133,7 @@ unset($__errorArgs, $__bag); ?>
                 <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
                 <?php endif; ?>
                 <?php if(Auth::User()->department_id == 2): ?>
-                <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
+                <li data-toggle="tooltip" data-placement="bottom" <?php if($resignation_id): ?> title= 'User Not Attended The Exit Interview' style="cursor: not-allowed;" <?php endif; ?>><a href="#tab_5-2" class="<?php echo e(($resignation_id != NULL) ? 'isDisabled' : ' '); ?>"  data-toggle="tab">Exit Interview Answers</a></li>
                 <?php endif; ?>
                 <?php if(\Auth::User()->department_id == 2): ?>
                 <li><a href="#tab_6-2" data-toggle="tab">Final Exit Checklist</a></li>

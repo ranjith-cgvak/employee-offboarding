@@ -20,28 +20,28 @@ class ProcessController extends Controller
     */
 
     public function index()
-    {
-        // Head 
-        if(\Auth::User()->designation_id == 3) {
-        $emp_list = \DB::table('resignations')
-        ->select('resignations.id','employee_id','display_name','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','changed_dol')
-        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
-        ->get();
+ {
+        // Head
+        if ( \Auth::User()->designation_id == 3 ) {
+            $emp_list = \DB::table( 'resignations' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol' )
+            ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
+            ->get();
         }
         //HR OR SA
-        else if((\Auth::User()->department_id == 2) || (\Auth::User()->department_id == 7)) {
-            $emp_list = \DB::table('resignations')
-            ->select('resignations.id','employee_id','display_name','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','changed_dol')
-            ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
+        else if ( ( \Auth::User()->department_id == 2 ) || ( \Auth::User()->department_id == 7 ) ) {
+            $emp_list = \DB::table( 'resignations' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol' )
+            ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->get();
         }
         //LEAD
         else {
             $leadName = \Auth::User()->display_name;
-            $emp_list = \DB::table('resignations')
-            ->select('resignations.id','employee_id','display_name','name','designation','date_of_resignation','date_of_leaving','date_of_withdraw','lead','changed_dol')
-            ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
-            ->where('lead', $leadName)
+            $emp_list = \DB::table( 'resignations' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol' )
+            ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
+            ->where( 'lead', $leadName )
             ->get();
         }
         $lead_list = \DB::table( 'users' )
@@ -87,17 +87,18 @@ class ProcessController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $emp_resignation = \DB::table('resignations')
-        ->select('resignations.id','employee_id','display_name','department_name','comment_on_resignation','name','designation','joining_date','date_of_resignation','date_of_leaving','date_of_withdraw','lead','users.created_at','reason','comment_on_withdraw','changed_dol','other_reason')
-        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
-        ->where('resignations.id',$id)
+    * Show the form for editing the specified resource.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+
+    public function edit( $id )
+ {
+        $emp_resignation = \DB::table( 'resignations' )
+        ->select( 'resignations.id', 'employee_id', 'display_name', 'department_name', 'comment_on_resignation', 'name', 'designation', 'joining_date', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'users.created_at', 'reason', 'comment_on_withdraw', 'changed_dol', 'other_reason' )
+        ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
+        ->where( 'resignations.id', $id )
         ->first();
         //Converting the dates to dd-mm-yyyy
         $joining_date = strtotime( $emp_resignation->joining_date );
@@ -124,14 +125,14 @@ class ProcessController extends Controller
         ->Join( 'questions', 'questions.id', '=', 'user_answers.question_id' )
         ->where( 'user_answers.resignation_id', $id )
         ->get();
-        
+
         $finalCheckList = \DB::table( 'final_exit_checklists' )
         ->where( 'final_exit_checklists.resignation_id', $id )
         ->first();
-        $comments = \DB::table('comments')
-        ->where('comments.resignation_id',$id)
+        $comments = \DB::table( 'comments' )
+        ->where( 'comments.resignation_id', $id )
         ->get();
-
+        $resignation_id = $id;
         $leadGeneralComment = NULL;
         $headGeneralComment = NULL;
         $hrGeneralComment = NULL;
@@ -142,37 +143,37 @@ class ProcessController extends Controller
         $headDolComment = NULL;
         $hrDolComment = NULL;
 
-        foreach($comments as $comment) {
-            if($comment->comment_type == 'general' && $comment->comment_by == 'lead') {
-                $leadGeneralComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+        foreach ( $comments as $comment ) {
+            if ( $comment->comment_type == 'general' && $comment->comment_by == 'lead' ) {
+                $leadGeneralComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
-            if($comment->comment_type == 'general' && $comment->comment_by == 'head') {
-                $headGeneralComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            if ( $comment->comment_type == 'general' && $comment->comment_by == 'head' ) {
+                $headGeneralComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
-            if($comment->comment_type == 'general' && $comment->comment_by == 'hr') {
-                $hrGeneralComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            if ( $comment->comment_type == 'general' && $comment->comment_by == 'hr' ) {
+                $hrGeneralComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
-            if($comment->comment_type == 'withdraw' && $comment->comment_by == 'lead') {
-                $leadDowComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            if ( $comment->comment_type == 'withdraw' && $comment->comment_by == 'lead' ) {
+                $leadDowComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
-            if($comment->comment_type == 'withdraw' && $comment->comment_by == 'head') {
-                $headDowComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            if ( $comment->comment_type == 'withdraw' && $comment->comment_by == 'head' ) {
+                $headDowComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
-            if($comment->comment_type == 'withdraw' && $comment->comment_by == 'hr') {
-                $hrDowComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            if ( $comment->comment_type == 'withdraw' && $comment->comment_by == 'hr' ) {
+                $hrDowComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
-            if($comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'lead') {
-                $leadDolComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            if ( $comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'lead' ) {
+                $leadDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
-            if($comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'head') {
-                $headDolComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            if ( $comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'head' ) {
+                $headDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
-            if($comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'hr') {
-                $hrDolComment = array("comment"=>$comment->comment,"id"=>$comment->id);
+            if ( $comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'hr' ) {
+                $hrDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
         }
 
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment'));
+        return view( 'process.viewResignation', compact( 'emp_resignation', 'isFeedback', 'feedback', 'converted_dates', 'nodue', 'finalCheckList', 'leadGeneralComment', 'headGeneralComment', 'hrGeneralComment', 'leadDowComment', 'headDowComment', 'hrDowComment', 'leadDolComment', 'headDolComment', 'hrDolComment', 'answers','resignation_id' ) );
     }
 
     /**
@@ -198,150 +199,144 @@ class ProcessController extends Controller
     }
 
     //add or update date of leaving
-    public function addOrUpdateDolComments(Request $request) {
-        $request->validate([
-            'commentDol'=>'required'
-        ]);
-        $resignationId = $request->get('resignationId');
-        $resignation = Resignation::find($resignationId);
-        $resignation->changed_dol = $request->get('dateOfLeaving');
 
-        if(((\Auth::User()->designation_id == 2) && ($request->get('leadDolCommentId') == NULL)) || ((\Auth::User()->designation_id == 3) && ($request->get('headDolCommentId') == NULL)) || ((\Auth::User()->department_id == 2) && ($request->get('hrDolCommentId') == NULL))) {
-            $addOrUpdateDolComment = new Comments([
-                'resignation_id' => $request->get('resignationId'),
+    public function addOrUpdateDolComments( Request $request ) {
+        $request->validate( [
+            'commentDol'=>'required'
+        ] );
+        $resignationId = $request->get( 'resignationId' );
+        $resignation = Resignation::find( $resignationId );
+        $resignation->changed_dol = $request->get( 'dateOfLeaving' );
+
+        if ( ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadDolCommentId' ) == NULL ) ) || ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headDolCommentId' ) == NULL ) ) || ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrDolCommentId' ) == NULL ) ) ) {
+            $addOrUpdateDolComment = new Comments( [
+                'resignation_id' => $request->get( 'resignationId' ),
                 'comment_type' => 'date_of_leaving'
-            ]);
-        }
-        else if((\Auth::User()->designation_id == 2) && ($request->get('leadDolCommentId') != NULL)){
-            $addOrUpdateDolComment = Comments::find($request->get('leadDolCommentId'));
-        }
-        else if((\Auth::User()->designation_id == 3) && ($request->get('headDolCommentId') != NULL)){
-            $addOrUpdateDolComment = Comments::find($request->get('headDolCommentId'));
-        }
-        else if((\Auth::User()->department_id == 2) && ($request->get('hrDolCommentId') != NULL)){
-            $addOrUpdateDolComment = Comments::find($request->get('hrDolCommentId'));
+            ] );
+        } else if ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadDolCommentId' ) != NULL ) ) {
+            $addOrUpdateDolComment = Comments::find( $request->get( 'leadDolCommentId' ) );
+        } else if ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headDolCommentId' ) != NULL ) ) {
+            $addOrUpdateDolComment = Comments::find( $request->get( 'headDolCommentId' ) );
+        } else if ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrDolCommentId' ) != NULL ) ) {
+            $addOrUpdateDolComment = Comments::find( $request->get( 'hrDolCommentId' ) );
         }
         //Head
-        if(\Auth::User()->designation_id == 3) {
-            $request->validate([
+        if ( \Auth::User()->designation_id == 3 ) {
+            $request->validate( [
                 'commentDol'=>'required'
-            ]);
+            ] );
             $addOrUpdateDolComment->comment_by = 'head';
-            $addOrUpdateDolComment->comment = $request->get('commentDol');
+            $addOrUpdateDolComment->comment = $request->get( 'commentDol' );
         }
         //HR
-        else if(\Auth::User()->department_id == 2) {
-            $request->validate([
+        else if ( \Auth::User()->department_id == 2 ) {
+            $request->validate( [
                 'commentDol'=>'required'
-            ]);
+            ] );
             $addOrUpdateDolComment->comment_by = 'hr';
-            $addOrUpdateDolComment->comment = $request->get('commentDol');
+            $addOrUpdateDolComment->comment = $request->get( 'commentDol' );
         }
         //lead
         else {
-            $request->validate([
+            $request->validate( [
                 'commentDol'=>'required'
-            ]);
+            ] );
             $addOrUpdateDolComment->comment_by = 'lead';
-            $addOrUpdateDolComment->comment = $request->get('commentDol');
+            $addOrUpdateDolComment->comment = $request->get( 'commentDol' );
         }
 
         $resignation->save();
         $addOrUpdateDolComment->save();
 
-        return redirect()->route('process.edit', ['process' => $resignationId]);
+        return redirect()->route( 'process.edit', ['process' => $resignationId] );
     }
-    //add or update resignation comment 
-    public function addOrUpdateResignationComment(Request $request) {
-        $resignationId = $request->get('resignationId');
-        if(((\Auth::User()->designation_id == 2) && ($request->get('leadGeneralCommentId') == NULL)) || ((\Auth::User()->designation_id == 3) && ($request->get('headGeneralCommentId') == NULL)) || ((\Auth::User()->department_id == 2) && ($request->get('hrGeneralCommentId') == NULL))) {
-            $addOrUpdateResignationComment = new Comments([
-                'resignation_id' => $request->get('resignationId'),
+    //add or update resignation comment
+
+    public function addOrUpdateResignationComment( Request $request ) {
+        $resignationId = $request->get( 'resignationId' );
+        if ( ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadGeneralCommentId' ) == NULL ) ) || ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headGeneralCommentId' ) == NULL ) ) || ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrGeneralCommentId' ) == NULL ) ) ) {
+            $addOrUpdateResignationComment = new Comments( [
+                'resignation_id' => $request->get( 'resignationId' ),
                 'comment_type' => 'general'
-            ]);
+            ] );
+        } else if ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadGeneralCommentId' ) != NULL ) ) {
+            $addOrUpdateResignationComment = Comments::find( $request->get( 'leadGeneralCommentId' ) );
+        } else if ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headGeneralCommentId' ) != NULL ) ) {
+            $addOrUpdateResignationComment = Comments::find( $request->get( 'headGeneralCommentId' ) );
+        } else if ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrGeneralCommentId' ) != NULL ) ) {
+            $addOrUpdateResignationComment = Comments::find( $request->get( 'hrGeneralCommentId' ) );
         }
-        else if((\Auth::User()->designation_id == 2) && ($request->get('leadGeneralCommentId') != NULL)){
-            $addOrUpdateResignationComment = Comments::find($request->get('leadGeneralCommentId'));
-        }
-        else if((\Auth::User()->designation_id == 3) && ($request->get('headGeneralCommentId') != NULL)){
-            $addOrUpdateResignationComment = Comments::find($request->get('headGeneralCommentId'));
-        }
-        else if((\Auth::User()->department_id == 2) && ($request->get('hrGeneralCommentId') != NULL)){
-            $addOrUpdateResignationComment = Comments::find($request->get('hrGeneralCommentId'));
-        }
-        
+
         //Head
         if ( \Auth::User()->designation_id == 3 ) {
             $request->validate( [
                 'headComment'=>'required'
-            ]);
+            ] );
             $addOrUpdateResignationComment->comment_by = 'head';
-            $addOrUpdateResignationComment->comment = $request->get('headComment');
+            $addOrUpdateResignationComment->comment = $request->get( 'headComment' );
         }
         //HR
         else if ( \Auth::User()->department_id == 2 ) {
             $request->validate( [
                 'hrComment'=>'required'
-            ]);
+            ] );
             $addOrUpdateResignationComment->comment_by = 'hr';
-            $addOrUpdateResignationComment->comment = $request->get('hrComment');
+            $addOrUpdateResignationComment->comment = $request->get( 'hrComment' );
         }
         //lead
         else {
-            $request->validate([
+            $request->validate( [
                 'leadComment'=>'required'
-            ]);
+            ] );
             $addOrUpdateResignationComment->comment_by = 'lead';
-            $addOrUpdateResignationComment->comment = $request->get('leadComment');
+            $addOrUpdateResignationComment->comment = $request->get( 'leadComment' );
         }
         $addOrUpdateResignationComment->save();
-        return redirect()->route('process.edit', ['process' => $resignationId]);
+        return redirect()->route( 'process.edit', ['process' => $resignationId] );
     }
 
     //add or update date of withdraw comment
-    public function addOrUpdateDowComment(Request $request) {
-        $resignationId = $request->get('resignationId');
-        if(((\Auth::User()->designation_id == 2) && ($request->get('leadDowCommentId') == NULL)) || ((\Auth::User()->designation_id == 3) && ($request->get('headDowCommentId') == NULL)) || ((\Auth::User()->department_id == 2) && ($request->get('hrDowCommentId') == NULL))) {
-            $addOrUpdateDowComment = new Comments([
-                'resignation_id' => $request->get('resignationId'),
+
+    public function addOrUpdateDowComment( Request $request ) {
+        $resignationId = $request->get( 'resignationId' );
+        if ( ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadDowCommentId' ) == NULL ) ) || ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headDowCommentId' ) == NULL ) ) || ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrDowCommentId' ) == NULL ) ) ) {
+            $addOrUpdateDowComment = new Comments( [
+                'resignation_id' => $request->get( 'resignationId' ),
                 'comment_type' => 'withdraw'
-            ]);
-        }
-        else if((\Auth::User()->designation_id == 2) && ($request->get('leadDowCommentId') != NULL)){
-            $addOrUpdateDowComment = Comments::find($request->get('leadDowCommentId'));
-        }
-        else if((\Auth::User()->designation_id == 3) && ($request->get('headDowCommentId') != NULL)){
-            $addOrUpdateDowComment = Comments::find($request->get('headDowCommentId'));
-        }
-        else if((\Auth::User()->department_id == 2) && ($request->get('hrDowCommentId') != NULL)){
-            $addOrUpdateDowComment = Comments::find($request->get('hrDowCommentId'));
+            ] );
+        } else if ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadDowCommentId' ) != NULL ) ) {
+            $addOrUpdateDowComment = Comments::find( $request->get( 'leadDowCommentId' ) );
+        } else if ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headDowCommentId' ) != NULL ) ) {
+            $addOrUpdateDowComment = Comments::find( $request->get( 'headDowCommentId' ) );
+        } else if ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrDowCommentId' ) != NULL ) ) {
+            $addOrUpdateDowComment = Comments::find( $request->get( 'hrDowCommentId' ) );
         }
         //Head
         if ( \Auth::User()->designation_id == 3 ) {
             $request->validate( [
                 'withdrawHeadComment'=>'required'
-            ]);
+            ] );
             $addOrUpdateDowComment->comment_by = 'head';
-            $addOrUpdateDowComment->comment = $request->get('withdrawHeadComment');
+            $addOrUpdateDowComment->comment = $request->get( 'withdrawHeadComment' );
         }
         //HR
         else if ( \Auth::User()->department_id == 2 ) {
             $request->validate( [
                 'withdrawHrComment'=>'required'
-            ]);
+            ] );
             $addOrUpdateDowComment->comment_by = 'hr';
-            $addOrUpdateDowComment->comment = $request->get('withdrawHrComment');
+            $addOrUpdateDowComment->comment = $request->get( 'withdrawHrComment' );
         }
         //lead
         else {
-            $request->validate([
+            $request->validate( [
                 'withdrawLeadComment'=>'required'
-            ]);
+            ] );
             $addOrUpdateDowComment->comment_by = 'lead';
-            $addOrUpdateDowComment->comment = $request->get('withdrawLeadComment');
+            $addOrUpdateDowComment->comment = $request->get( 'withdrawLeadComment' );
         }
         $addOrUpdateDowComment->save();
-        return redirect()->route('process.edit', ['process' => $resignationId]);
+        return redirect()->route( 'process.edit', ['process' => $resignationId] );
     }
 
     //Storing feedback for the resignation
@@ -574,18 +569,24 @@ class ProcessController extends Controller
 
         $resignationId = $request->get( 'resignationId' );
         if ( ( $request->file( 'RelievingLetter' ) ) || ( $request->file( 'ExperienceLetter' ) ) || ( $request->file( 'SalaryCertificate' ) ) ) {
-            $RelievingLetterPath = $request->file( 'RelievingLetter' );
-            $RelievingLetterName = $RelievingLetterPath->getClientOriginalName();
+            if ( $request->file( 'RelievingLetter' ) ) {
+                $RelievingLetterPath = $request->file( 'RelievingLetter' );
+                $RelievingLetterName = $RelievingLetterPath->getClientOriginalName();
+                $RelievingLetterFilepath = $request->file( 'RelievingLetter' )->storeAs( 'uploads', $RelievingLetterName, 'public' );
 
-            $ExperienceLetterPath = $request->file( 'ExperienceLetter' );
-            $ExperienceLetterName = $ExperienceLetterPath->getClientOriginalName();
+            }
+            if ( $request->file( 'ExperienceLetter' ) ) {
+                $ExperienceLetterPath = $request->file( 'ExperienceLetter' );
+                $ExperienceLetterName = $ExperienceLetterPath->getClientOriginalName();
+                $ExperienceLetterFilepath = $request->file( 'ExperienceLetter' )->storeAs( 'uploads', $ExperienceLetterName, 'public' );
 
-            $SalaryCertificatePath = $request->file( 'SalaryCertificate' );
-            $SalaryCertificateName = $SalaryCertificatePath->getClientOriginalName();
+            }
+            if ( $request->file( 'SalaryCertificate' ) ) {
 
-            $RelievingLetterFilepath = $request->file( 'RelievingLetter' )->storeAs( 'uploads', $RelievingLetterName, 'public' );
-            $ExperienceLetterFilepath = $request->file( 'ExperienceLetter' )->storeAs( 'uploads', $ExperienceLetterName, 'public' );
-            $SalaryCertificateFilepath = $request->file( 'SalaryCertificate' )->storeAs( 'uploads', $SalaryCertificateName, 'public' );
+                $SalaryCertificatePath = $request->file( 'SalaryCertificate' );
+                $SalaryCertificateName = $SalaryCertificatePath->getClientOriginalName();
+                $SalaryCertificateFilepath = $request->file( 'SalaryCertificate' )->storeAs( 'uploads', $SalaryCertificateName, 'public' );
+            }
         }
 
         $finalCheckList = new FinalExitChecklist( [
