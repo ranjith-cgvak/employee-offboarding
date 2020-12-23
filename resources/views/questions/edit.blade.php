@@ -2,13 +2,8 @@
 
 @section('content')
 
-<!-- Employee details -->
-@if(session()->get('success'))
-<div class="alert alert-success">
-    {{ session()->get('success') }}
-</div>
-@endif
-<!-- Leaving form -->
+
+<!-- edit questions form -->
 
 @if(Auth::User()->department_id == 2)
 <div class="container-fluid">
@@ -16,7 +11,7 @@
         <div class="col-xs-12">
             <div class="box box-primary formBox">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Leaving Form</h3>
+                    <h3 class="box-title">Edit Question</h3>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->

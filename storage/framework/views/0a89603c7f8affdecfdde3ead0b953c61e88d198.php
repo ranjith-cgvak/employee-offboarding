@@ -2,14 +2,6 @@
 
 <?php $__env->startSection('content'); ?>
 
-
-<?php if(session()->get('success')): ?>
-<div class="alert alert-success">
-<?php echo e(session()->get('success')); ?>
-
-</div>
-<?php endif; ?>
-
 <!-- Employee details -->
 <div class="container-fluid">
     <div class="box box-primary">
@@ -82,9 +74,9 @@ unset($__errorArgs, $__bag); ?>
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
                 <div class="col-sm-6">
-                    <?php if(\Auth::User()->designation_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($leadDolComment != NULL) ? $leadDolComment['comment'] : ' '); ?></textarea><?php endif; ?>
-                    <?php if(\Auth::User()->designation_id == 3): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($headDolComment != NULL) ? $headDolComment['comment'] : ' '); ?></textarea><?php endif; ?>
-                    <?php if(\Auth::User()->department_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($hrDolComment != NULL) ? $hrDolComment['comment'] : ' '); ?></textarea><?php endif; ?>
+                    <?php if(\Auth::User()->designation_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($leadDolComment != NULL) ? $leadDolComment['comment'] : ''); ?></textarea><?php endif; ?>
+                    <?php if(\Auth::User()->designation_id == 3): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($headDolComment != NULL) ? $headDolComment['comment'] : ''); ?></textarea><?php endif; ?>
+                    <?php if(\Auth::User()->department_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($hrDolComment != NULL) ? $hrDolComment['comment'] : ''); ?></textarea><?php endif; ?>
                     <?php $__errorArgs = ['dateOfLeaving'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -232,7 +224,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
                                                 <?php if(Auth::User()->designation_id == 2): ?>
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ' '); ?></textarea>
+                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ''); ?></textarea>
                                                 <?php endif; ?>
                                                     <?php $__errorArgs = ['leadComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -257,7 +249,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
                                                     <?php if(Auth::User()->designation_id == 3 ): ?>
-                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ' '); ?></textarea>
+                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ''); ?></textarea>
                                                     <?php endif; ?>
                                                     <?php $__errorArgs = ['headComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -283,7 +275,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
                                                 <div class="col-sm-6">
-                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required><?php echo e(($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : ' '); ?></textarea>
+                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required><?php echo e(($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : ''); ?></textarea>
                                                     <?php $__errorArgs = ['hrComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

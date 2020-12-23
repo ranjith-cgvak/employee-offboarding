@@ -2,20 +2,14 @@
 
 <?php $__env->startSection('content'); ?>
 
-<!-- Employee details -->
-<?php if(session()->get('success')): ?>
-<div class="alert alert-success">
-    <?php echo e(session()->get('success')); ?>
 
-</div>
-<?php endif; ?>
-<!-- Leaving form -->
+<!-- Add questions form -->
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12">
             <div class="box box-primary formBox">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Leaving Form</h3>
+                    <h3 class="box-title">Add Question</h3>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->

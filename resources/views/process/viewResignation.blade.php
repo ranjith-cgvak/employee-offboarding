@@ -2,13 +2,6 @@
 
 @section('content')
 
-
-@if(session()->get('success'))
-<div class="alert alert-success">
-{{ session()->get('success') }}
-</div>
-@endif
-
 <!-- Employee details -->
 <div class="container-fluid">
     <div class="box box-primary">
@@ -73,9 +66,9 @@
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
                 <div class="col-sm-6">
-                    @if(\Auth::User()->designation_id == 2)<textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{($leadDolComment != NULL) ? $leadDolComment['comment'] : ' ' }}</textarea>@endif
-                    @if(\Auth::User()->designation_id == 3)<textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{  ($headDolComment != NULL) ? $headDolComment['comment'] : ' ' }}</textarea>@endif
-                    @if(\Auth::User()->department_id == 2)<textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{  ($hrDolComment != NULL) ? $hrDolComment['comment'] : ' ' }}</textarea>@endif
+                    @if(\Auth::User()->designation_id == 2)<textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{($leadDolComment != NULL) ? $leadDolComment['comment'] : '' }}</textarea>@endif
+                    @if(\Auth::User()->designation_id == 3)<textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{($headDolComment != NULL) ? $headDolComment['comment'] : '' }}</textarea>@endif
+                    @if(\Auth::User()->department_id == 2)<textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required>{{($hrDolComment != NULL) ? $hrDolComment['comment'] : '' }}</textarea>@endif
                     @error('dateOfLeaving')
                     <br>
                     <span class="invalid-feedback" role="alert">
@@ -215,7 +208,7 @@
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
                                                 @if(Auth::User()->designation_id == 2)
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required>{{ ($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ' '}}</textarea>
+                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required>{{ ($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ''}}</textarea>
                                                 @endif
                                                     @error('leadComment')
                                                     <br>
@@ -233,7 +226,7 @@
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
                                                     @if(Auth::User()->designation_id == 3 )
-                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required>{{ ($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ' '}}</textarea>
+                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required>{{ ($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ''}}</textarea>
                                                     @endif
                                                     @error('headComment')
                                                     <br>
@@ -252,7 +245,7 @@
                                             <div class="form-group row">
                                                 <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
                                                 <div class="col-sm-6">
-                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required>{{ ($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : ' ' }}</textarea>
+                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required>{{ ($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : '' }}</textarea>
                                                     @error('hrComment')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
