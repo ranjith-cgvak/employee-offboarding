@@ -53,7 +53,11 @@ class QuestionController extends Controller {
             $answers->resignation_id = $myResignation;
             $answers->save();
         }
-        return redirect( '/noDueStatus' )->with( 'success', 'Details saved!' );
+        $notification=array(
+            'message' => 'Your answers has been recorded!',
+            'alert-type' => 'success'
+        );
+        return redirect( '/noDueStatus' )->with($notification);
     }
     /**
     * Show the form for editing the specified resource.
@@ -99,7 +103,11 @@ class QuestionController extends Controller {
                 $question->questions      = $request->get( 'question' );
                 $question->question_type = $request->get( 'question_type' );
                 $question->save();
-                return redirect( '/questions' )->with( 'success', 'Details saved!' );
+                $notification=array(
+                    'message' => 'Questions has been modified!',
+                    'alert-type' => 'success'
+                );
+                return redirect( '/questions' )->with($notification);
             } elseif ( $request_questiontype == 2 ) {
                 $question = Question::find( $id );
                 $question->question_number       = $request->get( 'question_number' );
@@ -116,7 +124,11 @@ class QuestionController extends Controller {
 
                 );
                 Question_option::insert( $question_options );
-                return redirect( '/questions' )->with( 'success', 'Details saved!' );
+                $notification=array(
+                    'message' => 'Questions has been modified!',
+                    'alert-type' => 'success'
+                );
+                return redirect( '/questions' )->with($notification);
             } elseif ( $request_questiontype == 3 ) {
                 $question = Question::find( $id );
                 $question->question_number       = $request->get( 'question_number' );
@@ -131,7 +143,11 @@ class QuestionController extends Controller {
 
                 );
                 Question_option::insert( $question_options );
-                return redirect( '/questions' )->with( 'success', 'Details saved!' );
+                $notification=array(
+                    'message' => 'Questions has been modified!',
+                    'alert-type' => 'success'
+                );
+                return redirect( '/questions' )->with($notification);
             }
         } elseif ( $question_type->question_type == 2 ) {
             if ( $request_questiontype == 1 || $request_questiontype == 4 ) {
@@ -145,7 +161,11 @@ class QuestionController extends Controller {
                     $opton_id = $options[$i]->id;
                     Question_option::where( 'id', $opton_id )->firstorfail()->delete();
                 }
-                return redirect( '/questions' )->with( 'success', 'Details saved!' );
+                $notification=array(
+                    'message' => 'Questions has been modified!',
+                    'alert-type' => 'success'
+                );
+                return redirect( '/questions' )->with($notification);
             } elseif ( $request_questiontype == 2 ) {
                 $question = Question::find( $id );
                 $question->question_number       = $request->get( 'question_number' );
@@ -159,7 +179,11 @@ class QuestionController extends Controller {
                     $update_option = array( 'option_value' => $request->get( $gets ) );
                     Question_option::where( 'id', $opton_id )->update( $update_option );
                 }
-                return redirect( '/questions' )->with( 'success', 'Details saved!' );
+                $notification=array(
+                    'message' => 'Questions has been modified!',
+                    'alert-type' => 'success'
+                );
+                return redirect( '/questions' )->with($notification);
             } elseif ( $request_questiontype == 3 ) {
                 $question = Question::find( $id );
                 $question->question_number       = $request->get( 'question_number' );
@@ -179,7 +203,11 @@ class QuestionController extends Controller {
 
                 );
                 Question_option::insert( $question_options );
-                return redirect( '/questions' )->with( 'success', 'Details saved!' );
+                $notification=array(
+                    'message' => 'Questions has been modified!',
+                    'alert-type' => 'success'
+                );
+                return redirect( '/questions' )->with($notification);
             }
         } elseif ( $question_type->question_type == 3 ) {
             if ( $request_questiontype == 1 || $request_questiontype == 4 ) {
@@ -193,7 +221,11 @@ class QuestionController extends Controller {
                     $opton_id = $options[$i]->id;
                     Question_option::where( 'id', $opton_id )->firstorfail()->delete();
                 }
-                return redirect( '/questions' )->with( 'success', 'Details saved!' );
+                $notification=array(
+                    'message' => 'Questions has been modified!',
+                    'alert-type' => 'success'
+                );
+                return redirect( '/questions' )->with($notification);
             } elseif ( $request_questiontype == 2 ) {
                 $question = Question::find( $id );
                 $question->question_number       = $request->get( 'question_number' );
@@ -215,7 +247,11 @@ class QuestionController extends Controller {
 
                 );
                 Question_option::insert( $question_options );
-                return redirect( '/questions' )->with( 'success', 'Details saved!' );
+                $notification=array(
+                    'message' => 'Questions has been modified!',
+                    'alert-type' => 'success'
+                );
+                return redirect( '/questions' )->with($notification);
             } elseif ( $request_questiontype == 3 ) {
                 $question = Question::find( $id );
                 $question->question_number       = $request->get( 'question_number' );
@@ -229,7 +265,11 @@ class QuestionController extends Controller {
                     $update_option = array( 'option_value' => $request->get( $gets ) );
                     Question_option::where( 'id', $opton_id )->update( $update_option );
                 }
-                return redirect( '/questions' )->with( 'success', 'Details saved!' );
+                $notification=array(
+                    'message' => 'Questions has been modified!',
+                    'alert-type' => 'success'
+                );
+                return redirect( '/questions' )->with($notification);
             }
         }
     }
@@ -254,7 +294,13 @@ class QuestionController extends Controller {
                 }
                 $delete_question = Question::find( $id );
                 $delete_question->delete();
-                return redirect( '/questions' )->with( 'danger', 'Details Deleted!' );
+
+                $notification=array(
+                    'message' => 'Question has been deleted!',
+                    'alert-type' => 'error'
+                );
+
+                return redirect( '/questions' )->with($notification);
             } elseif ( $question_types->question_type == 3 ) {
 
                 $options = Question_option::select( 'id' )->where( 'question_id', $id )->get();
@@ -264,11 +310,23 @@ class QuestionController extends Controller {
                 }
                 $delete_question = Question::find( $id );
                 $delete_question->delete();
-                return redirect( '/questions' )->with( 'danger', 'Details Deleted!' );
+
+                $notification=array(
+                    'message' => 'Question has been deleted!',
+                    'alert-type' => 'error'
+                );
+
+                return redirect( '/questions' )->with($notification);
             } elseif ( $question_types->question_type == 1 || $question_types->question_type == 4 ) {
                 $delete_question = Question::find( $id );
                 $delete_question->delete();
-                return redirect( '/questions' )->with( 'danger', 'Details Deleted!' );
+
+                $notification=array(
+                    'message' => 'Question has been deleted!',
+                    'alert-type' => 'error'
+                );
+
+                return redirect( '/questions' )->with($notification);
             }
         }
     }

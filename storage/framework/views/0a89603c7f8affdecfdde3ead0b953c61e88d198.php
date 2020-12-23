@@ -2,14 +2,6 @@
 
 <?php $__env->startSection('content'); ?>
 
-
-<?php if(session()->get('success')): ?>
-<div class="alert alert-success">
-<?php echo e(session()->get('success')); ?>
-
-</div>
-<?php endif; ?>
-
 <!-- Employee details -->
 <div class="container-fluid">
     <div class="box box-primary">
@@ -82,9 +74,9 @@ unset($__errorArgs, $__bag); ?>
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
                 <div class="col-sm-6">
-                    <?php if(\Auth::User()->designation_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($leadDolComment != NULL) ? $leadDolComment['comment'] : ' '); ?></textarea><?php endif; ?>
-                    <?php if(\Auth::User()->designation_id == 3): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($headDolComment != NULL) ? $headDolComment['comment'] : ' '); ?></textarea><?php endif; ?>
-                    <?php if(\Auth::User()->department_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($hrDolComment != NULL) ? $hrDolComment['comment'] : ' '); ?></textarea><?php endif; ?>
+                    <?php if(\Auth::User()->designation_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($leadDolComment != NULL) ? $leadDolComment['comment'] : ''); ?></textarea><?php endif; ?>
+                    <?php if(\Auth::User()->designation_id == 3): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($headDolComment != NULL) ? $headDolComment['comment'] : ''); ?></textarea><?php endif; ?>
+                    <?php if(\Auth::User()->department_id == 2): ?><textarea class="form-control" name="commentDol" id="commentDol" cols="30" rows="10" required><?php echo e(($hrDolComment != NULL) ? $hrDolComment['comment'] : ''); ?></textarea><?php endif; ?>
                     <?php $__errorArgs = ['dateOfLeaving'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -232,7 +224,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
                                                 <?php if(Auth::User()->designation_id == 2): ?>
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ' '); ?></textarea>
+                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ''); ?></textarea>
                                                 <?php endif; ?>
                                                     <?php $__errorArgs = ['leadComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -257,7 +249,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
                                                     <?php if(Auth::User()->designation_id == 3 ): ?>
-                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ' '); ?></textarea>
+                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ''); ?></textarea>
                                                     <?php endif; ?>
                                                     <?php $__errorArgs = ['headComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -283,7 +275,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
                                                 <div class="col-sm-6">
-                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required><?php echo e(($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : ' '); ?></textarea>
+                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required><?php echo e(($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : ''); ?></textarea>
                                                     <?php $__errorArgs = ['hrComment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1336,43 +1328,47 @@ unset($__errorArgs, $__bag); ?>
                 <!-- /End of feedback -->
                 <?php endif; ?>
 
-<!-- No due forms -->
-<div class="tab-pane" id="tab_5-2">
-    <?php if(Auth::User()->department_id == 2): ?>
-    <!-- No Due status -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Exit Interview Answers</h3>
+                <!-- Exit interview answers -->
+                <div class="tab-pane" id="tab_5-2">
+                    <?php if(Auth::User()->department_id == 2): ?>
+                    <!--Exit interview answers -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Exit Interview Answers</h3>
+                                    </div>
+                                    <div class="box-body">
+                                    <?php if($answers == NULL): ?>
+                                        <h4 class="text-center"> Not yet answered</h4>
+                                    <?php else: ?>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <th width="5%"> Q\N</th>
+                                                <th width="65%">Exit Interview Question</th>
+                                                <th>Exit Interview Answers</th>
+                                                
+                                            </thead>
+                                            <tbody>
+                                                <?php $__currentLoopData = $answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <tr>
+                                                    <td ><?php echo e($answer->question_number); ?></td>
+                                                    <td ><?php echo e($answer->questions); ?></td>
+                                                    <td ><?php echo e($answer->answers); ?></td>
+                                                </tr>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </tbody>
+                                        </table>
+                                    <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="box-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <th width="5%"> Q\N</th>
-                                <th width="65%">Exit Interview Question</th>
-                                <th>Exit Interview Answers</th>
-                                
-                            </thead>
-                            <tbody>
-                                <?php $__currentLoopData = $answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr>
-                                    <td ><?php echo e($answer->question_number); ?></td>
-                                    <td ><?php echo e($answer->questions); ?></td>
-                                    <td ><?php echo e($answer->answers); ?></td>
-                                </tr>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </tbody>
-                        </table>
-                    </div>
+                    <?php endif; ?>
                 </div>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
-</div>
-<!-- /.tab-pane -->
+                <!-- /.tab-pane -->
 
                 <?php if(\Auth::User()->department_id == 2): ?>
                 <!-- Final Exit check list -->
@@ -1391,7 +1387,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="type_of_exit">Type Of Exit</label>
                                                 <div class="col-sm-4">
-                                                    <select name="type_of_exit" id="type_of_exit"  class="form-control">
+                                                    <select name="type_of_exit" id="type_of_exit"  class="form-control" required>
                                                         <option value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->type_of_exit); ?>"><?php echo e((!$finalCheckList) ? 'Select' : $finalCheckList->type_of_exit); ?></option>
                                                         <option value="Voluntary">Voluntary</option>
                                                         <option value="Involuntary">Involuntary</option>
@@ -1452,7 +1448,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="last_drawn_salary">Last Drawn Salary</label>
                                                 <div class="col-sm-4">
-                                                <input type="number" class="form-control" id="last_drawn_salary" name="last_drawn_salary" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->last_drawn_salary); ?>">
+                                                <input type="number" class="form-control" id="last_drawn_salary" name="last_drawn_salary" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->last_drawn_salary); ?>" required>
                                                 <?php $__errorArgs = ['last_drawn_salary'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1471,7 +1467,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="consider_for_rehire">Can Be Considered For Rehire</label>
                                                 <div class="col-sm-4">
-                                                <input type="text" class="form-control" id="consider_for_rehire" name="consider_for_rehire" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->consider_for_rehire); ?>">
+                                                <input type="text" class="form-control" id="consider_for_rehire" name="consider_for_rehire" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->consider_for_rehire); ?>" required>
                                                 <?php $__errorArgs = ['consider_for_rehire'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1490,7 +1486,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="overall_feedback">Overall Feedback</label>
                                                 <div class="col-sm-4">
-                                                <input type="text" class="form-control" id="overall_feedback" name="overall_feedback" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->overall_feedback); ?>">
+                                                <input type="text" class="form-control" id="overall_feedback" name="overall_feedback" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->overall_feedback); ?>" required>
                                                 <?php $__errorArgs = ['overall_feedback'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1509,7 +1505,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="relieving_letter">Relieving Letter</label>
                                                 <div class="col-sm-4">
-                                                    <select name="relieving_letter" id="relieving_letter"  class="form-control">
+                                                    <select name="relieving_letter" id="relieving_letter"  class="form-control" required>
                                                         <option value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->relieving_letter); ?>"><?php echo e((!$finalCheckList) ? 'Select' : $finalCheckList->relieving_letter); ?></option>
                                                         <option value="Given">Given</option>
                                                         <option value="Pending">Pending</option>
@@ -1532,7 +1528,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="experience_letter">Experience Letter</label>
                                                 <div class="col-sm-4">
-                                                    <select name="experience_letter" id="experience_letter"  class="form-control">
+                                                    <select name="experience_letter" id="experience_letter"  class="form-control" required>
                                                         <option value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->experience_letter); ?>"><?php echo e((!$finalCheckList) ? 'Select' : $finalCheckList->experience_letter); ?></option>
                                                         <option value="Given">Given</option>
                                                         <option value="Pending">Pending</option>
@@ -1555,7 +1551,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="salary_certificate">Salary Certificate</label>
                                                 <div class="col-sm-4">
-                                                    <select name="salary_certificate" id="salary_certificate"  class="form-control">
+                                                    <select name="salary_certificate" id="salary_certificate"  class="form-control" required>
                                                         <option value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->salary_certificate); ?>"><?php echo e((!$finalCheckList) ? 'Select' : $finalCheckList->salary_certificate); ?></option>
                                                         <option value="Given">Given</option>
                                                         <option value="Pending">Pending</option>
@@ -1578,7 +1574,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="final_comment">Final Comment</label>
                                                 <div class="col-sm-4">
-                                                <textarea name="final_comment" id="final_comment" class="form-control" cols="30" rows="10"><?php echo e((!$finalCheckList) ? '' : $finalCheckList->final_comment); ?></textarea>
+                                                <textarea name="final_comment" id="final_comment" class="form-control" cols="30" rows="10" required><?php echo e((!$finalCheckList) ? '' : $finalCheckList->final_comment); ?></textarea>
                                                 <?php $__errorArgs = ['final_comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

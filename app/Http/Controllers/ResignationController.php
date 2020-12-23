@@ -39,6 +39,19 @@ class ResignationController extends Controller
     }
 
     //Acceptance status of the resignation
+    public function resignationProgress() {
+        $empId = \Auth::User()->emp_id;
+        $myResignation = \DB::table('resignations')
+        ->where([
+            ['employee_id', '=', $empId],
+            ['date_of_withdraw', '=', NULL],
+        ])
+        ->first();
+        $user = \DB::table('users')->where('emp_id',$empId)->first();
+        return view('resignation.progress', compact('myResignation','user'));
+    }
+
+    //Acceptance status of the resignation
     public function showAcceptanceStatus() {
         $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
@@ -94,7 +107,11 @@ class ResignationController extends Controller
         $converted_joining_date = date("d-m-Y", $joining_date);
         $converted_dates = array("joining_date"=>$converted_joining_date);
         
-        return view('resignation.noDueStatus', compact('myResignation','user','converted_dates','nodue'));
+        $answers = \DB::table('user_answers')
+        ->where('user_answers.resignation_id',$myResignation->id)
+        ->first();
+
+        return view('resignation.noDueStatus', compact('myResignation','user','converted_dates','nodue','answers'));
     }
 
     //Withdraw for the resignation
@@ -163,7 +180,11 @@ class ResignationController extends Controller
         $resignation->date_of_leaving = $dateofleaving;
         $resignation->changed_dol = $dateofleaving;
         $resignation->save();
-        return redirect('/resignation')->with('success','Details saved!');
+        $notification=array(
+            'message' => 'Resignation Applied Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect('/resignation')->with($notification);
     }
 
     /**
@@ -207,7 +228,11 @@ class ResignationController extends Controller
         $resignation->date_of_withdraw = $withdrawDate;
         $resignation->comment_on_withdraw = $request->get('comment');
         $resignation->save();
-        return redirect('/resignation/create')->with('success','Details saved!');
+        $notification=array(
+            'message' => 'Resignation has been withdrawn!',
+            'alert-type' => 'error'
+        );
+        return redirect('/resignation/create')->with($notification);
     }
 
     /**

@@ -2,12 +2,6 @@
 
 @section('content')
 
-
-@if(session()->get('success'))
-<div class="alert alert-success">
-{{ session()->get('success') }}
-</div>
-@endif
 <!-- Employee details -->
 <div class="container-fluid">
     <div class="box box-primary box-body">

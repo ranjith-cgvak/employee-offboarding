@@ -173,7 +173,7 @@ class ProcessController extends Controller
             }
         }
 
-        return view( 'process.viewResignation', compact( 'emp_resignation', 'isFeedback', 'feedback', 'converted_dates', 'nodue', 'finalCheckList', 'leadGeneralComment', 'headGeneralComment', 'hrGeneralComment', 'leadDowComment', 'headDowComment', 'hrDowComment', 'leadDolComment', 'headDolComment', 'hrDolComment', 'answers','resignation_id' ) );
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers'));
     }
 
     /**
@@ -247,8 +247,11 @@ class ProcessController extends Controller
 
         $resignation->save();
         $addOrUpdateDolComment->save();
-
-        return redirect()->route( 'process.edit', ['process' => $resignationId] );
+        $notification=array(
+            'message' => 'Date of leaving has been changed!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
     //add or update resignation comment
 
@@ -292,7 +295,11 @@ class ProcessController extends Controller
             $addOrUpdateResignationComment->comment = $request->get( 'leadComment' );
         }
         $addOrUpdateResignationComment->save();
-        return redirect()->route( 'process.edit', ['process' => $resignationId] );
+        $notification=array(
+            'message' => 'Comments has been recorded!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
 
     //add or update date of withdraw comment
@@ -336,7 +343,11 @@ class ProcessController extends Controller
             $addOrUpdateDowComment->comment = $request->get( 'withdrawLeadComment' );
         }
         $addOrUpdateDowComment->save();
-        return redirect()->route( 'process.edit', ['process' => $resignationId] );
+        $notification=array(
+            'message' => 'Comments has been recorded!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
 
     //Storing feedback for the resignation
@@ -382,7 +393,11 @@ class ProcessController extends Controller
         }
         $feedback->feedback_date = $feedbackDate;
         $feedback->save();
-        return redirect()->route( 'process.edit', ['process' => $resignationId] );
+        $notification=array(
+            'message' => 'Your feedbacks has been recorded!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
     //Updating feedback for the resignation
@@ -425,7 +440,11 @@ class ProcessController extends Controller
             $updateFeedback->lead_comment = $request->get( 'feedback_comments' );
         }
         $updateFeedback->save();
-        return redirect()->route( 'process.edit', ['process' => $resignationId] );
+        $notification=array(
+            'message' => 'Your feedbacks has been updated!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
     //Storing No Due forms for the resignation
@@ -488,7 +507,11 @@ class ProcessController extends Controller
             $nodue->skype_account_comment = $request->get( 'skype_account_comment' );
         }
         $nodue->save();
-        return redirect()->route( 'process.edit', ['process' => $resignationId] );
+        $notification=array(
+            'message' => 'No-due has been recorded!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
     //Update No due forms for resignation
@@ -550,7 +573,11 @@ class ProcessController extends Controller
             $updateNodue->skype_account_comment = $request->get( 'skype_account_comment' );
         }
         $updateNodue->save();
-        return redirect()->route( 'process.edit', ['process' => $resignationId] );
+        $notification=array(
+            'message' => 'No-due has been updated!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
     public function storeFinalCheckList( Request $request ) {
@@ -608,7 +635,11 @@ class ProcessController extends Controller
             'updated_by' => $request->get( 'updated_by' )
         ] );
         $finalCheckList->save();
-        return redirect()->route( 'process.edit', ['process' => $resignationId] );
+        $notification=array(
+            'message' => 'Final checklist has been recorded!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
     public function updateFinalCheckList( Request $request ) {
@@ -672,7 +703,11 @@ class ProcessController extends Controller
         $updateFinalCheckList->date_of_entry = $request->get( 'date_of_entry' );
         $updateFinalCheckList->updated_by = $request->get( 'updated_by' );
         $updateFinalCheckList->save();
-        return redirect()->route( 'process.edit', ['process' => $resignationId] );
+        $notification=array(
+            'message' => 'Final checklist has been updated!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
     /**
     * Remove the specified resource from storage.

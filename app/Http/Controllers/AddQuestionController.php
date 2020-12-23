@@ -57,7 +57,11 @@ class AddQuestionController extends Controller
                 'question_type' => $request->question_type,
             ] );
             $question->save();
-            return redirect( '/questions' )->with( 'success', 'Details saved!' );
+            $notification=array(
+                'message' => 'Question has been added!',
+                'alert-type' => 'success'
+            );
+            return redirect( '/questions' )->with($notification);
         }
         if ( $question_type == 2 ) {
 
@@ -78,7 +82,11 @@ class AddQuestionController extends Controller
 
             );
             Question_option::insert( $question_options );
-            return redirect( '/questions' )->with( 'success', 'Details saved!' );
+            $notification=array(
+                'message' => 'Question has been added!',
+                'alert-type' => 'success'
+            );
+            return redirect( '/questions' )->with($notification);
         }
 
         if ( $question_type == 3 ) {
@@ -99,7 +107,11 @@ class AddQuestionController extends Controller
 
             );
             Question_option::insert( $question_options );
-            return redirect( '/questions' )->with( 'success', 'Details saved!' );
+            $notification=array(
+                'message' => 'Question has been added!',
+                'alert-type' => 'success'
+            );
+            return redirect( '/questions' )->with($notification);
         }
     }
 }

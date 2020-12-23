@@ -8,13 +8,8 @@
         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
     </li>
-    <li class=" <?php echo e(((request()->segment(1) == 'questions') || (request()->segment(1) == 'addquestions') ) ? 'active' : ''); ?> ">
-        <a href="<?php echo e(route('questions.index')); ?>">
-        <i class="fa fa-comments"></i> <span>Exit Interview</span>
-        </a>
-    </li>
-    <!-- For employees -->
     <?php else: ?>
+    <!-- For employees -->
     <li data-toggle="tooltip" data-placement="right" <?php if($myResignation): ?> title= 'Applied Already' style="cursor: not-allowed;" <?php endif; ?> class=" <?php echo e(((request()->segment(1) == 'resignation') && (request()->segment(2) == 'create')) ? 'active' : ''); ?>">
         <a class="<?php echo e(($myResignation != NULL) ? 'isDisabled' : ' '); ?>" href="<?php echo e(route('resignation.create')); ?>">
         <i class="fa fa-file-text-o"></i> <span>Resignation Form</span>
@@ -41,5 +36,14 @@
         </a>
     </li>
     <?php endif; ?>
+    <!-- Exit interview sidebar only for HR -->
+    <?php if(Auth::User()->department_id == 2): ?>
+    <li class=" <?php echo e(((request()->segment(1) == 'questions') || (request()->segment(1) == 'addquestions') ) ? 'active' : ''); ?> ">
+        <a href="<?php echo e(route('questions.index')); ?>">
+        <i class="fa fa-comments"></i> <span>Exit Interview</span>
+        </a>
+    </li>
+    <?php endif; ?>
+
     </ul>
 </section><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/common/sidebar.blade.php ENDPATH**/ ?>
