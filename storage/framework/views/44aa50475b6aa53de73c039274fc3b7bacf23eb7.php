@@ -70,8 +70,12 @@
                             </tr>
                         </tbody>
                     </table>
-                    <br>
-                    <a href="<?php echo e(route('questions.index')); ?>" class="btn btn-primary" style="float: right;">Exit Interview</a>
+                    <br><?php if(!$answers): ?>
+                    <a class="btn btn-primary" style="float: right;">Exit Interview</a><?php echo e($answers); ?>
+
+                    <?php else: ?>
+<a href="<?php echo e(route('questions.index')); ?>" class="btn btn-primary" style="float: right;">Exit Interview</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
