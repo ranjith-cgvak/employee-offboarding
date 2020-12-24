@@ -2,12 +2,6 @@
 
 <?php $__env->startSection('content'); ?>
 
-<?php if(session()->get('success')): ?>
-<script>
-    toastr.success("<?php echo e(Session::get('success')); ?>");
-</script>
-<?php endif; ?>
-
 
 <!-- Employee details -->
 <div class="container-fluid">
