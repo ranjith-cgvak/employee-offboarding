@@ -20,9 +20,7 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::get('/progress', function () {
-    return view('resignation.progress');
-}); 
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -49,6 +47,7 @@ Route::get('updateFeedback' , 'ProcessController@updateFeedback')->name('updateF
 Route::post('storeFinalCheckList' , 'ProcessController@storeFinalCheckList')->name('storeFinalCheckList');
 Route::post('updateFinalCheckList' , 'ProcessController@updateFinalCheckList')->name('updateFinalCheckList');
 Route::get('resignationDetails','ResignationController@index')->name('resignationDetails');
+Route::get('progress','ResignationController@resignationProgress')->name('progress');
 Route::get('acceptanceStatus','ResignationController@showAcceptanceStatus')->name('acceptanceStatus');
 Route::get('noDueStatus','ResignationController@noDueStatus')->name('noDueStatus');
 Route::get('withdrawForm','ResignationController@showWithdrawForm')->name('withdrawForm');

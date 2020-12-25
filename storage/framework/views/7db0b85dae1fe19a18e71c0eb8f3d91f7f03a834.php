@@ -2,12 +2,6 @@
 
 <?php $__env->startSection('content'); ?>
 
-<?php if(session()->get('success')): ?>
-<div class="alert alert-success">
-<?php echo e(session()->get('success')); ?>
-
-</div>
-<?php endif; ?>
 
 <!-- Employee details -->
 <div class="container-fluid">

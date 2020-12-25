@@ -21,6 +21,9 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <!-- Toaster CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -102,7 +105,49 @@
 <!-- AdminLTE App -->
 <script src="<?php echo e(asset('js/adminlte.min.js')); ?>"></script>
 <script src="<?php echo e(asset('js/script.js')); ?>"></script>
+<!-- Toaster CDN -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js">
+</script>
 
+<script>
+
+  <?php if(Session::has('message')): ?>
+  var type = "<?php echo e(Session::get('alert-type', 'info')); ?>"
+  switch(type){
+  case 'info':
+
+  toastr.options.timeOut = 10000;
+  toastr.info("<?php echo e(Session::get('message')); ?>");
+  var audio = new Audio('audio.mp3');
+  audio.play();
+  break;
+  case 'success':
+
+  toastr.options.timeOut = 10000;
+  toastr.success("<?php echo e(Session::get('message')); ?>");
+  var audio = new Audio('audio.mp3');
+  audio.play();
+
+  break;
+  case 'warning':
+
+  toastr.options.timeOut = 10000;
+  toastr.warning("<?php echo e(Session::get('message')); ?>");
+  var audio = new Audio('audio.mp3');
+  audio.play();
+
+  break;
+  case 'error':
+
+  toastr.options.timeOut = 10000;
+  toastr.error("<?php echo e(Session::get('message')); ?>");
+  var audio = new Audio('audio.mp3');
+  audio.play();
+
+  break;
+  }
+  <?php endif; ?>
+</script>
 </body>
 </html>
 <?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/layouts/app_home.blade.php ENDPATH**/ ?>
