@@ -595,26 +595,31 @@ class ProcessController extends Controller
         ] );
 
         $resignationId = $request->get( 'resignationId' );
-        if ( ( $request->file( 'RelievingLetter' ) ) || ( $request->file( 'ExperienceLetter' ) ) || ( $request->file( 'SalaryCertificate' ) ) ) {
             if ( $request->file( 'RelievingLetter' ) ) {
                 $RelievingLetterPath = $request->file( 'RelievingLetter' );
                 $RelievingLetterName = $RelievingLetterPath->getClientOriginalName();
                 $RelievingLetterFilepath = $request->file( 'RelievingLetter' )->storeAs( 'uploads', $RelievingLetterName, 'public' );
 
+            } else {
+                $RelievingLetterFilepath = '';
             }
             if ( $request->file( 'ExperienceLetter' ) ) {
                 $ExperienceLetterPath = $request->file( 'ExperienceLetter' );
                 $ExperienceLetterName = $ExperienceLetterPath->getClientOriginalName();
                 $ExperienceLetterFilepath = $request->file( 'ExperienceLetter' )->storeAs( 'uploads', $ExperienceLetterName, 'public' );
 
+            }else {
+                $ExperienceLetterFilepath = '';
             }
             if ( $request->file( 'SalaryCertificate' ) ) {
 
                 $SalaryCertificatePath = $request->file( 'SalaryCertificate' );
                 $SalaryCertificateName = $SalaryCertificatePath->getClientOriginalName();
                 $SalaryCertificateFilepath = $request->file( 'SalaryCertificate' )->storeAs( 'uploads', $SalaryCertificateName, 'public' );
+            }else {
+                $SalaryCertificateFilepath = '';
             }
-        }
+
 
         $finalCheckList = new FinalExitChecklist( [
             'resignation_id' => $request->get( 'resignationId' ),

@@ -66,7 +66,7 @@
             <h3 class="box-title">Exit Interview questions</h3>
         </div>
 
-        <form method="post" action="{{ (!$finalCheckList) ? route('questions.store') : route('questions.updateanswer') }}">
+        <form method="post" action="{{ route('questions.store') }}">
             @csrf
 
             <div class="box-body">
