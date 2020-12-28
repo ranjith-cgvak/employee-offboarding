@@ -198,6 +198,19 @@ class ProcessController extends Controller
         return redirect( '/process' );
     }
 
+    public function sendMail(){
+        $subject = "Resignation status";
+        $template = "emails.testMail";
+        $details = [
+            'firstName' => 'Gowtham',
+            'content' => 'Resignation has been accepted',
+            'date' => '2-2-2022'
+        ];
+       
+        \Mail::to('gowthamraj2399@gmail.com')->send(new \App\Mail\SendMail($details,$subject,$template));  
+
+        dd("mail sent");
+    }
     //add or update date of leaving
 
     public function addOrUpdateDolComments( Request $request ) {
