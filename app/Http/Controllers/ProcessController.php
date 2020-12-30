@@ -199,17 +199,17 @@ class ProcessController extends Controller
     }
 
     public function sendMail(){
-        $subject = "Resignation status";
-        $template = "emails.testMail";
+        $subject = "New Resignation Applied!";
+        $template = "emails.resignationMail";
         $details = [
-            'firstName' => 'Gowtham',
-            'content' => 'Resignation has been accepted',
+            'firstName' => "Gowtham",
+            'content' => 'has applied resignation',
             'date' => '2-2-2022'
         ];
        
-        \Mail::to('gowthamraj2399@gmail.com')->send(new \App\Mail\SendMail($details,$subject,$template));  
+        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));  
 
-        dd("mail sent");
+        dd("mail sent now");
     }
     //add or update date of leaving
 
@@ -264,6 +264,18 @@ class ProcessController extends Controller
             'message' => 'Date of leaving has been changed!',
             'alert-type' => 'success'
         );
+        
+        //Sending mail
+        $subject = "Resignation Withdrawn!";
+        $template = "emails.withdrawMail";
+        $details = [
+            'name' => \Auth::User()->display_name,
+            'content' => 'has withdrawn resignation',
+            'date' => $withdrawDate
+        ];
+       
+        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
     //add or update resignation comment

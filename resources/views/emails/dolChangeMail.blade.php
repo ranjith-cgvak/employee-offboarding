@@ -120,11 +120,11 @@
                                                 font-family: 'Montserrat', sans-serif;
                                                 font-weight: 700;
                                                 line-height: 1.4;
-                                                margin: 0; ">Employee Details Mail</h3>
+                                                margin: 0; ">Updation Details</h3>
                                              <br>
-                                             <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" >Hello,</div>
+                                             <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" >Hello Team,</div>
                                              <br>
-                                                <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" >{{ $details['firstName'] }} {{ $details['content'] }} on {{  $details['date']}}</div>
+                                                <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" >{{ $details['name'] }} {{ $details['content'] }} on {{  $details['date']}}.</div>
                                           </td>
                                        </tr>
                                        <tr>
