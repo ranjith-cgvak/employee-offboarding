@@ -124,7 +124,7 @@
                                              <br>
                                              <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" >Hello Team,</div>
                                              <br>
-                                                <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" >{{ $details['name'] }} {{ $details['content'] }} to {{  $details['date']}}.</div>
+                                                <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" ><?php echo e($details['name']); ?> <?php echo e($details['content']); ?> to <?php echo e($details['date']); ?>.</div>
                                           </td>
                                        </tr>
                                        <tr>
@@ -159,4 +159,4 @@
       </tr>
       </table>
    </body>
-</html>
+</html><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/emails/dolChangeMail.blade.php ENDPATH**/ ?>

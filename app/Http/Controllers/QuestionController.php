@@ -53,6 +53,18 @@ class QuestionController extends Controller {
             $answers->resignation_id = $myResignation;
             $answers->save();
         }
+
+        //Sending mail
+        
+        $subject = "Exit interview form submitted!";
+        $template = "emails.interviewSubmissionMail";
+        $details = [
+            'name' => \Auth::User()->display_name,
+            'content' => "has submitted the exit interview form!"
+        ];
+       
+        \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+
         $notification=array(
             'message' => 'Your answers has been recorded!',
             'alert-type' => 'success'
