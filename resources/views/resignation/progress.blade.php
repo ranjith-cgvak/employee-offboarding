@@ -2,30 +2,56 @@
 
 @section('content')
 
-<div class="container">
-  <div class="row">
-    <div class="col-xs-12">
-      <h1 class="text-center">My Resignation Progress</h1>
-      <br>
-      <br>
-      <br>
-      <ol class="progtrckr" data-progtrckr-steps="6">
-        <li class="progtrckr-done">Resignation Applied</li>
-        <li class="progtrckr-done">Lead Assigned</li>
-        <li class="progtrckr-done">Lead Verified</li>
-        <li class="progtrckr-todo">Head Verified</li>
-        <li class="progtrckr-todo">Hr Verified</li>
-        <li class="progtrckr-todo">Completed</li>
-      </ol>
-      <br>
-      <br>
-      <br>
-      <div class="text-center">
-        <button class="btn btn-primary">View Details</button>
-      </div>
+
+<!-- Progress bar -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+			<div class="progress_content">	
+			<div class="arrow-steps clearfix">
+				<div class="step current_prev"> <span> 1.Progress </span> </div>
+				<div class="step current_prev"> <span> 2.Progress </span> </div>
+				<div class="step current"> <span> 3.Progress </span> </div>
+				<div class="step current_next"> <span> 4.Progress </span> </div>
+				<div class="step current_next"> <span> 5.Progress </span> </div>
+				<div class="step current_next"> <span> 6.Progress</span> </div>
+				<div class="step current_next"> <span> 7.Progress</span> </div>
+			</div>
+			</div>	
+        </div>
     </div>
-  </div>
 </div>
 
+
+
+<script>
+  jQuery( document ).ready(function() {
+		
+		var back =jQuery(".prev");
+		var	next = jQuery(".next");
+		var	steps = jQuery(".step");
+		
+		next.bind("click", function() { 
+			jQuery.each( steps, function( i ) {
+				if (!jQuery(steps[i]).hasClass('current') && !jQuery(steps[i]).hasClass('done')) {
+					jQuery(steps[i]).addClass('current');
+					jQuery(steps[i - 1]).removeClass('current').addClass('done');
+					return false;
+				}
+			})		
+		});
+		back.bind("click", function() { 
+			jQuery.each( steps, function( i ) {
+				if (jQuery(steps[i]).hasClass('done') && jQuery(steps[i + 1]).hasClass('current')) {
+					jQuery(steps[i + 1]).removeClass('current');
+					jQuery(steps[i]).removeClass('done').addClass('current');
+					return false;
+				}
+			})		
+		});
+
+	})
+</script>
 
 @endsection
