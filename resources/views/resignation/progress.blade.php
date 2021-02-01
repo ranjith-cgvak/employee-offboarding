@@ -15,8 +15,7 @@
 				<div class="step current"> <span> 3.Progress </span> </div>
 				<div class="step current_next"> <span> 4.Progress </span> </div>
 				<div class="step current_next"> <span> 5.Progress </span> </div>
-				<div class="step current_next"> <span> 6.Progress</span> </div>
-				<div class="step current_next"> <span> 7.Progress</span> </div>
+				<div class="step current_next last_progress"> <span> 6.Progress</span> </div>
 			</div>
 			</div>	
         </div>

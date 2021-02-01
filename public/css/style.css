@@ -86,7 +86,7 @@ ol.progtrckr li.progtrckr-todo:before {
   /* Progress bar start */
 
   
-.clearfix:after {
+  .clearfix:after {
     clear: both;
     content: "";
     display: block;
@@ -110,12 +110,12 @@ a:hover {
 	color: #999;
 }
 .arrow-steps .step {
-	font-size: 14px;
+	font-size: 16px;
 	text-align: center;
 	color: #666;
 	cursor: default;
 	margin: 0 3px;
-	padding: 10px 10px 10px 30px;
+	padding: 17px 17px 17px 17px;
 	min-width: 180px;
 	float: left;
 	position: relative;
@@ -138,8 +138,8 @@ a:hover {
 	right: -17px;
 	width: 0;
 	height: 0;
-	border-top: 20px solid transparent;
-	border-bottom: 20px solid transparent;
+	border-top: 28px solid transparent;
+	border-bottom: 28px solid transparent;
 	border-left: 17px solid #d9e3f7;	
 	z-index: 2;
   transition: border-color 0.2s ease;
@@ -182,12 +182,12 @@ a:hover {
 }
 
 .arrow-steps .step.current {
-	color: #fff;
-	background-color: #f7f700;
+	color: #000;
+	background-color: #f7f725;
 }
 
 .arrow-steps .step.current:after {
-	border-left: 17px solid #f7f700;	
+	border-left: 17px solid #f7f725;	
 }
 
 .arrow-steps .step.current_prev {
@@ -202,6 +202,7 @@ a:hover {
 .arrow-steps .step.current_next {
 	color: #fff;
 	background-color: #ea0000;
+	border-radius: 4px;
 }
 
 .arrow-steps .step.current_next:after {
@@ -209,6 +210,10 @@ a:hover {
 }
 .arrow-steps .clearfix {
    text-transform:uppercase;
+}
+.step.current_next.last_progress:after{
+    display:none;
+	
 }
 
 /* Progress bar nd */
