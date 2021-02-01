@@ -70,7 +70,6 @@
                         </tbody>
                     </table>
                     <br>
-                    
                     <a href="{{ route('questions.index')}}" class="btn btn-primary" style="float: right;">Exit Interview</a>
                 </div>
             </div>

@@ -160,7 +160,7 @@
                                             <label class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
                                             <div class="col-sm-10">
                                                 <div class="row">
-                                                    <div class="col-sm-1">
+                                                    <div class="col-sm-2">
                                                     <p>{{ $converted_dates['date_of_leaving'] }}</p>
                                                     </div>
                                                 </div>
@@ -171,7 +171,7 @@
                                             <label class="col-sm-2 form-label">Date Of Leaving </label>
                                             <div class="col-sm-10">
                                                 <div class="row">
-                                                    <div class="col-sm-1">
+                                                    <div class="col-sm-2">
                                                     <p>{{ $converted_dates['changed_dol'] }}</p>
                                                     </div>
                                                     @if(\Auth::User()->department_id != 7)

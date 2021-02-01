@@ -52,3 +52,18 @@ Route::get('acceptanceStatus','ResignationController@showAcceptanceStatus')->nam
 Route::get('noDueStatus','ResignationController@noDueStatus')->name('noDueStatus');
 Route::get('withdrawForm','ResignationController@showWithdrawForm')->name('withdrawForm');
 Route::resource('process', 'ProcessController');
+
+
+Route::get('send-mail', function () {
+   
+    $details = [
+        'title' => 'Mail from CG-VAK',
+        'body' => 'This is for testing email using smtp'
+    ];
+   
+    \Mail::to('gowthamraj2399@gmail.com')->send(new \App\Mail\MyTestMail($details));
+   
+    dd("Email is Sent.");
+});
+
+Route::get('test-mail','ProcessController@sendMail')->name('test-mail');

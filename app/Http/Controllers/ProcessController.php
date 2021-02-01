@@ -58,7 +58,7 @@ class ProcessController extends Controller
     */
 
     public function create()
- {
+    { 
         //
     }
 
@@ -198,6 +198,19 @@ class ProcessController extends Controller
         return redirect( '/process' );
     }
 
+    public function sendMail(){
+        $subject = "New Resignation Applied!";
+        $template = "emails.resignationMail";
+        $details = [
+            'firstName' => "Gowtham",
+            'content' => 'has applied resignation',
+            'date' => '2-2-2022'
+        ];
+       
+        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));  
+
+        dd("mail sent now");
+    }
     //add or update date of leaving
 
     public function addOrUpdateDolComments( Request $request ) {
@@ -251,6 +264,23 @@ class ProcessController extends Controller
             'message' => 'Date of leaving has been changed!',
             'alert-type' => 'success'
         );
+        
+        //Sending mail
+        $empname = Resignation::find( $resignationId )
+        ->select('display_name')
+        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
+        ->first();
+
+        $subject = "Changes in resignation!";
+        $template = "emails.dolChangeMail";
+        $details = [
+            'name' => $empname->display_name,
+            'content' => "resignation's date of leaving has changed",
+            'date' => $request->get( 'dateOfLeaving' )
+        ];
+       
+        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
     //add or update resignation comment
@@ -397,6 +427,22 @@ class ProcessController extends Controller
             'message' => 'Your feedbacks has been recorded!',
             'alert-type' => 'success'
         );
+
+        //Sending mail
+        $empname = Resignation::find( $resignationId )
+        ->select('display_name')
+        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
+        ->first();
+
+        $subject = "User feedback has been added!";
+        $template = "emails.feedbackMail";
+        $details = [
+            'name' => $empname->display_name,
+            'content' => "has been added!"
+        ];
+       
+        \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
@@ -444,6 +490,22 @@ class ProcessController extends Controller
             'message' => 'Your feedbacks has been updated!',
             'alert-type' => 'success'
         );
+
+        //Sending mail
+        $empname = Resignation::find( $resignationId )
+        ->select('display_name')
+        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
+        ->first();
+
+        $subject = "User feedback has been updated!";
+        $template = "emails.feedbackMail";
+        $details = [
+            'name' => $empname->display_name,
+            'content' => "has been updated!"
+        ];
+       
+        \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 

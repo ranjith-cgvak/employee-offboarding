@@ -195,6 +195,17 @@ class ResignationController extends Controller
             'message' => 'Resignation Applied Successfully',
             'alert-type' => 'success'
         );
+
+        //Sending mail
+        $subject = "New Resignation Applied!";
+        $template = "emails.resignationMail";
+        $details = [
+            'name' => \Auth::User()->display_name,
+            'content' => 'has applied resignation',
+            'date' => $request->get( 'dateOfResignation' )
+        ];
+       
+        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
         return redirect('/resignation')->with($notification);
     }
 
@@ -246,6 +257,18 @@ class ResignationController extends Controller
             'message' => 'Resignation has been withdrawn!',
             'alert-type' => 'error'
         );
+
+        //Sending mail
+        $subject = "Resignation Withdrawn!";
+        $template = "emails.withdrawMail";
+        $details = [
+            'name' => \Auth::User()->display_name,
+            'content' => 'has withdrawn resignation',
+            'date' => $withdrawDate
+        ];
+       
+        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+
         return redirect('/resignation/create')->with($notification);
     }
 
