@@ -4,7 +4,7 @@
 
 <div class="login-box">
   <div class="login-logo">
-    <a href=""><b>CG-VAK| OFFBOARDING</b></a>
+  <img src="https://www.cgvakindia.com/wp-content/uploads/2017/06/logo-white.png" alt="CG-VAK">
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">

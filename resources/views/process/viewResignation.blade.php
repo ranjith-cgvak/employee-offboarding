@@ -105,9 +105,11 @@
                 @endif
                 @if($emp_resignation->date_of_withdraw == NULL )
                 <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
-                <li><a href="#tab_3-2" data-toggle="tab">No Due</a></li>
                 @if(\Auth::User()->department_id != 7)
-                <li><a href="#tab_4-2" data-toggle="tab">Feedback</a></li>
+                <li><a href="#tab_3-2" data-toggle="tab">Feedback</a></li>
+                @endif
+                @if(date('d-m-Y') >= date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days')))
+                <li><a href="#tab_4-2" data-toggle="tab">No Due</a></li>
                 @endif
                 @if(Auth::User()->department_id == 2)
                 <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
@@ -200,10 +202,23 @@
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form method="get" action="{{ route('addOrUpdateResignationComment') }}">
+                                    <form method="get" action="{{ route('addOrUpdateResignationAcceptance') }}">
                                         @csrf
                                         {{ method_field('PUT') }}
                                         <div class="box-body">
+                                            @if(Auth::User()->designation_id == 2)
+                                            <div class="form-group row">
+                                                <label for="leadAcceptance" class="col-sm-2 form-label">Your Acceptance</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="leadAcceptance" id="leadAcceptance">
+                                                        <option value="{{ ($leadAcceptance == NULL) ? '' : $leadAcceptance }}">{{ ($leadAcceptance == NULL) ? 'Select' : $leadAcceptance }}</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Accepted">Accepted</option>
+                                                        <option value="Rejected">Rejected</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            @endif
                                             <div class="form-group row">
                                                 <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
                                                 <div class="col-sm-6">
@@ -222,6 +237,19 @@
                                                 </div>
                                             </div>
                                             @if(Auth::User()->designation_id != 2)
+                                            @if(Auth::User()->designation_id == 3 )
+                                            <div class="form-group row">
+                                                <label for="headAcceptance" class="col-sm-2 form-label">Your Acceptance</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="headAcceptance" id="headAcceptance">
+                                                        <option value="{{ ($headAcceptance == NULL) ? '' : $headAcceptance }}">{{ ($headAcceptance == NULL) ? 'Select' : $headAcceptance }}</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Accepted">Accepted</option>
+                                                        <option value="Rejected">Rejected</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            @endif
                                             <div class="form-group row">
                                                 <label for="headComment" class="col-sm-2 form-label">Head comment</label>
                                                 <div class="col-sm-6">
@@ -242,6 +270,17 @@
                                             @endif
 
                                             @if(Auth::User()->department_id == 2 )
+                                            <div class="form-group row">
+                                                <label for="hrAcceptance" class="col-sm-2 form-label">Your Acceptance</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="hrAcceptance" id="hrAcceptance">
+                                                        <option value="{{ ($hrAcceptance == NULL) ? '' : $hrAcceptance }}">{{ ($hrAcceptance == NULL) ? 'Select' : $hrAcceptance }}</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Accepted">Accepted</option>
+                                                        <option value="Rejected">Rejected</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="form-group row">
                                                 <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
                                                 <div class="col-sm-6">
@@ -421,7 +460,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Lead</td>
-                                                    <td class="{{ ($leadGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($leadGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    <td class="{{ ($leadAcceptance == NULL || $leadAcceptance == 'Pending' ) ? 'bg-warning' :( $leadAcceptance == 'Accepted' ? 'bg-success' : 'bg-danger' )}}">{{ ($leadAcceptance == NULL ) ? 'Pending' : $leadAcceptance }}</td>
                                                     @if(\Auth::User()->department_id != 7)
                                                     <td>{{ $leadGeneralComment['comment'] }}</td>
                                                     <td>{{ ( $emp_resignation->changed_dol != NULL && $leadDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
@@ -430,7 +469,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Department Head / Unit Head</td>
-                                                    <td class="{{ ($headGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($headGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    <td class="{{ ($headAcceptance == NULL || $headAcceptance == 'Pending' ) ? 'bg-warning' :( $headAcceptance == 'Accepted' ? 'bg-success' : 'bg-danger' )}}">{{ ($headAcceptance == NULL ) ? 'Pending' : $headAcceptance }}</td>
                                                     @if(\Auth::User()->department_id != 7)
                                                     <td>{{ $headGeneralComment['comment'] }}</td>
                                                     <td>{{ ( $emp_resignation->changed_dol != NULL && $headDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
@@ -439,7 +478,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>HR</td>
-                                                    <td class="{{ ($hrGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($hrGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
+                                                    <td class="{{ ($hrAcceptance == NULL || $hrAcceptance == 'Pending' ) ? 'bg-warning' :( $hrAcceptance == 'Accepted' ? 'bg-success' : 'bg-danger' )}}">{{ ($hrAcceptance == NULL ) ? 'Pending' : $hrAcceptance }}</td>
                                                     @if(\Auth::User()->department_id != 7)
                                                     <td>{{ $hrGeneralComment['comment'] }}</td>
                                                     <td>{{ ( $emp_resignation->changed_dol != NULL && $hrDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
@@ -459,301 +498,9 @@
                 <!-- /.tab-pane -->
                 @endif
 
-                <!-- No due forms -->
-                <div class="tab-pane" id="tab_3-2">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="box box-secondary">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title">No Due</h3>
-                                    </div>
-                                    <form method="get" action="{{ (!$nodue) ? route('storeNodue') : route('updateNodue') }}">
-                                        <div class="box-body">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <th>Attributes</th>
-                                                    <th>Comments</th>
-                                                </thead>
-                                                <tbody>
-                                                <!-- No due forms for lead -->
-                                                    @if(Auth::User()->designation_id == 2)
-                                                        <tr>
-                                                            <td>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required @if($nodue) {{ ($nodue->knowledge_transfer_lead != NULL) ? 'checked' : '' }} @endif> Knowledge Transfer
-                                                                    </label>
-                                                                    @error('knowledge_transfer')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->knowledge_transfer_lead_comment  }}</textarea>
-                                                                    @error('knowledge_transfer_comment')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required @if($nodue) {{ ($nodue->mail_id_closure_lead != NULL) ? 'checked' : '' }} @endif> Mail ID closure
-                                                                    </label>
-                                                                    @error('mail_id_closure')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->mail_id_closure_lead_comment  }}</textarea>
-                                                                    @error('mail_id_closure_comment')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td> 
-                                                        </tr>
-                                                    @endif
-                                                    <!-- No due forms for head -->
-                                                    @if(Auth::User()->designation_id == 3)
-                                                        <tr>
-                                                            <td>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required @if($nodue) {{ ($nodue->knowledge_transfer_head != NULL) ? 'checked' : '' }} @endif> Knowledge Transfer
-                                                                    </label>
-                                                                    @error('knowledge_transfer')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->knowledge_transfer_head_comment  }}</textarea>
-                                                                    @error('knowledge_transfer_comment')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required @if($nodue) {{ ($nodue->mail_id_closure_head != NULL) ? 'checked' : '' }} @endif> Mail ID closure
-                                                                    </label>
-                                                                    @error('mail_id_closure')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->mail_id_closure_head_comment  }}</textarea>
-                                                                    @error('mail_id_closure_comment')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td> 
-                                                        </tr>
-                                                    @endif
-                                                    <!-- No due forms for HR -->
-                                                    @if(Auth::User()->department_id == 2)
-                                                        <tr>
-                                                            <td>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="id_card" value="completed" required @if($nodue) {{ ($nodue->id_card != NULL) ? 'checked' : '' }} @endif> ID Card
-                                                                    </label>
-                                                                    @error('id_card')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <textarea name="id_card_comment" class="form-control" id="id_card_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->id_card_comment  }}</textarea>
-                                                                    @error('id_card_comment')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="nda" value="completed" required @if($nodue) {{ ($nodue->nda != NULL) ? 'checked' : '' }} @endif> NDA
-                                                                    </label>
-                                                                    @error('nda')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <textarea name="nda_comment" class="form-control" id="nda_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->nda_comment  }}</textarea>
-                                                                    @error('nda_comment')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td> 
-                                                        </tr>
-                                                    @endif
-                                                    <!-- No due forms for SA -->
-                                                    @if(Auth::User()->department_id == 7)
-                                                        <tr>
-                                                            <td>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="official_email_id" value="completed" required @if($nodue) {{ ($nodue->official_email_id != NULL) ? 'checked' : '' }} @endif> Official Email ID
-                                                                    </label>
-                                                                    @error('official_email_id')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <textarea name="official_email_id_comment" class="form-control" id="official_email_id_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->official_email_id_comment  }}</textarea>
-                                                                    @error('official_email_id_comment')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="skype_account" value="completed" required @if($nodue) {{ ($nodue->skype_account != NULL) ? 'checked' : '' }} @endif> NDA
-                                                                    </label>
-                                                                    @error('skype_account')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <textarea name="skype_account_comment" class="form-control" id="skype_account_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->skype_account_comment  }}</textarea>
-                                                                    @error('skype_account_comment')
-                                                                    <br>
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                                    </span>
-                                                                    @enderror
-                                                                </div>
-                                                            </td> 
-                                                        </tr>
-                                                    @endif
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                        <div class="box-footer">
-                                            <input type="hidden" id="nodueId" name="nodueId" value="{{ (!$nodue) ? '' : $nodue->id }}">
-                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
-                                            <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @if(Auth::User()->department_id == 2)
-                    <!-- No Due status -->
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="box box-primary">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title">No Due Status</h3>
-                                    </div>
-                                    <div class="box-body">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <th>Lead</th>
-                                                <th>Department Head / Unit Head</th>
-                                                <th>HR</th>
-                                                <th>SA</th>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td @if($nodue) class="{{ ($nodue->knowledge_transfer_lead == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Knowledge Transfer</td>
-                                                    <td @if($nodue) class="{{ ($nodue->knowledge_transfer_head == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Knowledge Transfer</td>
-                                                    <td @if($nodue) class="{{ ($nodue->id_card == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>ID Card</td>
-                                                    <td @if($nodue) class="{{ ($nodue->official_email_id == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Official Email ID</td>
-                                                </tr>
-                                                <tr>
-                                                    <td @if($nodue) class="{{ ($nodue->mail_id_closure_lead == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Mail ID Closure</td>
-                                                    <td @if($nodue) class="{{ ($nodue->mail_id_closure_head == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Mail ID Closure</td>
-                                                    <td @if($nodue) class="{{ ($nodue->nda == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>NDA</td>
-                                                    <td @if($nodue) class="{{ ($nodue->skype_account == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Skype Account</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-                </div>
-                <!-- /.tab-pane -->
-
                 @if(\Auth::User()->department_id != 7)
                 <!-- Feedback form -->
-                <div class="tab-pane" id="tab_4-2">
+                <div class="tab-pane" id="tab_3-2">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
@@ -1048,10 +795,6 @@
                                                     <div class="col-xs-12">
                                                         <label class="form-label">Thankyou for your valuable feedback</label>
                                                     </div>
-                                                    <div class="col-xs-2">
-                                                        <input type="date" name="date_of_feedback" value="{{ Date('Y-m-d')}}" id="date_of_feedback" class="form-control disablePast">
-                                                    </div>
-                                                    
                                                 </div>
                                             @endif
                                             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}"> 
@@ -1071,6 +814,300 @@
                 </div>
                 <!-- /.tab-pane -->
                 <!-- /End of feedback -->
+                @endif
+
+                @if(date('d-m-Y') >= date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days')))
+                <!-- No due forms -->
+                <div class="tab-pane" id="tab_4-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-secondary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">No Due</h3>
+                                    </div>
+                                    <form method="get" action="{{ (!$nodue) ? route('storeNodue') : route('updateNodue') }}">
+                                        <div class="box-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <th>Attributes</th>
+                                                    <th>Comments</th>
+                                                </thead>
+                                                <tbody>
+                                                <!-- No due forms for lead -->
+                                                    @if(Auth::User()->designation_id == 2)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required @if($nodue) {{ ($nodue->knowledge_transfer_lead != NULL) ? 'checked' : '' }} @endif> Knowledge Transfer
+                                                                    </label>
+                                                                    @error('knowledge_transfer')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->knowledge_transfer_lead_comment  }}</textarea>
+                                                                    @error('knowledge_transfer_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required @if($nodue) {{ ($nodue->mail_id_closure_lead != NULL) ? 'checked' : '' }} @endif> Mail ID closure
+                                                                    </label>
+                                                                    @error('mail_id_closure')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->mail_id_closure_lead_comment  }}</textarea>
+                                                                    @error('mail_id_closure_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for head -->
+                                                    @if(Auth::User()->designation_id == 3)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required @if($nodue) {{ ($nodue->knowledge_transfer_head != NULL) ? 'checked' : '' }} @endif> Knowledge Transfer
+                                                                    </label>
+                                                                    @error('knowledge_transfer')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->knowledge_transfer_head_comment  }}</textarea>
+                                                                    @error('knowledge_transfer_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required @if($nodue) {{ ($nodue->mail_id_closure_head != NULL) ? 'checked' : '' }} @endif> Mail ID closure
+                                                                    </label>
+                                                                    @error('mail_id_closure')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->mail_id_closure_head_comment  }}</textarea>
+                                                                    @error('mail_id_closure_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for HR -->
+                                                    @if(Auth::User()->department_id == 2)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="id_card" value="completed" required @if($nodue) {{ ($nodue->id_card != NULL) ? 'checked' : '' }} @endif> ID Card
+                                                                    </label>
+                                                                    @error('id_card')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="id_card_comment" class="form-control" id="id_card_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->id_card_comment  }}</textarea>
+                                                                    @error('id_card_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="nda" value="completed" required @if($nodue) {{ ($nodue->nda != NULL) ? 'checked' : '' }} @endif> NDA
+                                                                    </label>
+                                                                    @error('nda')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="nda_comment" class="form-control" id="nda_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->nda_comment  }}</textarea>
+                                                                    @error('nda_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for SA -->
+                                                    @if(Auth::User()->department_id == 7)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="official_email_id" value="completed" required @if($nodue) {{ ($nodue->official_email_id != NULL) ? 'checked' : '' }} @endif> Official Email ID
+                                                                    </label>
+                                                                    @error('official_email_id')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="official_email_id_comment" class="form-control" id="official_email_id_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->official_email_id_comment  }}</textarea>
+                                                                    @error('official_email_id_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="skype_account" value="completed" required @if($nodue) {{ ($nodue->skype_account != NULL) ? 'checked' : '' }} @endif> NDA
+                                                                    </label>
+                                                                    @error('skype_account')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="skype_account_comment" class="form-control" id="skype_account_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->skype_account_comment  }}</textarea>
+                                                                    @error('skype_account_comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                    @endif
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div class="box-footer">
+                                            <input type="hidden" id="nodueId" name="nodueId" value="{{ (!$nodue) ? '' : $nodue->id }}">
+                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
+                                            <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if(Auth::User()->department_id == 2)
+                    <!-- No Due status -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">No Due Status</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <th>Lead</th>
+                                                <th>Department Head / Unit Head</th>
+                                                <th>HR</th>
+                                                <th>SA</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td @if($nodue) class="{{ ($nodue->knowledge_transfer_lead == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Knowledge Transfer</td>
+                                                    <td @if($nodue) class="{{ ($nodue->knowledge_transfer_head == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Knowledge Transfer</td>
+                                                    <td @if($nodue) class="{{ ($nodue->id_card == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>ID Card</td>
+                                                    <td @if($nodue) class="{{ ($nodue->official_email_id == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Official Email ID</td>
+                                                </tr>
+                                                <tr>
+                                                    <td @if($nodue) class="{{ ($nodue->mail_id_closure_lead == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Mail ID Closure</td>
+                                                    <td @if($nodue) class="{{ ($nodue->mail_id_closure_head == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Mail ID Closure</td>
+                                                    <td @if($nodue) class="{{ ($nodue->nda == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>NDA</td>
+                                                    <td @if($nodue) class="{{ ($nodue->skype_account == NULL) ? 'bg-warning' : 'bg-success' }}" @else class="bg-warning" @endif>Skype Account</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                <!-- /.tab-pane -->
                 @endif
 
                 <!-- Exit interview answers -->

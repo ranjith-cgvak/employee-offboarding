@@ -36,7 +36,7 @@ Route::get('deleteQuestion/{key}','QuestionController@destroy');
 Route::resource('addquestions', 'AddQuestionController');
 Route::get('updateDol' , 'ProcessController@updateDol')->name('updateDol');
 Route::get('updateResignationComment' , 'ProcessController@updateResignationComment')->name('updateResignationComment');
-Route::get('addOrUpdateResignationComment' , 'ProcessController@addOrUpdateResignationComment')->name('addOrUpdateResignationComment');
+Route::get('addOrUpdateResignationAcceptance' , 'ProcessController@addOrUpdateResignationAcceptance')->name('addOrUpdateResignationAcceptance');
 Route::get('addOrUpdateDolComments' , 'ProcessController@addOrUpdateDolComments')->name('addOrUpdateDolComments');
 Route::get('addOrUpdateDowComment' , 'ProcessController@addOrUpdateDowComment')->name('addOrUpdateDowComment');
 Route::get('updateDowComment' , 'ProcessController@updateDowComment')->name('updateDowComment');

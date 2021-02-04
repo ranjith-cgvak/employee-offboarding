@@ -20,7 +20,7 @@
                 <p><b>Employee ID: </b>{{ $user->emp_id }}</p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joinig: </b>{{ $converted_dates['joining_date'] }}</p>
+                <p><b>Date of joining: </b>{{ $converted_dates['joining_date'] }}</p>
             </div>
         </div>
         <div class="row">
@@ -70,7 +70,9 @@
                         </tbody>
                     </table>
                     <br>
+                    @if($completed_no_due)
                     <a href="{{ route('questions.index')}}" class="btn btn-primary" style="float: right;">Exit Interview</a>
+                    @endif
                 </div>
             </div>
         </div>

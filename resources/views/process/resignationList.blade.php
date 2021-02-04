@@ -38,7 +38,7 @@
                   <td>{{ $emp->designation }}</td>
                   <td>{{ $emp->date_of_resignation }}</td>
                   <td>{{ ($emp->changed_dol == NULL) ? $emp->date_of_leaving : $emp->changed_dol }}</td>
-                  <td><span class="label {{ ($emp->date_of_withdraw != NULL) ? 'label-danger' : 'label-primary'}}">{{ ($emp->date_of_withdraw != NULL) ? 'Withdrawn' : 'New'}}</span></td>
+                  <td><span class="label {{ ($emp->date_of_withdraw != NULL) ? 'label-danger' :($emp->is_completed == 1 ? 'label-success' : ($emp->lead ==NULL ? 'label-primary': 'label-warning' )) }}">{{ ($emp->date_of_withdraw != NULL) ? 'Withdrawn' :($emp->is_completed == 1 ? 'Completed' : ($emp->lead ==NULL ? 'New': 'On-Progress' ) ) }}</span></td>
                   <td><a href="{{ route('process.edit', $emp->id )}}">View</a></td>
                   <!-- Assiging lead form by head -->
                   @if(Auth::user()->designation_id == 3)

@@ -1,6 +1,6 @@
-@extends('layouts.app_home')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 
 
 <!-- Employee details -->
@@ -8,24 +8,24 @@
     <div class="box box-primary box-body">
         <div class="row">
             <div class="col-xs-4">
-                <p><b>Employee Name: </b>{{ $user->display_name }}</p>
+                <p><b>Employee Name: </b><?php echo e($user->display_name); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Employee ID: </b>{{ $user->emp_id }}</p>
+                <p><b>Employee ID: </b><?php echo e($user->emp_id); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joining: </b>{{ $converted_dates['joining_date'] }}</p>
+                <p><b>Date of joining: </b><?php echo e($converted_dates['joining_date']); ?></p>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-4">
-                <p><b>Designation: </b>{{ $user->designation }}</p>
+                <p><b>Designation: </b><?php echo e($user->designation); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Department: </b>{{ $user->department_name }}</p>
+                <p><b>Department: </b><?php echo e($user->department_name); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Lead: </b>{{ ($user->lead == NULL) ? 'Not Assigned' : $user->lead }}</p>
+                <p><b>Lead: </b><?php echo e(($user->lead == NULL) ? 'Not Assigned' : $user->lead); ?></p>
             </div>
         </div>
     </div>
@@ -41,8 +41,8 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form method="post" action="{{ route('resignation.store') }}">
-                    @csrf
+                <form method="post" action="<?php echo e(route('resignation.store')); ?>">
+                    <?php echo csrf_field(); ?>
                     <div class="box-body">
                         <div class="form-group row">
                             <label for="reason" class="col-sm-2 form-label">Reason For Leaving <span class="text-danger">*</span></label>
@@ -53,60 +53,95 @@
                                 <option value="Health reason">Health reason</option>
                                 <option value="others">Others</option>
                                 </select>
-                                @error('reason')
+                                <?php $__errorArgs = ['reason'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong class="text-danger">{{ $message }}</strong>
+                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row" id="othersDiv"  style='display:none;'>
                             <label for="others" class="col-sm-2 form-label">Mention the reason  <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
                                 <input type="text" name="others"  class="form-control">
-                                @error('others')
+                                <?php $__errorArgs = ['others'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong class="text-danger">{{ $message }}</strong>
+                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="comment_on_resignation" class="col-sm-2 form-label">Comments <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
                                 <textarea name="comment_on_resignation" id="comment_on_resignation" class="form-control" cols="20" rows="10" required></textarea>
-                                @error('comments')
+                                <?php $__errorArgs = ['comments'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong class="text-danger">{{ $message }}</strong>
+                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="dateOfResignation" class="col-sm-2 form-label">Date Of Resignation <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
-                                <input type="date" class="form-control disablePast" value="{{ Date('Y-m-d')}}" id="dateOfResignation" name="dateOfResignation">
-                                @error('dateOfResignation')
+                                <input type="date" class="form-control disablePast" value="<?php echo e(Date('Y-m-d')); ?>" id="dateOfResignation" name="dateOfResignation">
+                                <?php $__errorArgs = ['dateOfResignation'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong class="text-danger">{{ $message }}</strong>
+                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="dateOfLeaving" class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" value="{{ Date('m/d/Y', strtotime('+3 months')) }}" id="dateOfLeaving" name="dateOfLeaving">
-                                @error('dateOfLeaving')
+                                <input type="text" readonly class="form-control" value="<?php echo e(Date('m/d/Y', strtotime('+3 months'))); ?>" id="dateOfLeaving" name="dateOfLeaving">
+                                <?php $__errorArgs = ['dateOfLeaving'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                 <br>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong class="text-danger">{{ $message }}</strong>
+                                    <strong class="text-danger"><?php echo e($message); ?></strong>
                                 </span>
-                                @enderror
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>     
                         </div>
                     </div>
@@ -131,4 +166,6 @@ function CheckOthers(val){
     }
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/resignation/create.blade.php ENDPATH**/ ?>

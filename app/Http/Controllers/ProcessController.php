@@ -7,6 +7,7 @@ use App\Resignation;
 use App\User;
 use App\Feedback;
 use App\Comments;
+use App\AcceptanceStatus;
 use App\NoDue;
 use App\FinalExitChecklist;
 use App\Support\Facades\DB;
@@ -24,14 +25,14 @@ class ProcessController extends Controller
         // Head
         if ( \Auth::User()->designation_id == 3 ) {
             $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol', 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->get();
         }
         //HR OR SA
         else if ( ( \Auth::User()->department_id == 2 ) || ( \Auth::User()->department_id == 7 ) ) {
             $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol', 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->get();
         }
@@ -39,7 +40,7 @@ class ProcessController extends Controller
         else {
             $leadName = \Auth::User()->display_name;
             $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol', 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->where( 'lead', $leadName )
             ->get();
@@ -172,8 +173,25 @@ class ProcessController extends Controller
                 $hrDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
         }
+        $acceptanceStatuses = \DB::table( 'acceptance_statuses' )
+        ->where( 'acceptance_statuses.resignation_id', $id )
+        ->get();
 
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers'));
+        $leadAcceptance = NULL;
+        $headAcceptance = NULL;
+        $hrAcceptance = NULL;
+        foreach ( $acceptanceStatuses as $acceptanceStatus ) {
+            if( $acceptanceStatus->reviewed_by == 'lead') {
+                $leadAcceptance = $acceptanceStatus->acceptance_status;
+            }
+            if( $acceptanceStatus->reviewed_by == 'head') {
+                $headAcceptance = $acceptanceStatus->acceptance_status;
+            }
+            if( $acceptanceStatus->reviewed_by == 'hr') {
+                $hrAcceptance = $acceptanceStatus->acceptance_status;
+            }  
+        }
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance'));
     }
 
     /**
@@ -283,54 +301,98 @@ class ProcessController extends Controller
 
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
-    //add or update resignation comment
 
-    public function addOrUpdateResignationComment( Request $request ) {
+    //function to add or update acceptance details
+    public function addOrUpdateResignationAcceptance( Request $request ) {
         $resignationId = $request->get( 'resignationId' );
-        if ( ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadGeneralCommentId' ) == NULL ) ) || ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headGeneralCommentId' ) == NULL ) ) || ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrGeneralCommentId' ) == NULL ) ) ) {
-            $addOrUpdateResignationComment = new Comments( [
-                'resignation_id' => $request->get( 'resignationId' ),
-                'comment_type' => 'general'
-            ] );
-        } else if ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadGeneralCommentId' ) != NULL ) ) {
-            $addOrUpdateResignationComment = Comments::find( $request->get( 'leadGeneralCommentId' ) );
-        } else if ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headGeneralCommentId' ) != NULL ) ) {
-            $addOrUpdateResignationComment = Comments::find( $request->get( 'headGeneralCommentId' ) );
-        } else if ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrGeneralCommentId' ) != NULL ) ) {
-            $addOrUpdateResignationComment = Comments::find( $request->get( 'hrGeneralCommentId' ) );
-        }
-
         //Head
         if ( \Auth::User()->designation_id == 3 ) {
+
             $request->validate( [
                 'headComment'=>'required'
             ] );
-            $addOrUpdateResignationComment->comment_by = 'head';
-            $addOrUpdateResignationComment->comment = $request->get( 'headComment' );
+
+            $acceptanceStatusComment = Comments::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'comment_by' => 'head',
+                'comment_type' => 'general'
+            ],
+            [
+                'comment' => $request->get( 'headComment' )
+            ]
+            );
+            $acceptanceStatusComment->save();
+
+            $acceptanceStatus = AcceptanceStatus::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'reviewed_by' => 'head'
+            ],
+            [
+                'acceptance_status' => $request->get( 'headAcceptance' )
+            ]);
+            $acceptanceStatus->save();
         }
         //HR
         else if ( \Auth::User()->department_id == 2 ) {
             $request->validate( [
                 'hrComment'=>'required'
             ] );
-            $addOrUpdateResignationComment->comment_by = 'hr';
-            $addOrUpdateResignationComment->comment = $request->get( 'hrComment' );
+            $acceptanceStatusComment = Comments::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'comment_by' => 'hr',
+                'comment_type' => 'general'
+            ],
+            [
+                'comment' => $request->get( 'hrComment' )
+            ]
+            );
+            $acceptanceStatusComment->save();
+
+            $acceptanceStatus = AcceptanceStatus::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'reviewed_by' => 'hr'
+            ],
+            [
+                'acceptance_status' => $request->get( 'hrAcceptance' )
+            ]);
+            $acceptanceStatus->save();
         }
         //lead
         else {
             $request->validate( [
                 'leadComment'=>'required'
             ] );
-            $addOrUpdateResignationComment->comment_by = 'lead';
-            $addOrUpdateResignationComment->comment = $request->get( 'leadComment' );
+            $acceptanceStatusComment = Comments::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'comment_by' => 'lead',
+                'comment_type' => 'general'
+            ],
+            [
+                'comment' => $request->get( 'leadComment' )
+            ]
+            );
+            $acceptanceStatusComment->save();
+
+            $acceptanceStatus = AcceptanceStatus::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'reviewed_by' => 'lead'
+            ],
+            [
+                'acceptance_status' => $request->get( 'leadAcceptance' )
+            ]);
+            $acceptanceStatus->save();
         }
-        $addOrUpdateResignationComment->save();
+
+        
         $notification=array(
             'message' => 'Comments has been recorded!',
             'alert-type' => 'success'
         );
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
+        
     }
+
+
 
     //add or update date of withdraw comment
 
@@ -702,6 +764,11 @@ class ProcessController extends Controller
             'updated_by' => $request->get( 'updated_by' )
         ] );
         $finalCheckList->save();
+
+        \DB::table('resignations')
+        ->where('id', $resignationId)
+        ->update(['is_completed' => 1]);
+
         $notification=array(
             'message' => 'Final checklist has been recorded!',
             'alert-type' => 'success'

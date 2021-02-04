@@ -1,30 +1,30 @@
-@extends('layouts.app_home')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 
 <!-- Employee details -->
 <div class="container-fluid">
     <div class="box box-primary box-body">
         <div class="row">
             <div class="col-xs-4">
-                <p><b>Employee Name: </b>{{ $user->display_name }}</p>
+                <p><b>Employee Name: </b><?php echo e($user->display_name); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Employee ID: </b>{{ $user->emp_id }}</p>
+                <p><b>Employee ID: </b><?php echo e($user->emp_id); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joining: </b>{{ $converted_dates['joining_date'] }}</p>
+                <p><b>Date of joining: </b><?php echo e($converted_dates['joining_date']); ?></p>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-4">
-                <p><b>Designation: </b>{{ $user->designation }}</p>
+                <p><b>Designation: </b><?php echo e($user->designation); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Department: </b>{{ $user->department_name }}</p>
+                <p><b>Department: </b><?php echo e($user->department_name); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Lead: </b>{{ ($user->lead == NULL) ? 'Not Assigned' : $user->lead }}</p>
+                <p><b>Lead: </b><?php echo e(($user->lead == NULL) ? 'Not Assigned' : $user->lead); ?></p>
             </div>
         </div>
     </div>
@@ -41,47 +41,48 @@
             <div class="form-group row">
                 <label for="reason" class="col-sm-3 form-label">Reason For Leaving </label>
                 <div class="col-sm-6">
-                    <p>{{ $myResignation->reason }}</p>
+                    <p><?php echo e($myResignation->reason); ?></p>
                 </div>
             </div>
-            @if($myResignation->other_reason != NULL)
+            <?php if($myResignation->other_reason != NULL): ?>
             <div class="form-group row">
                 <label for="reason" class="col-sm-3 form-label">Other Reason </label>
                 <div class="col-sm-6">
-                    <p>{{ $myResignation->other_reason }}</p>
+                    <p><?php echo e($myResignation->other_reason); ?></p>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
             <div class="form-group row">
                 <label for="comment_on_resignation" class="col-sm-3 form-label">Comments </label>
                 <div class="col-sm-6">
-                    <p>{{ $myResignation->comment_on_resignation }}</p>
+                    <p><?php echo e($myResignation->comment_on_resignation); ?></p>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="dateOfResignation" class="col-sm-3 form-label">Date Of Resignation </label>
                 <div class="col-sm-4">
-                    <p>{{ $converted_dates['date_of_resignation'] }}</p>
+                    <p><?php echo e($converted_dates['date_of_resignation']); ?></p>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="dateOfLeaving" class="col-sm-3 form-label">Date Of Leaving As Per Policy </label>
                 <div class="col-sm-4">
-                    <p>{{ $converted_dates['date_of_leaving'] }}</p>
+                    <p><?php echo e($converted_dates['date_of_leaving']); ?></p>
                 </div>     
             </div>
-            @if($myResignation->changed_dol != NULL)
+            <?php if($myResignation->changed_dol != NULL): ?>
             <div class="form-group row">
                 <label for="dateOfLeaving" class="col-sm-3 form-label">Accepted Date Of Leaving </label>
                 <div class="col-sm-4">
-                    <p>{{ $converted_dates['changed_dol'] }}</p>
+                    <p><?php echo e($converted_dates['changed_dol']); ?></p>
                 </div>     
             </div>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 
 </div>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/resignation/resignationDetails.blade.php ENDPATH**/ ?>

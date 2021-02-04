@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Support\Facades\DB;
 use App\User;
 use App\Resignation;
+use App\AcceptanceStatus;
 use Illuminate\Http\Request;
 
 class ResignationController extends Controller
@@ -88,7 +89,26 @@ class ResignationController extends Controller
             }
         }
 
-        return view( 'resignation.acceptanceStatus', compact( 'myResignation', 'user', 'converted_dates', 'leadGeneralComment', 'headGeneralComment', 'hrGeneralComment' ) );
+        $acceptanceStatuses = \DB::table( 'acceptance_statuses' )
+        ->where( 'acceptance_statuses.resignation_id', $myResignation->id )
+        ->get();
+
+        $leadAcceptance = NULL;
+        $headAcceptance = NULL;
+        $hrAcceptance = NULL;
+        foreach ( $acceptanceStatuses as $acceptanceStatus ) {
+            if( $acceptanceStatus->reviewed_by == 'lead') {
+                $leadAcceptance = $acceptanceStatus->acceptance_status;
+            }
+            if( $acceptanceStatus->reviewed_by == 'head') {
+                $headAcceptance = $acceptanceStatus->acceptance_status;
+            }
+            if( $acceptanceStatus->reviewed_by == 'hr') {
+                $hrAcceptance = $acceptanceStatus->acceptance_status;
+            }  
+        }
+
+        return view( 'resignation.acceptanceStatus', compact( 'myResignation', 'user', 'converted_dates', 'leadGeneralComment', 'headGeneralComment', 'hrGeneralComment','leadAcceptance','headAcceptance','hrAcceptance' ) );
     }
 
     //No due status of the resignation
@@ -118,7 +138,20 @@ class ResignationController extends Controller
         ->where('user_answers.resignation_id',$myResignation->id)
         ->first();
 
-        return view('resignation.noDueStatus', compact('myResignation','user','converted_dates','nodue','answers'));
+        $completed_no_due = \DB::table( 'no_dues' )
+        ->where([
+            ['no_dues.resignation_id', $myResignation->id],
+            ['knowledge_transfer_lead','!=',NULL],
+            ['mail_id_closure_lead','!=',NULL],
+            ['knowledge_transfer_head','!=',NULL],
+            ['mail_id_closure_head','!=',NULL],
+            ['id_card','!=',NULL],
+            ['nda','!=',NULL],
+            ['official_email_id','!=',NULL],
+            ['skype_account','!=',NULL]
+            ])
+        ->first();
+        return view('resignation.noDueStatus', compact('myResignation','user','converted_dates','nodue','answers','completed_no_due'));
     }
 
     //Withdraw for the resignation
@@ -217,7 +250,7 @@ class ResignationController extends Controller
     */
 
     public function show( $id )
- {
+    {
         //
     }
 
@@ -229,7 +262,7 @@ class ResignationController extends Controller
     */
 
     public function edit( $id )
- {
+    {
         //
     }
 
@@ -245,6 +278,7 @@ class ResignationController extends Controller
 
     public function update( Request $request, $id )
  {
+
         $request->validate( [
             'comment'=>'required'
         ] );
@@ -253,6 +287,11 @@ class ResignationController extends Controller
         $resignation->date_of_withdraw = $withdrawDate;
         $resignation->comment_on_withdraw = $request->get( 'comment' );
         $resignation->save();
+        
+        \DB::table('users')
+        ->where('id', \Auth::User()->id)
+        ->update(['lead' => NULL]);
+
         $notification=array(
             'message' => 'Resignation has been withdrawn!',
             'alert-type' => 'error'
