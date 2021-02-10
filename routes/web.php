@@ -44,6 +44,7 @@ Route::get('storeNodue' , 'ProcessController@storeNodue')->name('storeNodue');
 Route::get('updateNodue' , 'ProcessController@updateNodue')->name('updateNodue');
 Route::get('storeFeedback' , 'ProcessController@storeFeedback')->name('storeFeedback');
 Route::get('updateFeedback' , 'ProcessController@updateFeedback')->name('updateFeedback');
+Route::get('addOrUpdateHrInterview' , 'ProcessController@addOrUpdateHrInterview')->name('addOrUpdateHrInterview');
 Route::post('storeFinalCheckList' , 'ProcessController@storeFinalCheckList')->name('storeFinalCheckList');
 Route::post('updateFinalCheckList' , 'ProcessController@updateFinalCheckList')->name('updateFinalCheckList');
 Route::get('resignationDetails','ResignationController@index')->name('resignationDetails');

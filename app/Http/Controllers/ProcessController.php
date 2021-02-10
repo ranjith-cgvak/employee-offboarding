@@ -11,7 +11,7 @@ use App\AcceptanceStatus;
 use App\NoDue;
 use App\FinalExitChecklist;
 use App\Support\Facades\DB;
-
+use Carbon\Carbon;
 class ProcessController extends Controller
  {
     /**
@@ -191,7 +191,40 @@ class ProcessController extends Controller
                 $hrAcceptance = $acceptanceStatus->acceptance_status;
             }  
         }
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance'));
+
+        $acceptanceValue = NULL;
+        $acceptanceComment = NULL;
+        $is_reviewed = false;
+        //Head
+        if ( \Auth::User()->designation_id == 3 ) {
+            $acceptanceValue = $headAcceptance;
+            $acceptanceComment = $headGeneralComment['comment'];
+            $is_reviewed = ($leadAcceptance == 'Accepted') ? true : false;
+        }
+        //HR 
+        else if ( ( \Auth::User()->department_id == 2 ) ) {
+            $acceptanceValue = $hrAcceptance;
+            $acceptanceComment = $hrGeneralComment['comment'];
+            $is_reviewed = ($leadAcceptance == 'Accepted' && $headAcceptance == 'Accepted') ? true : false;
+        }
+        //LEAD
+        else {
+            $acceptanceValue = $leadAcceptance;
+            $acceptanceComment = $leadGeneralComment['comment'];
+            $is_reviewed = true;
+        }
+
+        //fixing no due when to appear 
+        $today = Carbon::now();
+        $nodueDate = Carbon::parse(date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days')));
+        $displayNodue = $today >= $nodueDate;
+
+        //Exit interview answers
+        $showAnswers = \DB::table( 'user_answers' )
+        ->where( 'resignation_id', $id )
+        ->first();
+
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance','acceptanceValue','acceptanceComment','is_reviewed','displayNodue','showAnswers'));
     }
 
     /**
@@ -305,20 +338,21 @@ class ProcessController extends Controller
     //function to add or update acceptance details
     public function addOrUpdateResignationAcceptance( Request $request ) {
         $resignationId = $request->get( 'resignationId' );
+        
+        $request->validate( [
+            'acceptanceComment'=>'required',
+            'accepatanceStatus'=>'required'
+        ] );
+
         //Head
         if ( \Auth::User()->designation_id == 3 ) {
-
-            $request->validate( [
-                'headComment'=>'required'
-            ] );
-
             $acceptanceStatusComment = Comments::updateOrCreate([
                 'resignation_id' => $request->get( 'resignationId' ),
                 'comment_by' => 'head',
                 'comment_type' => 'general'
             ],
             [
-                'comment' => $request->get( 'headComment' )
+                'comment' => $request->get( 'acceptanceComment' )
             ]
             );
             $acceptanceStatusComment->save();
@@ -328,22 +362,20 @@ class ProcessController extends Controller
                 'reviewed_by' => 'head'
             ],
             [
-                'acceptance_status' => $request->get( 'headAcceptance' )
+                'acceptance_status' => $request->get( 'accepatanceStatus' )
             ]);
             $acceptanceStatus->save();
         }
         //HR
         else if ( \Auth::User()->department_id == 2 ) {
-            $request->validate( [
-                'hrComment'=>'required'
-            ] );
+            
             $acceptanceStatusComment = Comments::updateOrCreate([
                 'resignation_id' => $request->get( 'resignationId' ),
                 'comment_by' => 'hr',
                 'comment_type' => 'general'
             ],
             [
-                'comment' => $request->get( 'hrComment' )
+                'comment' => $request->get( 'acceptanceComment' )
             ]
             );
             $acceptanceStatusComment->save();
@@ -353,22 +385,20 @@ class ProcessController extends Controller
                 'reviewed_by' => 'hr'
             ],
             [
-                'acceptance_status' => $request->get( 'hrAcceptance' )
+                'acceptance_status' => $request->get( 'accepatanceStatus' )
             ]);
             $acceptanceStatus->save();
         }
         //lead
         else {
-            $request->validate( [
-                'leadComment'=>'required'
-            ] );
+            
             $acceptanceStatusComment = Comments::updateOrCreate([
                 'resignation_id' => $request->get( 'resignationId' ),
                 'comment_by' => 'lead',
                 'comment_type' => 'general'
             ],
             [
-                'comment' => $request->get( 'leadComment' )
+                'comment' => $request->get( 'acceptanceComment' )
             ]
             );
             $acceptanceStatusComment->save();
@@ -378,7 +408,7 @@ class ProcessController extends Controller
                 'reviewed_by' => 'lead'
             ],
             [
-                'acceptance_status' => $request->get( 'leadAcceptance' )
+                'acceptance_status' => $request->get( 'accepatanceStatus' )
             ]);
             $acceptanceStatus->save();
         }
@@ -842,6 +872,21 @@ class ProcessController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
+    }
+
+    public function addOrUpdateHrInterview(Request $request) {
+        
+        for($arraySize = 0; $arraySize < count($request->hr_exitinterview_comment) ; $arraySize++ ) {
+            echo "<pre>";
+            echo $request->hr_exitinterview_comment[$arraySize];
+            echo "<br>";
+            echo $request->hr_exitinterview_actionarea[$arraySize];
+            
+
+        }
+        dd(count($request->hr_exitinterview_comment));
+        
+        
     }
     /**
     * Remove the specified resource from storage.

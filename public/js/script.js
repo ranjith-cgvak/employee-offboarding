@@ -40,4 +40,42 @@ $(document).ready(function(){
     //Disable the past dates in the date picker
     var today = new Date().toISOString().split('T')[0];
     document.getElementsByClassName("disablePast")[0].setAttribute('min', today);
+
+    //HR EXIT INTERVIEW
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper   		= $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    var tableBody = $(".table_body_wrap");
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+      e.preventDefault();
+      if(x < max_fields){ //max input box allowed
+        x++; //text box increment
+        // $(wrapper).append('<div><input type="text" name="mytext[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+        $(tableBody).append(`
+        <tr>
+        <td>
+            <input type="text" name='hr_exitinterview_comment[]' class="form-control" required>  
+        </td>
+        <td>
+            <select name="hr_exitinterview_actionarea[]" class="form-control" required>
+                <option value="">Select</option>
+                <option value="Salary">Salary</option>
+                <option value="Leave and Holiday">Leave and Holiday</option>
+                <option value="Benifits">Benifits</option>
+            </select>
+        </td>
+        <td>
+        <button type="button" class="remove_field btn btn-danger">Remove</button>
+        <td>
+        </tr>
+        `);
+      }
+    });
+    
+    $(tableBody).on("click",".remove_field", function(e){ //user click on remove text
+      e.preventDefault(); $(this).parent('td').parent('tr').remove(); x--;
+    })
+
+
 })

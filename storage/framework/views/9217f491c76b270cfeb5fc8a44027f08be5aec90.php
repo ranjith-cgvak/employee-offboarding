@@ -123,10 +123,10 @@ unset($__errorArgs, $__bag); ?>
                 <?php if(\Auth::User()->department_id != 7): ?>
                 <li><a href="#tab_3-2" data-toggle="tab">Feedback</a></li>
                 <?php endif; ?>
-                <?php if(date('d-m-Y') >= date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days'))): ?>
+                <?php if($displayNodue): ?>
                 <li><a href="#tab_4-2" data-toggle="tab">No Due</a></li>
                 <?php endif; ?>
-                <?php if(Auth::User()->department_id == 2): ?>
+                <?php if(Auth::User()->department_id == 2 && $showAnswers != NULL): ?>
                 <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
                 <?php endif; ?>
                 <?php if(\Auth::User()->department_id == 2): ?>
@@ -207,6 +207,7 @@ unset($__errorArgs, $__bag); ?>
                         
                         <?php if(\Auth::User()->department_id != 7): ?>
                         <?php if($emp_resignation->date_of_withdraw == NULL): ?>
+                        <?php if($is_reviewed): ?>
                         <!-- Comments on the resignation -->
                         <div class="row">
                             <div class="col-xs-12">
@@ -222,100 +223,17 @@ unset($__errorArgs, $__bag); ?>
                                         <?php echo e(method_field('PUT')); ?>
 
                                         <div class="box-body">
-                                            <?php if(Auth::User()->designation_id == 2): ?>
+                                            
                                             <div class="form-group row">
-                                                <label for="leadAcceptance" class="col-sm-2 form-label">Your Acceptance</label>
+                                                <label for="accepatanceStatus" class="col-sm-2 form-label">Your Acceptance</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" name="leadAcceptance" id="leadAcceptance">
-                                                        <option value="<?php echo e(($leadAcceptance == NULL) ? '' : $leadAcceptance); ?>"><?php echo e(($leadAcceptance == NULL) ? 'Select' : $leadAcceptance); ?></option>
+                                                    <select class="form-control" name="accepatanceStatus" id="accepatanceStatus" required>
+                                                        <option value="<?php echo e(($acceptanceValue == NULL) ? '' : $acceptanceValue); ?>"><?php echo e(($acceptanceValue == NULL) ? 'Select' : $acceptanceValue); ?></option>
                                                         <option value="Pending">Pending</option>
                                                         <option value="Accepted">Accepted</option>
                                                         <option value="Rejected">Rejected</option>
                                                     </select>
-                                                </div>
-                                            </div>
-                                            <?php endif; ?>
-                                            <div class="form-group row">
-                                                <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
-                                                <div class="col-sm-6">
-                                                <?php if(Auth::User()->designation_id == 2): ?>
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required><?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ''); ?></textarea>
-                                                <?php endif; ?>
-                                                    <?php $__errorArgs = ['leadComment'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                    <br>
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                    </span>
-                                                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                    <?php if(Auth::User()->designation_id != 2): ?>
-                                                    <p><?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : 'N/A'); ?></p>
-                                                    <?php endif; ?>
-                                                </div>
-                                            </div>
-                                            <?php if(Auth::User()->designation_id != 2): ?>
-                                            <?php if(Auth::User()->designation_id == 3 ): ?>
-                                            <div class="form-group row">
-                                                <label for="headAcceptance" class="col-sm-2 form-label">Your Acceptance</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" name="headAcceptance" id="headAcceptance">
-                                                        <option value="<?php echo e(($headAcceptance == NULL) ? '' : $headAcceptance); ?>"><?php echo e(($headAcceptance == NULL) ? 'Select' : $headAcceptance); ?></option>
-                                                        <option value="Pending">Pending</option>
-                                                        <option value="Accepted">Accepted</option>
-                                                        <option value="Rejected">Rejected</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <?php endif; ?>
-                                            <div class="form-group row">
-                                                <label for="headComment" class="col-sm-2 form-label">Head comment</label>
-                                                <div class="col-sm-6">
-                                                    <?php if(Auth::User()->designation_id == 3 ): ?>
-                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required><?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ''); ?></textarea>
-                                                    <?php endif; ?>
-                                                    <?php $__errorArgs = ['headComment'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                    <br>
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                    </span>
-                                                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                    <?php if(Auth::User()->department_id == 2): ?>
-                                                    <p><?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['comment'] : 'N/A'); ?></p>
-                                                    <?php endif; ?>
-                                                </div>
-                                            </div>
-                                            <?php endif; ?>
-
-                                            <?php if(Auth::User()->department_id == 2 ): ?>
-                                            <div class="form-group row">
-                                                <label for="hrAcceptance" class="col-sm-2 form-label">Your Acceptance</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" name="hrAcceptance" id="hrAcceptance">
-                                                        <option value="<?php echo e(($hrAcceptance == NULL) ? '' : $hrAcceptance); ?>"><?php echo e(($hrAcceptance == NULL) ? 'Select' : $hrAcceptance); ?></option>
-                                                        <option value="Pending">Pending</option>
-                                                        <option value="Accepted">Accepted</option>
-                                                        <option value="Rejected">Rejected</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
-                                                <div class="col-sm-6">
-                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required><?php echo e(($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : ''); ?></textarea>
-                                                    <?php $__errorArgs = ['hrComment'];
+                                                    <?php $__errorArgs = ['accepatanceStatus'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -330,21 +248,38 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
-                                            <?php endif; ?>
-
+                                            
+                                            <div class="form-group row">
+                                                <label for="acceptanceComment" class="col-sm-2 form-label">Your Comment </label>
+                                                <div class="col-sm-6">
+                                                <textarea class="form-control" name="acceptanceComment" id="acceptanceComment" cols="30" rows="10" required><?php echo e(($acceptanceComment != NULL) ? $acceptanceComment : ''); ?></textarea>
+                                                    <?php $__errorArgs = ['acceptanceComment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?> 
+                                                </div>
+                                            </div>
                                             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
-                                        <input type="hidden" name="leadGeneralCommentId" value="<?php echo e(($leadGeneralComment != NULL) ? $leadGeneralComment['id'] : NULL); ?> ">
-                                        <input type="hidden" name="headGeneralCommentId" value="<?php echo e(($headGeneralComment != NULL) ? $headGeneralComment['id'] : NULL); ?> ">
-                                        <input type="hidden" name="hrGeneralCommentId" value="<?php echo e(($hrGeneralComment != NULL) ? $hrGeneralComment['id'] : NULL); ?> ">
+                                        
                                         <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
+                        <?php endif; ?>
                         <?php endif; ?>
                         <?php endif; ?>
                     </div>
@@ -959,7 +894,7 @@ unset($__errorArgs, $__bag); ?>
                 <!-- /End of feedback -->
                 <?php endif; ?>
 
-                <?php if(date('d-m-Y') >= date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days'))): ?>
+                <?php if($displayNodue): ?>
                 <!-- No due forms -->
                 <div class="tab-pane" id="tab_4-2">
                     <div class="container-fluid">
@@ -1365,6 +1300,7 @@ unset($__errorArgs, $__bag); ?>
                 <!-- /.tab-pane -->
                 <?php endif; ?>
 
+                <?php if(Auth::User()->department_id == 2 && $showAnswers != NULL): ?>
                 <!-- Exit interview answers -->
                 <div class="tab-pane" id="tab_5-2">
                     <?php if(Auth::User()->department_id == 2): ?>
@@ -1377,9 +1313,6 @@ unset($__errorArgs, $__bag); ?>
                                         <h3 class="box-title">Exit Interview Answers</h3>
                                     </div>
                                     <div class="box-body">
-                                    <?php if($answers == NULL): ?>
-                                        <h4 class="text-center"> Not yet answered</h4>
-                                    <?php else: ?>
                                         <table class="table table-bordered">
                                             <thead>
                                                 <th width="5%"> Q\N</th>
@@ -1397,8 +1330,53 @@ unset($__errorArgs, $__bag); ?>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </tbody>
                                         </table>
-                                    <?php endif; ?>
                                     </div>
+                                </div>
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">HR EXIT INTERVIEW</h3>
+                                    </div>
+                                    <form method="get" action="<?php echo e(route('addOrUpdateHrInterview')); ?>">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo e(method_field('PUT')); ?>
+
+                                        <div class="box-body">
+                                            <div class="input_fields_wrap">
+                                                <button class="add_field_button btn btn-success" style="float: right;">Add More Fields</button>
+                                                
+                                                <table class="table table-striped" style="clear: both;">
+                                                    <thead>
+                                                        <tr>
+                                                        <th scope="col">Comment</th>
+                                                        <th scope="col">Action Area</th>
+                                                        <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table_body_wrap">
+                                                        <tr>
+                                                        <td>
+                                                            <input type="text" name="hr_exitinterview_comment[]" class="form-control" required> 
+                                                        </td>
+                                                        <td>
+                                                            <select name="hr_exitinterview_actionarea[]" class="form-control" required>
+                                                                <option value="">Select</option>
+                                                                <option value="Salary">Salary</option>
+                                                                <option value="Leave and Holiday">Leave and Holiday</option>
+                                                                <option value="Benifits">Benifits</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="remove_field btn btn-danger">Remove</button>
+                                                        <td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="box-footer">
+                                            <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -1406,6 +1384,7 @@ unset($__errorArgs, $__bag); ?>
                     <?php endif; ?>
                 </div>
                 <!-- /.tab-pane -->
+                <?php endif; ?>
 
                 <?php if(\Auth::User()->department_id == 2): ?>
                 <!-- Final Exit check list -->
@@ -1676,6 +1655,10 @@ unset($__errorArgs, $__bag); ?>
         <!-- /.col -->
     </div>
 </div>
+
+
+
+
 
 
 <?php $__env->stopSection(); ?>

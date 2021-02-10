@@ -108,10 +108,10 @@
                 @if(\Auth::User()->department_id != 7)
                 <li><a href="#tab_3-2" data-toggle="tab">Feedback</a></li>
                 @endif
-                @if(date('d-m-Y') >= date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days')))
+                @if($displayNodue)
                 <li><a href="#tab_4-2" data-toggle="tab">No Due</a></li>
                 @endif
-                @if(Auth::User()->department_id == 2)
+                @if(Auth::User()->department_id == 2 && $showAnswers != NULL)
                 <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
                 @endif
                 @if(\Auth::User()->department_id == 2)
@@ -192,6 +192,7 @@
                         
                         @if(\Auth::User()->department_id != 7)
                         @if($emp_resignation->date_of_withdraw == NULL)
+                        @if($is_reviewed)
                         <!-- Comments on the resignation -->
                         <div class="row">
                             <div class="col-xs-12">
@@ -206,86 +207,17 @@
                                         @csrf
                                         {{ method_field('PUT') }}
                                         <div class="box-body">
-                                            @if(Auth::User()->designation_id == 2)
+                                            
                                             <div class="form-group row">
-                                                <label for="leadAcceptance" class="col-sm-2 form-label">Your Acceptance</label>
+                                                <label for="accepatanceStatus" class="col-sm-2 form-label">Your Acceptance</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" name="leadAcceptance" id="leadAcceptance">
-                                                        <option value="{{ ($leadAcceptance == NULL) ? '' : $leadAcceptance }}">{{ ($leadAcceptance == NULL) ? 'Select' : $leadAcceptance }}</option>
+                                                    <select class="form-control" name="accepatanceStatus" id="accepatanceStatus" required>
+                                                        <option value="{{ ($acceptanceValue == NULL) ? '' : $acceptanceValue }}">{{ ($acceptanceValue == NULL) ? 'Select' : $acceptanceValue }}</option>
                                                         <option value="Pending">Pending</option>
                                                         <option value="Accepted">Accepted</option>
                                                         <option value="Rejected">Rejected</option>
                                                     </select>
-                                                </div>
-                                            </div>
-                                            @endif
-                                            <div class="form-group row">
-                                                <label for="leadComment" class="col-sm-2 form-label">Lead Comment </label>
-                                                <div class="col-sm-6">
-                                                @if(Auth::User()->designation_id == 2)
-                                                <textarea class="form-control" name="leadComment" id="leadComment" cols="30" rows="10" required>{{ ($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : ''}}</textarea>
-                                                @endif
-                                                    @error('leadComment')
-                                                    <br>
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                    </span>
-                                                    @enderror
-                                                    @if(Auth::User()->designation_id != 2)
-                                                    <p>{{ ($leadGeneralComment != NULL) ? $leadGeneralComment['comment'] : 'N/A' }}</p>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            @if(Auth::User()->designation_id != 2)
-                                            @if(Auth::User()->designation_id == 3 )
-                                            <div class="form-group row">
-                                                <label for="headAcceptance" class="col-sm-2 form-label">Your Acceptance</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" name="headAcceptance" id="headAcceptance">
-                                                        <option value="{{ ($headAcceptance == NULL) ? '' : $headAcceptance }}">{{ ($headAcceptance == NULL) ? 'Select' : $headAcceptance }}</option>
-                                                        <option value="Pending">Pending</option>
-                                                        <option value="Accepted">Accepted</option>
-                                                        <option value="Rejected">Rejected</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            @endif
-                                            <div class="form-group row">
-                                                <label for="headComment" class="col-sm-2 form-label">Head comment</label>
-                                                <div class="col-sm-6">
-                                                    @if(Auth::User()->designation_id == 3 )
-                                                    <textarea name="headComment" class="form-control" id="headComment" cols="30" rows="10" required>{{ ($headGeneralComment != NULL) ? $headGeneralComment['comment'] : ''}}</textarea>
-                                                    @endif
-                                                    @error('headComment')
-                                                    <br>
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger">{{ $message }}</strong>
-                                                    </span>
-                                                    @enderror
-                                                    @if(Auth::User()->department_id == 2)
-                                                    <p>{{ ($headGeneralComment != NULL) ? $headGeneralComment['comment'] : 'N/A' }}</p>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            @endif
-
-                                            @if(Auth::User()->department_id == 2 )
-                                            <div class="form-group row">
-                                                <label for="hrAcceptance" class="col-sm-2 form-label">Your Acceptance</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" name="hrAcceptance" id="hrAcceptance">
-                                                        <option value="{{ ($hrAcceptance == NULL) ? '' : $hrAcceptance }}">{{ ($hrAcceptance == NULL) ? 'Select' : $hrAcceptance }}</option>
-                                                        <option value="Pending">Pending</option>
-                                                        <option value="Accepted">Accepted</option>
-                                                        <option value="Rejected">Rejected</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="hrComment" class="col-sm-2 form-label">HR comment</label>
-                                                <div class="col-sm-6">
-                                                    <textarea name="hrComment" class="form-control" id="hrComment" cols="30" rows="10" required>{{ ($hrGeneralComment != NULL) ? $hrGeneralComment['comment'] : '' }}</textarea>
-                                                    @error('hrComment')
+                                                    @error('accepatanceStatus')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -293,21 +225,31 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            @endif
-
+                                            
+                                            <div class="form-group row">
+                                                <label for="acceptanceComment" class="col-sm-2 form-label">Your Comment </label>
+                                                <div class="col-sm-6">
+                                                <textarea class="form-control" name="acceptanceComment" id="acceptanceComment" cols="30" rows="10" required>{{ ($acceptanceComment != NULL) ? $acceptanceComment : '' }}</textarea>
+                                                    @error('acceptanceComment')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror 
+                                                </div>
+                                            </div>
                                             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
-                                        <input type="hidden" name="leadGeneralCommentId" value="{{ ($leadGeneralComment != NULL) ? $leadGeneralComment['id'] : NULL }} ">
-                                        <input type="hidden" name="headGeneralCommentId" value="{{ ($headGeneralComment != NULL) ? $headGeneralComment['id'] : NULL }} ">
-                                        <input type="hidden" name="hrGeneralCommentId" value="{{ ($hrGeneralComment != NULL) ? $hrGeneralComment['id'] : NULL }} ">
+                                        
                                         <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
+                        @endif
                         @endif
                         @endif
                     </div>
@@ -816,7 +758,7 @@
                 <!-- /End of feedback -->
                 @endif
 
-                @if(date('d-m-Y') >= date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days')))
+                @if($displayNodue)
                 <!-- No due forms -->
                 <div class="tab-pane" id="tab_4-2">
                     <div class="container-fluid">
@@ -1110,6 +1052,7 @@
                 <!-- /.tab-pane -->
                 @endif
 
+                @if(Auth::User()->department_id == 2 && $showAnswers != NULL)
                 <!-- Exit interview answers -->
                 <div class="tab-pane" id="tab_5-2">
                     @if(Auth::User()->department_id == 2)
@@ -1122,9 +1065,6 @@
                                         <h3 class="box-title">Exit Interview Answers</h3>
                                     </div>
                                     <div class="box-body">
-                                    @if($answers == NULL)
-                                        <h4 class="text-center"> Not yet answered</h4>
-                                    @else
                                         <table class="table table-bordered">
                                             <thead>
                                                 <th width="5%"> Q\N</th>
@@ -1142,8 +1082,52 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                    @endif
                                     </div>
+                                </div>
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">HR EXIT INTERVIEW</h3>
+                                    </div>
+                                    <form method="get" action="{{ route('addOrUpdateHrInterview') }}">
+                                            @csrf
+                                            {{ method_field('PUT') }}
+                                        <div class="box-body">
+                                            <div class="input_fields_wrap">
+                                                <button class="add_field_button btn btn-success" style="float: right;">Add More Fields</button>
+                                                
+                                                <table class="table table-striped" style="clear: both;">
+                                                    <thead>
+                                                        <tr>
+                                                        <th scope="col">Comment</th>
+                                                        <th scope="col">Action Area</th>
+                                                        <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table_body_wrap">
+                                                        <tr>
+                                                        <td>
+                                                            <input type="text" name="hr_exitinterview_comment[]" class="form-control" required> 
+                                                        </td>
+                                                        <td>
+                                                            <select name="hr_exitinterview_actionarea[]" class="form-control" required>
+                                                                <option value="">Select</option>
+                                                                <option value="Salary">Salary</option>
+                                                                <option value="Leave and Holiday">Leave and Holiday</option>
+                                                                <option value="Benifits">Benifits</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="remove_field btn btn-danger">Remove</button>
+                                                        <td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="box-footer">
+                                            <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -1151,6 +1135,7 @@
                     @endif
                 </div>
                 <!-- /.tab-pane -->
+                @endif
 
                 @if(\Auth::User()->department_id == 2)
                 <!-- Final Exit check list -->
@@ -1351,6 +1336,10 @@
         <!-- /.col -->
     </div>
 </div>
+
+
+
+
 
 
 @endsection
