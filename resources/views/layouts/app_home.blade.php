@@ -58,10 +58,10 @@
                 </a>
                 <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
                   {{ csrf_field() }}
-                </form> 
-              </li> 
-            </ul> 
-          </li> 
+                </form>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     </nav>
@@ -146,6 +146,7 @@
   break;
   }
   @endif
+
 </script>
 </body>
 </html>

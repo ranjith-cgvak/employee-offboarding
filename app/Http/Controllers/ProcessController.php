@@ -10,6 +10,7 @@ use App\Comments;
 use App\AcceptanceStatus;
 use App\NoDue;
 use App\FinalExitChecklist;
+use App\HrExitInterviewComments;
 use App\Support\Facades\DB;
 use Carbon\Carbon;
 class ProcessController extends Controller
@@ -20,19 +21,18 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function index()
- {
+    public function index(){
         // Head
         if ( \Auth::User()->designation_id == 3 ) {
             $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol', 'is_completed' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->get();
         }
         //HR OR SA
         else if ( ( \Auth::User()->department_id == 2 ) || ( \Auth::User()->department_id == 7 ) ) {
             $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol', 'is_completed' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->get();
         }
@@ -40,7 +40,7 @@ class ProcessController extends Controller
         else {
             $leadName = \Auth::User()->display_name;
             $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol', 'is_completed' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->where( 'lead', $leadName )
             ->get();
@@ -58,8 +58,7 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function create()
-    { 
+    public function create() {
         //
     }
 
@@ -70,8 +69,7 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function store( Request $request )
- {
+    public function store( Request $request ){
         //
     }
 
@@ -82,8 +80,7 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function show( $id )
- {
+    public function show( $id ){
         //
     }
 
@@ -94,10 +91,9 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function edit( $id )
- {
+    public function edit( $id ){
         $emp_resignation = \DB::table( 'resignations' )
-        ->select( 'resignations.id', 'employee_id', 'display_name', 'department_name', 'comment_on_resignation', 'name', 'designation', 'joining_date', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'users.created_at', 'reason', 'comment_on_withdraw', 'changed_dol', 'other_reason' )
+        ->select( 'resignations.id', 'employee_id', 'display_name', 'department_name', 'comment_on_resignation', 'name', 'designation', 'joining_date', 'date_of_resignation', 'date_of_leaving',\DB::raw("DATE_FORMAT(date_of_withdraw, '%d-%m-%Y') as date_of_withdraw"), 'lead', 'users.created_at', 'reason', 'comment_on_withdraw', 'changed_dol', 'other_reason' )
         ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
         ->where( 'resignations.id', $id )
         ->first();
@@ -189,7 +185,7 @@ class ProcessController extends Controller
             }
             if( $acceptanceStatus->reviewed_by == 'hr') {
                 $hrAcceptance = $acceptanceStatus->acceptance_status;
-            }  
+            }
         }
 
         $acceptanceValue = NULL;
@@ -201,7 +197,7 @@ class ProcessController extends Controller
             $acceptanceComment = $headGeneralComment['comment'];
             $is_reviewed = ($leadAcceptance == 'Accepted') ? true : false;
         }
-        //HR 
+        //HR
         else if ( ( \Auth::User()->department_id == 2 ) ) {
             $acceptanceValue = $hrAcceptance;
             $acceptanceComment = $hrGeneralComment['comment'];
@@ -214,7 +210,11 @@ class ProcessController extends Controller
             $is_reviewed = true;
         }
 
-        //fixing no due when to appear 
+        //Feedback tab view enable
+
+        $is_feedback_enable = ($leadAcceptance == 'Accepted' && $headAcceptance == 'Accepted' && $hrAcceptance == 'Accepted') ? true : false;
+
+        //fixing no due when to appear
         $today = Carbon::now();
         $nodueDate = Carbon::parse(date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days')));
         $displayNodue = $today >= $nodueDate;
@@ -224,7 +224,33 @@ class ProcessController extends Controller
         ->where( 'resignation_id', $id )
         ->first();
 
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance','acceptanceValue','acceptanceComment','is_reviewed','displayNodue','showAnswers'));
+        //Exit interview comments
+        $hrExitInterviewComments = \DB::table( 'hr_exit_interview_comments' )
+        ->where( 'resignation_id', $id )
+        ->get();
+
+        //completed no due
+        $completed_no_due = \DB::table( 'no_dues' )
+        ->where([
+            ['no_dues.resignation_id', $id],
+            ['knowledge_transfer_lead','!=',NULL],
+            ['mail_id_closure_lead','!=',NULL],
+            ['knowledge_transfer_head','!=',NULL],
+            ['mail_id_closure_head','!=',NULL],
+            ['id_card','!=',NULL],
+            ['nda','!=',NULL],
+            ['official_email_id','!=',NULL],
+            ['skype_account','!=',NULL]
+            ])
+        ->first();
+
+        //HR list for select the name in final exit checklist
+
+        $hr_list = \DB::table( 'users' )
+        ->where( 'department_id', 2 )
+        ->get();
+
+        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance','acceptanceValue','acceptanceComment','is_reviewed','displayNodue','showAnswers','hrExitInterviewComments','is_feedback_enable','completed_no_due','hr_list'));
     }
 
     /**
@@ -237,8 +263,7 @@ class ProcessController extends Controller
 
     //Updating lead for the user in process.resignationList blade
 
-    public function update( Request $request, $id )
- {
+    public function update( Request $request, $id ){
         $request->validate( [
             'lead'=>'required'
         ] );
@@ -257,8 +282,8 @@ class ProcessController extends Controller
             'content' => 'has applied resignation',
             'date' => '2-2-2022'
         ];
-       
-        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));  
+
+        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         dd("mail sent now");
     }
@@ -315,7 +340,7 @@ class ProcessController extends Controller
             'message' => 'Date of leaving has been changed!',
             'alert-type' => 'success'
         );
-        
+
         //Sending mail
         $empname = Resignation::find( $resignationId )
         ->select('display_name')
@@ -329,7 +354,7 @@ class ProcessController extends Controller
             'content' => "resignation's date of leaving has changed",
             'date' => $request->get( 'dateOfLeaving' )
         ];
-       
+
         \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
@@ -338,7 +363,7 @@ class ProcessController extends Controller
     //function to add or update acceptance details
     public function addOrUpdateResignationAcceptance( Request $request ) {
         $resignationId = $request->get( 'resignationId' );
-        
+
         $request->validate( [
             'acceptanceComment'=>'required',
             'accepatanceStatus'=>'required'
@@ -368,7 +393,7 @@ class ProcessController extends Controller
         }
         //HR
         else if ( \Auth::User()->department_id == 2 ) {
-            
+
             $acceptanceStatusComment = Comments::updateOrCreate([
                 'resignation_id' => $request->get( 'resignationId' ),
                 'comment_by' => 'hr',
@@ -391,7 +416,7 @@ class ProcessController extends Controller
         }
         //lead
         else {
-            
+
             $acceptanceStatusComment = Comments::updateOrCreate([
                 'resignation_id' => $request->get( 'resignationId' ),
                 'comment_by' => 'lead',
@@ -413,15 +438,14 @@ class ProcessController extends Controller
             $acceptanceStatus->save();
         }
 
-        
+
         $notification=array(
             'message' => 'Comments has been recorded!',
             'alert-type' => 'success'
         );
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
-        
-    }
 
+    }
 
 
     //add or update date of withdraw comment
@@ -532,7 +556,7 @@ class ProcessController extends Controller
             'name' => $empname->display_name,
             'content' => "has been added!"
         ];
-       
+
         \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
@@ -595,7 +619,7 @@ class ProcessController extends Controller
             'name' => $empname->display_name,
             'content' => "has been updated!"
         ];
-       
+
         \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
@@ -734,6 +758,8 @@ class ProcessController extends Controller
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
+    //Final checklist store
+
     public function storeFinalCheckList( Request $request ) {
         $request->validate( [
             'type_of_exit'=>'required',
@@ -806,6 +832,8 @@ class ProcessController extends Controller
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
+    //Final checklist update
+
     public function updateFinalCheckList( Request $request ) {
         $request->validate( [
             'type_of_exit'=>'required',
@@ -874,19 +902,29 @@ class ProcessController extends Controller
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
+    //Add and update HR exit interview comments
+
     public function addOrUpdateHrInterview(Request $request) {
-        
+        $resignationId = $request->get( 'resignationId' );
         for($arraySize = 0; $arraySize < count($request->hr_exitinterview_comment) ; $arraySize++ ) {
-            echo "<pre>";
-            echo $request->hr_exitinterview_comment[$arraySize];
-            echo "<br>";
-            echo $request->hr_exitinterview_actionarea[$arraySize];
-            
+            $hrInterview = HrExitInterviewComments::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'action_area' => $request->hr_exitinterview_actionarea[$arraySize],
+            ],
+            [
+                'comments' => $request->hr_exitinterview_comment[$arraySize],
+                'commented_by' => $request->commented_by
+            ]
+            );
+            $hrInterview->save();
 
         }
-        dd(count($request->hr_exitinterview_comment));
-        
-        
+        $notification=array(
+            'message' => 'Exit interviewComments has been recorded!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
+
     }
     /**
     * Remove the specified resource from storage.

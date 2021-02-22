@@ -14,7 +14,7 @@
                 <p><b>Employee ID: </b>{{ $user->emp_id }}</p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joining: </b>{{ $converted_dates['joining_date'] }}</p>
+                <p><b>Date of Joining: </b>{{ $converted_dates['joining_date'] }}</p>
             </div>
         </div>
         <div class="row">
@@ -46,7 +46,7 @@
                     <div class="box-body">
                         <div class="form-group row">
                             <label for="reason" class="col-sm-2 form-label">Reason For Leaving <span class="text-danger">*</span></label>
-                            
+
                             <div class="col-sm-6">
                                 <select name="reason" id="reason" class="form-control" onchange='CheckOthers(this.value)'>
                                 <option value="">Select</option>
@@ -100,14 +100,14 @@
                         <div class="form-group row">
                             <label for="dateOfLeaving" class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" value="{{ Date('m/d/Y', strtotime('+3 months')) }}" id="dateOfLeaving" name="dateOfLeaving">
+                                <input type="text" readonly class="form-control" value="{{ Date('d-m-Y', strtotime('+3 months')) }}" id="dateOfLeaving" name="dateOfLeaving">
                                 @error('dateOfLeaving')
                                 <br>
                                 <span class="invalid-feedback" role="alert">
                                     <strong class="text-danger">{{ $message }}</strong>
                                 </span>
                                 @enderror
-                            </div>     
+                            </div>
                         </div>
                     </div>
                     <!-- /.box-body -->
@@ -126,7 +126,7 @@ function CheckOthers(val){
     var element=document.getElementById('othersDiv');
     if(val=='others')
     element.style.display='block';
-    else  
+    else
         element.style.display='none';
     }
 </script>

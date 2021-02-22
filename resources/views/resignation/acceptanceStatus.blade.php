@@ -13,7 +13,7 @@
                 <p><b>Employee ID: </b>{{ $user->emp_id }}</p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joining: </b>{{ $converted_dates['joining_date'] }}</p>
+                <p><b>Date of Joining: </b>{{ $converted_dates['joining_date'] }}</p>
             </div>
         </div>
         <div class="row">

@@ -105,7 +105,7 @@ class ResignationController extends Controller
             }
             if( $acceptanceStatus->reviewed_by == 'hr') {
                 $hrAcceptance = $acceptanceStatus->acceptance_status;
-            }  
+            }
         }
 
         return view( 'resignation.acceptanceStatus', compact( 'myResignation', 'user', 'converted_dates', 'leadGeneralComment', 'headGeneralComment', 'hrGeneralComment','leadAcceptance','headAcceptance','hrAcceptance' ) );
@@ -133,7 +133,7 @@ class ResignationController extends Controller
         $joining_date = strtotime($user->joining_date);
         $converted_joining_date = date("d-m-Y", $joining_date);
         $converted_dates = array("joining_date"=>$converted_joining_date);
-        
+
         $answers = \DB::table('user_answers')
         ->where('user_answers.resignation_id',$myResignation->id)
         ->first();
@@ -237,7 +237,7 @@ class ResignationController extends Controller
             'content' => 'has applied resignation',
             'date' => $request->get( 'dateOfResignation' )
         ];
-       
+
         \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
         return redirect('/resignation')->with($notification);
     }
@@ -287,10 +287,14 @@ class ResignationController extends Controller
         $resignation->date_of_withdraw = $withdrawDate;
         $resignation->comment_on_withdraw = $request->get( 'comment' );
         $resignation->save();
-        
+
         \DB::table('users')
         ->where('id', \Auth::User()->id)
         ->update(['lead' => NULL]);
+
+        \DB::table('resignations')
+        ->where('id', $id)
+        ->update(['is_completed' => 0]);
 
         $notification=array(
             'message' => 'Resignation has been withdrawn!',
@@ -305,7 +309,7 @@ class ResignationController extends Controller
             'content' => 'has withdrawn resignation',
             'date' => $withdrawDate
         ];
-       
+
         \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         return redirect('/resignation/create')->with($notification);

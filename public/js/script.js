@@ -8,14 +8,14 @@ $(document).ready(function(){
         }
         return date;
     }
-    //converting a date function 
+    //converting a date function
     function convert(str) {
         var date = new Date(str),
           mnth = ("0" + (date.getMonth() + 1)).slice(-2),
           day = ("0" + date.getDate()).slice(-2);
-        return [mnth, day, date.getFullYear()].join("/");
+        return [ day,mnth, date.getFullYear()].join("-");
       }
-      
+
     //Hooking the input value to the date converted
     $('#dateOfResignation').change(function(){
         var date = new Date($('#dateOfResignation').val());
@@ -31,7 +31,7 @@ $(document).ready(function(){
         var convertedDate = convert(leavingdate);
         $('#dateOfLeaving').val(convertedDate);
     })
-    
+
     //Adding tooltip
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
@@ -55,7 +55,7 @@ $(document).ready(function(){
         $(tableBody).append(`
         <tr>
         <td>
-            <input type="text" name='hr_exitinterview_comment[]' class="form-control" required>  
+            <input type="text" name='hr_exitinterview_comment[]' class="form-control" required>
         </td>
         <td>
             <select name="hr_exitinterview_actionarea[]" class="form-control" required>
@@ -72,7 +72,7 @@ $(document).ready(function(){
         `);
       }
     });
-    
+
     $(tableBody).on("click",".remove_field", function(e){ //user click on remove text
       e.preventDefault(); $(this).parent('td').parent('tr').remove(); x--;
     })

@@ -13,7 +13,7 @@
                 <p><b>Employee ID: </b>{{ $user->emp_id }}</p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joining: </b>{{ $converted_dates['joining_date'] }}</p>
+                <p><b>Date of Joining: </b>{{ $converted_dates['joining_date'] }}</p>
             </div>
         </div>
         <div class="row">
@@ -68,14 +68,14 @@
                 <label for="dateOfLeaving" class="col-sm-3 form-label">Date Of Leaving As Per Policy </label>
                 <div class="col-sm-4">
                     <p>{{ $converted_dates['date_of_leaving'] }}</p>
-                </div>     
+                </div>
             </div>
             @if($myResignation->changed_dol != NULL)
             <div class="form-group row">
                 <label for="dateOfLeaving" class="col-sm-3 form-label">Accepted Date Of Leaving </label>
                 <div class="col-sm-4">
                     <p>{{ $converted_dates['changed_dol'] }}</p>
-                </div>     
+                </div>
             </div>
             @endif
         </div>

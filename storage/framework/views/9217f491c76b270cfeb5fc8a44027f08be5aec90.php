@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 
 <!-- Employee details -->
@@ -69,7 +67,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                </div>     
+                </div>
             </div>
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
@@ -90,7 +88,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                </div>     
+                </div>
             </div>
             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
             <input type="hidden" name="leadDolCommentId" value="<?php echo e(($leadDolComment != NULL) ? $leadDolComment['id'] : NULL); ?> ">
@@ -119,8 +117,8 @@ unset($__errorArgs, $__bag); ?>
                 <li><a href="#tab_1-2" data-toggle="tab">Withdraw Details</a></li>
                 <?php endif; ?>
                 <?php if($emp_resignation->date_of_withdraw == NULL ): ?>
-                <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
-                <?php if(\Auth::User()->department_id != 7): ?>
+                <li><a href="#tab_2-2" data-toggle="tab">Acceptance Status</a></li>
+                <?php if(\Auth::User()->department_id != 7 && $is_feedback_enable): ?>
                 <li><a href="#tab_3-2" data-toggle="tab">Feedback</a></li>
                 <?php endif; ?>
                 <?php if($displayNodue): ?>
@@ -129,7 +127,7 @@ unset($__errorArgs, $__bag); ?>
                 <?php if(Auth::User()->department_id == 2 && $showAnswers != NULL): ?>
                 <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
                 <?php endif; ?>
-                <?php if(\Auth::User()->department_id == 2): ?>
+                <?php if(\Auth::User()->department_id == 2 && $completed_no_due != NULL && $showAnswers != NULL): ?>
                 <li><a href="#tab_6-2" data-toggle="tab">Final Exit Checklist</a></li>
                 <?php endif; ?>
                 <?php endif; ?>
@@ -147,35 +145,37 @@ unset($__errorArgs, $__bag); ?>
                                     <!-- /.box-header -->
                                     <!-- form start -->
                                     <div class="box-body">
+                                    <?php if(\Auth::User()->department_id != 7): ?>
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Reason For Leaving the job</label>
+                                            <label class="col-sm-3 form-label">Reason For Leaving the job</label>
                                             <div class="col-sm-6">
                                                 <p><?php echo e($emp_resignation->reason); ?></p>
                                             </div>
                                         </div>
                                         <?php if($emp_resignation->other_reason != NULL): ?>
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Other Reasons </label>
+                                            <label class="col-sm-3 form-label">Other Reasons </label>
                                             <div class="col-sm-6">
                                                 <p><?php echo e($emp_resignation->other_reason); ?></p>
                                             </div>
                                         </div>
                                         <?php endif; ?>
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Comments on leaving</label>
+                                            <label class="col-sm-3 form-label">Comments on leaving</label>
                                             <div class="col-sm-6">
                                                 <p><?php echo e($emp_resignation->comment_on_resignation); ?></p>
                                             </div>
                                         </div>
+                                    <?php endif; ?>
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Date Of Resignation</label>
+                                            <label class="col-sm-3 form-label">Date Of Resignation</label>
                                             <div class="col-sm-4">
                                                 <p><?php echo e($converted_dates['date_of_resignation']); ?></p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
-                                            <div class="col-sm-10">
+                                            <label class="col-sm-3 form-label">Date Of Leaving As Per Policy </label>
+                                            <div class="col-sm-9">
                                                 <div class="row">
                                                     <div class="col-sm-2">
                                                     <p><?php echo e($converted_dates['date_of_leaving']); ?></p>
@@ -185,8 +185,8 @@ unset($__errorArgs, $__bag); ?>
                                         </div>
                                         <?php if($emp_resignation->date_of_withdraw == NULL): ?>
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Date Of Leaving </label>
-                                            <div class="col-sm-10">
+                                            <label class="col-sm-3 form-label">Date Of Leaving </label>
+                                            <div class="col-sm-9">
                                                 <div class="row">
                                                     <div class="col-sm-2">
                                                     <p><?php echo e($converted_dates['changed_dol']); ?></p>
@@ -204,7 +204,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <?php if(\Auth::User()->department_id != 7): ?>
                         <?php if($emp_resignation->date_of_withdraw == NULL): ?>
                         <?php if($is_reviewed): ?>
@@ -223,7 +223,7 @@ unset($__errorArgs, $__bag); ?>
                                         <?php echo e(method_field('PUT')); ?>
 
                                         <div class="box-body">
-                                            
+
                                             <div class="form-group row">
                                                 <label for="accepatanceStatus" class="col-sm-2 form-label">Your Acceptance</label>
                                                 <div class="col-sm-6">
@@ -248,7 +248,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="form-group row">
                                                 <label for="acceptanceComment" class="col-sm-2 form-label">Your Comment </label>
                                                 <div class="col-sm-6">
@@ -265,14 +265,14 @@ $message = $__bag->first($__errorArgs[0]); ?>
                                                     <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?> 
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
-                                        
+
                                         <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                         </div>
                                     </form>
@@ -361,7 +361,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
-                                                    <?php if(Auth::User()->designation_id == 3): ?> 
+                                                    <?php if(Auth::User()->designation_id == 3): ?>
                                                     <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required><?php echo e(($headDowComment != NULL) ? $headDowComment['comment'] : ''); ?></textarea>
                                                     <?php endif; ?>
                                                     <?php $__errorArgs = ['withdrawHeadComment'];
@@ -386,7 +386,7 @@ unset($__errorArgs, $__bag); ?>
                                             </div>
                                             <?php endif; ?>
 
-                                            <?php if(Auth::User()->department_id == 2): ?> 
+                                            <?php if(Auth::User()->department_id == 2): ?>
                                             <div class="form-group row">
                                                 <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
                                                 <div class="col-sm-4">
@@ -422,9 +422,9 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                         <?php endif; ?>
-                        
+
                     </div>
-                
+
                 </div>
                 <!-- /.tab-pane -->
                 <?php endif; ?>
@@ -440,7 +440,7 @@ unset($__errorArgs, $__bag); ?>
                                         <h3 class="box-title">Acceptance Status</h3>
                                     </div>
                                     <div class="box-body">
-                                        
+
                                         <table class="table table-bordered">
                                             <thead>
                                                 <th></th>
@@ -485,14 +485,14 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
 
                 </div>
                 <!-- /.tab-pane -->
                 <?php endif; ?>
 
-                <?php if(\Auth::User()->department_id != 7): ?>
+                <?php if(\Auth::User()->department_id != 7 && $is_feedback_enable): ?>
                 <!-- Feedback form -->
                 <div class="tab-pane" id="tab_3-2">
                     <div class="container-fluid">
@@ -535,7 +535,7 @@ unset($__errorArgs, $__bag); ?>
                                                     <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_secondary); ?></td>
                                                 <?php endif; ?>
                                                 <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?>" required>       
+                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?>" required>
                                                         <?php $__errorArgs = ['secondary_skill'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -579,13 +579,13 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                                         </td>
                                                     <?php endif; ?>
-                                                    
+
                                                 </tr>
 
                                             </table>
                                             </br>
                                             <table class="table table-bordered">
-                                                
+
                                             </table>
                                             </br>
                                             <table class="table table-bordered">
@@ -836,7 +836,7 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            
+
                                             </br>
                                             <?php if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                 <div class="form-group">
@@ -868,15 +868,15 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                                 </div>
-                                                
+
                                                 <div class="form-group row">
                                                     <div class="col-xs-12">
                                                         <label class="form-label">Thankyou for your valuable feedback</label>
                                                     </div>
                                                 </div>
                                             <?php endif; ?>
-                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>"> 
-                                            <input type="hidden" id="feedbackId" name="feedbackId" value="<?php echo e((!$feedback) ? '' : $feedback->id); ?>"> 
+                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
+                                            <input type="hidden" id="feedbackId" name="feedbackId" value="<?php echo e((!$feedback) ? '' : $feedback->id); ?>">
                                         </div>
                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                             <div class="box-footer">
@@ -888,7 +888,7 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                     </div>
-                
+
                 </div>
                 <!-- /.tab-pane -->
                 <!-- /End of feedback -->
@@ -992,7 +992,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                                                 </div>
-                                                            </td> 
+                                                            </td>
                                                         </tr>
                                                     <?php endif; ?>
                                                     <!-- No due forms for head -->
@@ -1075,7 +1075,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                                                 </div>
-                                                            </td> 
+                                                            </td>
                                                         </tr>
                                                     <?php endif; ?>
                                                     <!-- No due forms for HR -->
@@ -1158,7 +1158,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                                                 </div>
-                                                            </td> 
+                                                            </td>
                                                         </tr>
                                                     <?php endif; ?>
                                                     <!-- No due forms for SA -->
@@ -1241,7 +1241,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                                                 </div>
-                                                            </td> 
+                                                            </td>
                                                         </tr>
                                                     <?php endif; ?>
                                                 </tbody>
@@ -1318,7 +1318,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <th width="5%"> Q\N</th>
                                                 <th width="65%">Exit Interview Question</th>
                                                 <th>Exit Interview Answers</th>
-                                                
+
                                             </thead>
                                             <tbody>
                                                 <?php $__currentLoopData = $answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -1343,7 +1343,7 @@ unset($__errorArgs, $__bag); ?>
                                         <div class="box-body">
                                             <div class="input_fields_wrap">
                                                 <button class="add_field_button btn btn-success" style="float: right;">Add More Fields</button>
-                                                
+
                                                 <table class="table table-striped" style="clear: both;">
                                                     <thead>
                                                         <tr>
@@ -1353,9 +1353,27 @@ unset($__errorArgs, $__bag); ?>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="table_body_wrap">
+                                                    <?php $__currentLoopData = $hrExitInterviewComments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hrExitInterviewComment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" name="hr_exitinterview_comment[]" class="form-control" value="<?php echo e($hrExitInterviewComment->comments); ?>" required>
+                                                            </td>
+                                                            <td>
+                                                                <select name="hr_exitinterview_actionarea[]" class="form-control" required>
+                                                                    <option value="<?php echo e($hrExitInterviewComment->action_area); ?>"><?php echo e($hrExitInterviewComment->action_area); ?></option>
+                                                                    <option value="Salary">Salary</option>
+                                                                    <option value="Leave and Holiday">Leave and Holiday</option>
+                                                                    <option value="Benifits">Benifits</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="remove_field btn btn-danger" disabled title="Already recorded">Remove</button>
+                                                            <td>
+                                                        </tr>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                         <tr>
                                                         <td>
-                                                            <input type="text" name="hr_exitinterview_comment[]" class="form-control" required> 
+                                                            <input type="text" name="hr_exitinterview_comment[]" class="form-control" required>
                                                         </td>
                                                         <td>
                                                             <select name="hr_exitinterview_actionarea[]" class="form-control" required>
@@ -1372,8 +1390,26 @@ unset($__errorArgs, $__bag); ?>
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <div class="form-group row">
+                                                <div class="col-sm-6">
+                                                    <label class="control-label" for="date_of_entry">Date: <span style="color: #757575;"><?php echo e(Date('d-m-Y')); ?></span> </label>
+                                                    <input type="hidden" name="date_of_entry" value="<?php echo e(Date('d-m-Y')); ?>">
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <label class="control-label pull-right" for="updated_by">Updated By:
+                                                    <select name="commented_by" id="commented_by" style="color: #757575;">
+                                                        <option value="<?php echo e(Auth::User()->display_name); ?>"><?php echo e(Auth::User()->display_name); ?></option>
+                                                        <?php $__currentLoopData = $hr_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hr): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($hr->display_name); ?>"><?php echo e($hr->display_name); ?></option>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                    </select>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="box-footer">
+                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
                                             <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                         </div>
                                     </form>
@@ -1386,7 +1422,7 @@ unset($__errorArgs, $__bag); ?>
                 <!-- /.tab-pane -->
                 <?php endif; ?>
 
-                <?php if(\Auth::User()->department_id == 2): ?>
+                <?php if(\Auth::User()->department_id == 2 && $completed_no_due != NULL && $showAnswers != NULL): ?>
                 <!-- Final Exit check list -->
                 <div class="tab-pane" id="tab_6-2">
                     <div class="container-fluid">
@@ -1625,16 +1661,24 @@ unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="control-label col-sm-2" for="date_of_entry">Date: <?php echo e(Date('Y-m-d')); ?></label>
-                                                <input type="hidden" name="date_of_entry" value="<?php echo e(Date('Y-m-d')); ?>"> 
+                                                <div class="col-sm-2">
+                                                    <label class="control-label" for="date_of_entry"> Date: <span style="color: #757575;"><?php echo e(Date('d-m-Y')); ?></span> </label>
+                                                    <input type="hidden" name="date_of_entry" value="<?php echo e(Date('d-m-Y')); ?>">
+                                                </div>
                                                 <div class="col-sm-4">
-                                                <label class="control-label pull-right" for="updated_by">Updated By: <?php echo e(Auth::User()->display_name); ?></label>
-                                                <input type="hidden" name="updated_by" value="<?php echo e(Auth::User()->display_name); ?>">
+                                                <label class="control-label pull-right" for="updated_by">Updated By:
+                                                <select name="updated_by" id="updated_by" style="color: #757575;">
+                                                <option value="<?php echo e(Auth::User()->display_name); ?>"><?php echo e(Auth::User()->display_name); ?></option>
+                                                <?php $__currentLoopData = $hr_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hr): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($hr->display_name); ?>"><?php echo e($hr->display_name); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </select>
+                                                </label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="box-footer">
-                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>"> 
+                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
                                             <input type="hidden" id="finalChecklistId" name="finalChecklistId" value="<?php echo e((!$finalCheckList) ? '' : $finalCheckList->id); ?>">
                                             <button type="submit" class="btn btn-primary" id="myBtn">Update</button>
                                         </div>

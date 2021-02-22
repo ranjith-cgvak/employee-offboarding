@@ -59,10 +59,10 @@
                 <form id="frm-logout" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
                   <?php echo e(csrf_field()); ?>
 
-                </form> 
-              </li> 
-            </ul> 
-          </li> 
+                </form>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     </nav>
@@ -147,6 +147,7 @@
   break;
   }
   <?php endif; ?>
+
 </script>
 </body>
 </html>

@@ -61,7 +61,7 @@
                         <strong class="text-danger">{{ $message }}</strong>
                     </span>
                     @enderror
-                </div>     
+                </div>
             </div>
             <div class="form-group row">
                 <label for="commentDol" class="col-sm-4 form-label">Comment DOL: </label>
@@ -75,7 +75,7 @@
                         <strong class="text-danger">{{ $message }}</strong>
                     </span>
                     @enderror
-                </div>     
+                </div>
             </div>
             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
             <input type="hidden" name="leadDolCommentId" value="{{ ($leadDolComment != NULL) ? $leadDolComment['id'] : NULL }} ">
@@ -104,8 +104,8 @@
                 <li><a href="#tab_1-2" data-toggle="tab">Withdraw Details</a></li>
                 @endif
                 @if($emp_resignation->date_of_withdraw == NULL )
-                <li><a href="#tab_2-2" data-toggle="tab">Acceptance status</a></li>
-                @if(\Auth::User()->department_id != 7)
+                <li><a href="#tab_2-2" data-toggle="tab">Acceptance Status</a></li>
+                @if(\Auth::User()->department_id != 7 && $is_feedback_enable)
                 <li><a href="#tab_3-2" data-toggle="tab">Feedback</a></li>
                 @endif
                 @if($displayNodue)
@@ -114,7 +114,7 @@
                 @if(Auth::User()->department_id == 2 && $showAnswers != NULL)
                 <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
                 @endif
-                @if(\Auth::User()->department_id == 2)
+                @if(\Auth::User()->department_id == 2 && $completed_no_due != NULL && $showAnswers != NULL)
                 <li><a href="#tab_6-2" data-toggle="tab">Final Exit Checklist</a></li>
                 @endif
                 @endif
@@ -132,35 +132,37 @@
                                     <!-- /.box-header -->
                                     <!-- form start -->
                                     <div class="box-body">
+                                    @if(\Auth::User()->department_id != 7)
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Reason For Leaving the job</label>
+                                            <label class="col-sm-3 form-label">Reason For Leaving the job</label>
                                             <div class="col-sm-6">
                                                 <p>{{ $emp_resignation->reason }}</p>
                                             </div>
                                         </div>
                                         @if($emp_resignation->other_reason != NULL)
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Other Reasons </label>
+                                            <label class="col-sm-3 form-label">Other Reasons </label>
                                             <div class="col-sm-6">
                                                 <p>{{ $emp_resignation->other_reason }}</p>
                                             </div>
                                         </div>
                                         @endif
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Comments on leaving</label>
+                                            <label class="col-sm-3 form-label">Comments on leaving</label>
                                             <div class="col-sm-6">
                                                 <p>{{ $emp_resignation->comment_on_resignation }}</p>
                                             </div>
                                         </div>
+                                    @endif
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Date Of Resignation</label>
+                                            <label class="col-sm-3 form-label">Date Of Resignation</label>
                                             <div class="col-sm-4">
                                                 <p>{{ $converted_dates['date_of_resignation'] }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
-                                            <div class="col-sm-10">
+                                            <label class="col-sm-3 form-label">Date Of Leaving As Per Policy </label>
+                                            <div class="col-sm-9">
                                                 <div class="row">
                                                     <div class="col-sm-2">
                                                     <p>{{ $converted_dates['date_of_leaving'] }}</p>
@@ -170,8 +172,8 @@
                                         </div>
                                         @if($emp_resignation->date_of_withdraw == NULL)
                                         <div class="form-group row">
-                                            <label class="col-sm-2 form-label">Date Of Leaving </label>
-                                            <div class="col-sm-10">
+                                            <label class="col-sm-3 form-label">Date Of Leaving </label>
+                                            <div class="col-sm-9">
                                                 <div class="row">
                                                     <div class="col-sm-2">
                                                     <p>{{ $converted_dates['changed_dol'] }}</p>
@@ -189,7 +191,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         @if(\Auth::User()->department_id != 7)
                         @if($emp_resignation->date_of_withdraw == NULL)
                         @if($is_reviewed)
@@ -207,7 +209,7 @@
                                         @csrf
                                         {{ method_field('PUT') }}
                                         <div class="box-body">
-                                            
+
                                             <div class="form-group row">
                                                 <label for="accepatanceStatus" class="col-sm-2 form-label">Your Acceptance</label>
                                                 <div class="col-sm-6">
@@ -225,7 +227,7 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="form-group row">
                                                 <label for="acceptanceComment" class="col-sm-2 form-label">Your Comment </label>
                                                 <div class="col-sm-6">
@@ -235,14 +237,14 @@
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong class="text-danger">{{ $message }}</strong>
                                                     </span>
-                                                    @enderror 
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
                                         </div>
                                         <!-- /.box-body -->
                                         <div class="box-footer">
-                                        
+
                                         <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                         </div>
                                     </form>
@@ -323,7 +325,7 @@
                                             <div class="form-group row">
                                                 <label for="withdrawHeadComment" class="col-sm-2 form-label">Head comment on Withdraw </label>
                                                 <div class="col-sm-4">
-                                                    @if (Auth::User()->designation_id == 3) 
+                                                    @if (Auth::User()->designation_id == 3)
                                                     <textarea name="withdrawHeadComment" id="withdrawHeadComment" cols="30" rows="10" class="form-control" required>{{ ($headDowComment != NULL) ? $headDowComment['comment'] : ''}}</textarea>
                                                     @endif
                                                     @error('withdrawHeadComment')
@@ -341,7 +343,7 @@
                                             </div>
                                             @endif
 
-                                            @if (Auth::User()->department_id == 2) 
+                                            @if (Auth::User()->department_id == 2)
                                             <div class="form-group row">
                                                 <label for="withdrawHrComment" class="col-sm-2 form-label">HR comment on Withdraw </label>
                                                 <div class="col-sm-4">
@@ -370,9 +372,9 @@
                             </div>
                         </div>
                         @endif
-                        
+
                     </div>
-                
+
                 </div>
                 <!-- /.tab-pane -->
                 @endif
@@ -388,7 +390,7 @@
                                         <h3 class="box-title">Acceptance Status</h3>
                                     </div>
                                     <div class="box-body">
-                                        
+
                                         <table class="table table-bordered">
                                             <thead>
                                                 <th></th>
@@ -433,14 +435,14 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
 
                 </div>
                 <!-- /.tab-pane -->
                 @endif
 
-                @if(\Auth::User()->department_id != 7)
+                @if(\Auth::User()->department_id != 7 && $is_feedback_enable)
                 <!-- Feedback form -->
                 <div class="tab-pane" id="tab_3-2">
                     <div class="container-fluid">
@@ -476,7 +478,7 @@
                                                     <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_secondary }}</td>
                                                 @endif
                                                 @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
-                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}" required>       
+                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}" required>
                                                         @error('secondary_skill')
                                                         <br>
                                                         <span class="invalid-feedback" role="alert">
@@ -506,13 +508,13 @@
                                                             @enderror
                                                         </td>
                                                     @endif
-                                                    
+
                                                 </tr>
 
                                             </table>
                                             </br>
                                             <table class="table table-bordered">
-                                                
+
                                             </table>
                                             </br>
                                             <table class="table table-bordered">
@@ -707,7 +709,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            
+
                                             </br>
                                             @if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3))
                                                 <div class="form-group">
@@ -732,15 +734,15 @@
                                                     </span>
                                                     @enderror
                                                 </div>
-                                                
+
                                                 <div class="form-group row">
                                                     <div class="col-xs-12">
                                                         <label class="form-label">Thankyou for your valuable feedback</label>
                                                     </div>
                                                 </div>
                                             @endif
-                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}"> 
-                                            <input type="hidden" id="feedbackId" name="feedbackId" value="{{ (!$feedback) ? '' : $feedback->id }}"> 
+                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
+                                            <input type="hidden" id="feedbackId" name="feedbackId" value="{{ (!$feedback) ? '' : $feedback->id }}">
                                         </div>
                                         @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                             <div class="box-footer">
@@ -752,7 +754,7 @@
                             </div>
                         </div>
                     </div>
-                
+
                 </div>
                 <!-- /.tab-pane -->
                 <!-- /End of feedback -->
@@ -828,7 +830,7 @@
                                                                     </span>
                                                                     @enderror
                                                                 </div>
-                                                            </td> 
+                                                            </td>
                                                         </tr>
                                                     @endif
                                                     <!-- No due forms for head -->
@@ -883,7 +885,7 @@
                                                                     </span>
                                                                     @enderror
                                                                 </div>
-                                                            </td> 
+                                                            </td>
                                                         </tr>
                                                     @endif
                                                     <!-- No due forms for HR -->
@@ -938,7 +940,7 @@
                                                                     </span>
                                                                     @enderror
                                                                 </div>
-                                                            </td> 
+                                                            </td>
                                                         </tr>
                                                     @endif
                                                     <!-- No due forms for SA -->
@@ -993,7 +995,7 @@
                                                                     </span>
                                                                     @enderror
                                                                 </div>
-                                                            </td> 
+                                                            </td>
                                                         </tr>
                                                     @endif
                                                 </tbody>
@@ -1070,7 +1072,7 @@
                                                 <th width="5%"> Q\N</th>
                                                 <th width="65%">Exit Interview Question</th>
                                                 <th>Exit Interview Answers</th>
-                                                
+
                                             </thead>
                                             <tbody>
                                                 @foreach($answers as $answer)
@@ -1094,7 +1096,7 @@
                                         <div class="box-body">
                                             <div class="input_fields_wrap">
                                                 <button class="add_field_button btn btn-success" style="float: right;">Add More Fields</button>
-                                                
+
                                                 <table class="table table-striped" style="clear: both;">
                                                     <thead>
                                                         <tr>
@@ -1104,9 +1106,27 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody class="table_body_wrap">
+                                                    @foreach($hrExitInterviewComments as $hrExitInterviewComment)
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" name="hr_exitinterview_comment[]" class="form-control" value="{{ $hrExitInterviewComment->comments }}" required>
+                                                            </td>
+                                                            <td>
+                                                                <select name="hr_exitinterview_actionarea[]" class="form-control" required>
+                                                                    <option value="{{ $hrExitInterviewComment->action_area }}">{{ $hrExitInterviewComment->action_area }}</option>
+                                                                    <option value="Salary">Salary</option>
+                                                                    <option value="Leave and Holiday">Leave and Holiday</option>
+                                                                    <option value="Benifits">Benifits</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="remove_field btn btn-danger" disabled title="Already recorded">Remove</button>
+                                                            <td>
+                                                        </tr>
+                                                    @endforeach
                                                         <tr>
                                                         <td>
-                                                            <input type="text" name="hr_exitinterview_comment[]" class="form-control" required> 
+                                                            <input type="text" name="hr_exitinterview_comment[]" class="form-control" required>
                                                         </td>
                                                         <td>
                                                             <select name="hr_exitinterview_actionarea[]" class="form-control" required>
@@ -1123,8 +1143,26 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <div class="form-group row">
+                                                <div class="col-sm-6">
+                                                    <label class="control-label" for="date_of_entry">Date: <span style="color: #757575;">{{ Date('d-m-Y') }}</span> </label>
+                                                    <input type="hidden" name="date_of_entry" value="{{ Date('d-m-Y') }}">
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <label class="control-label pull-right" for="updated_by">Updated By:
+                                                    <select name="commented_by" id="commented_by" style="color: #757575;">
+                                                        <option value="{{ Auth::User()->display_name }}">{{ Auth::User()->display_name }}</option>
+                                                        @foreach($hr_list as $hr)
+                                                        <option value="{{ $hr->display_name }}">{{ $hr->display_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="box-footer">
+                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
                                             <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                         </div>
                                     </form>
@@ -1137,7 +1175,7 @@
                 <!-- /.tab-pane -->
                 @endif
 
-                @if(\Auth::User()->department_id == 2)
+                @if(\Auth::User()->department_id == 2 && $completed_no_due != NULL && $showAnswers != NULL)
                 <!-- Final Exit check list -->
                 <div class="tab-pane" id="tab_6-2">
                     <div class="container-fluid">
@@ -1306,16 +1344,24 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="control-label col-sm-2" for="date_of_entry">Date: {{ Date('Y-m-d') }}</label>
-                                                <input type="hidden" name="date_of_entry" value="{{ Date('Y-m-d') }}"> 
+                                                <div class="col-sm-2">
+                                                    <label class="control-label" for="date_of_entry"> Date: <span style="color: #757575;">{{ Date('d-m-Y') }}</span> </label>
+                                                    <input type="hidden" name="date_of_entry" value="{{ Date('d-m-Y') }}">
+                                                </div>
                                                 <div class="col-sm-4">
-                                                <label class="control-label pull-right" for="updated_by">Updated By: {{ Auth::User()->display_name }}</label>
-                                                <input type="hidden" name="updated_by" value="{{ Auth::User()->display_name }}">
+                                                <label class="control-label pull-right" for="updated_by">Updated By:
+                                                <select name="updated_by" id="updated_by" style="color: #757575;">
+                                                <option value="{{ Auth::User()->display_name }}">{{ Auth::User()->display_name }}</option>
+                                                @foreach($hr_list as $hr)
+                                                <option value="{{ $hr->display_name }}">{{ $hr->display_name }}</option>
+                                                @endforeach
+                                                </select>
+                                                </label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="box-footer">
-                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}"> 
+                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
                                             <input type="hidden" id="finalChecklistId" name="finalChecklistId" value="{{ (!$finalCheckList) ? '' : $finalCheckList->id }}">
                                             <button type="submit" class="btn btn-primary" id="myBtn">Update</button>
                                         </div>
