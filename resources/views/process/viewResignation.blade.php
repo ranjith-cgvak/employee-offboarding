@@ -54,7 +54,7 @@
             <div class="form-group row">
                 <label for="dateOfLeaving" class="col-sm-4 form-label">Change DOL: </label>
                 <div class="col-sm-6">
-                    <input type="date" class="form-control disablePast" value="{{ $emp_resignation->changed_dol }}" id="dateOfLeaving" name="dateOfLeaving">
+                    <input type="text" class="form-control jquery-datepicker" value="{{ $emp_resignation->changed_dol }}" id="dateOfLeaving" name="dateOfLeaving">
                     @error('dateOfLeaving')
                     <br>
                     <span class="invalid-feedback" role="alert">
@@ -455,66 +455,67 @@
                                         </div>
                                         <div class="box-body">
                                             <table class="table table-bordered">
-                                                <tr>
-                                                <td rowspan="2"><h3 class="text-center">Present Skill Set</h3></td>
-                                                <td><label for="primary_skill" class="form-label">Primary</label></td></td>
-                                                @if(Auth::User()->department_id == 2)
-                                                    <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_primary }}</td>
-                                                @endif
-                                                @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
-                                                    <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_primary }}" required>
-                                                        @error('primary_skill')
-                                                        <br>
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong class="text-danger">{{ $message }}</strong>
-                                                        </span>
+                                                <thead>
+                                                    <th><h3>Present Skill Set</h3></th>
+                                                    <th></th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label for="primary_skill" class="form-label">Primary</label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                        <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_primary }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_primary }}" required>
+                                                            @error('primary_skill')
+                                                            <br>
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong class="text-danger">{{ $message }}</strong>
+                                                            </span>
                                                         @enderror
-                                                    </td>
-                                                @endif
-                                                </tr>
-                                                <tr>
-                                                <td><label for="secondary_skill" class="form-label">Secondary</label</td>
-                                                @if(Auth::User()->department_id == 2)
-                                                    <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_secondary }}</td>
-                                                @endif
-                                                @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
-                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}" required>
-                                                        @error('secondary_skill')
-                                                        <br>
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong class="text-danger">{{ $message }}</strong>
-                                                        </span>
-                                                        @enderror
-                                                    </td>
-                                                @endif
-                                                </tr>
-
-                                                <tr>
-                                                <td><h3 class="text-center">Last worked project</h3></td>
-                                                    <td>
-                                                    <label for="last_worked_project" class="form-label">Project Name:</label</td>
-                                                    </td>
-                                                    @if(Auth::User()->department_id == 2)
-                                                        <td>{{ (!$feedback) ? 'N/A' : $feedback->last_worked_project }}</td>
-                                                    @endif
-                                                    @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
-                                                        <td colspan="2">
-                                                            <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="{{ (!$feedback) ? '' : $feedback->last_worked_project }}" required>
-                                                            @error('last_worked_project')
+                                                        </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="secondary_skill" class="form-label">Secondary</label</td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                        <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_secondary }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                        <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="{{ (!$feedback) ? '' : $feedback->skill_set_secondary }}" required>
+                                                            @error('secondary_skill')
                                                             <br>
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong class="text-danger">{{ $message }}</strong>
                                                             </span>
                                                             @enderror
                                                         </td>
-                                                    @endif
-
-                                                </tr>
-
-                                            </table>
-                                            </br>
-                                            <table class="table table-bordered">
-
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Last Worked Project</h3></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label for="last_worked_project" class="form-label">Project Name:</label</td>
+                                                        </td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                        <td>{{ (!$feedback) ? 'N/A' : $feedback->last_worked_project }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td colspan="2">
+                                                                <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="{{ (!$feedback) ? '' : $feedback->last_worked_project }}" required>
+                                                                @error('last_worked_project')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                             </br>
                                             <table class="table table-bordered">
@@ -1208,7 +1209,7 @@
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="date_of_leaving">Date Of Leaving</label>
                                                 <div class="col-sm-4">
-                                                <input type="date" class="form-control" id="date_of_leaving" name="date_of_leaving" value="{{ ($emp_resignation->changed_dol == NULL) ? $emp_resignation->date_of_leaving : $emp_resignation->changed_dol }}" readonly>
+                                                <input type="text" class="form-control" id="date_of_leaving" name="date_of_leaving" value="{{ ($emp_resignation->changed_dol == NULL) ? $emp_resignation->date_of_leaving : $emp_resignation->changed_dol }}" readonly>
                                                 @error('date_of_leaving')
                                                     <br>
                                                     <span class="invalid-feedback" role="alert">
@@ -1330,23 +1331,44 @@
                                                 <div class="col-sm-4">
                                                 <input type="file" name="RelievingLetter" id="RelievingLetter" class="form-control">
                                                 </div>
+                                                @if($finalCheckList)
+                                                @if($finalCheckList->relieving_document)
+                                                <div class="col-sm-4">
+                                                   <a href="{{ route('downloadDocs', ['filename' => $finalCheckList->relieving_document] )}}" class="btn btn-success"> <i class="fa fa-download" aria-hidden="true"></i></a> {{ $finalCheckList->relieving_document }}
+                                                </div>
+                                                @endif
+                                                @endif
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="documents">Experience Letter</label>
                                                 <div class="col-sm-4">
                                                 <input type="file" name="ExperienceLetter" id="ExperienceLetter" class="form-control">
                                                 </div>
+                                                @if($finalCheckList)
+                                                @if($finalCheckList->experience_document)
+                                                <div class="col-sm-4">
+                                                   <a href="{{ route('downloadDocs', ['filename' => $finalCheckList->experience_document] )}}" class="btn btn-success"> <i class="fa fa-download" aria-hidden="true"></i></a> {{ $finalCheckList->experience_document }}
+                                                </div>
+                                                @endif
+                                                @endif
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="documents">Salary Certificate</label>
                                                 <div class="col-sm-4">
                                                 <input type="file" name="SalaryCertificate" id="SalaryCertificate" class="form-control">
                                                 </div>
+                                                @if($finalCheckList)
+                                                @if($finalCheckList->salary_document)
+                                                <div class="col-sm-4">
+                                                   <a href="{{ route('downloadDocs', ['filename' => $finalCheckList->salary_document] )}}" class="btn btn-success"> <i class="fa fa-download" aria-hidden="true"></i></a> {{ $finalCheckList->salary_document }}
+                                                </div>
+                                                @endif
+                                                @endif
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-sm-2">
                                                     <label class="control-label" for="date_of_entry"> Date: <span style="color: #757575;">{{ Date('d-m-Y') }}</span> </label>
-                                                    <input type="hidden" name="date_of_entry" value="{{ Date('d-m-Y') }}">
+                                                    <input type="hidden" name="date_of_entry" value="{{ Date('Y-d-m') }}">
                                                 </div>
                                                 <div class="col-sm-4">
                                                 <label class="control-label pull-right" for="updated_by">Updated By:

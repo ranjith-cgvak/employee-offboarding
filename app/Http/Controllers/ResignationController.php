@@ -41,7 +41,7 @@ class ResignationController extends Controller
         return view( 'resignation.resignationDetails', compact( 'myResignation', 'user', 'converted_dates' ) );
     }
 
-    //Acceptance status of the resignation
+    //Resignation progress status of the resignation
     public function resignationProgress() {
         $empId = \Auth::User()->emp_id;
         $myResignation = \DB::table('resignations')
@@ -50,8 +50,24 @@ class ResignationController extends Controller
             ['date_of_withdraw', '=', NULL],
         ])
         ->first();
+        $noDueStatus = \DB::table('no_dues')->where('resignation_id',$myResignation->id)->first();
+        $completed_no_due = \DB::table( 'no_dues' )
+        ->where([
+            ['no_dues.resignation_id', $myResignation->id],
+            ['knowledge_transfer_lead','!=',NULL],
+            ['mail_id_closure_lead','!=',NULL],
+            ['knowledge_transfer_head','!=',NULL],
+            ['mail_id_closure_head','!=',NULL],
+            ['id_card','!=',NULL],
+            ['nda','!=',NULL],
+            ['official_email_id','!=',NULL],
+            ['skype_account','!=',NULL]
+            ])
+        ->first();
+        $exitInterview = \DB::table('user_answers')->where('resignation_id',$myResignation->id)->first();
+        $finalChecklist = \DB::table('final_exit_checklists')->where('resignation_id',$myResignation->id)->first();
         $user = \DB::table('users')->where('emp_id',$empId)->first();
-        return view('resignation.progress', compact('myResignation','user'));
+        return view('resignation.progress', compact('myResignation','user','noDueStatus','exitInterview','finalChecklist','completed_no_due'));
     }
 
     //Acceptance status of the resignation

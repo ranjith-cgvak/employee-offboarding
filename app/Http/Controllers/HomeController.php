@@ -33,7 +33,7 @@ class HomeController extends Controller
             ['date_of_withdraw', '=', NULL],
         ])
         ->count();
-        
+
         if((\Auth::User()->designation_id == 2) || (\Auth::User()->designation_id == 3) || (\Auth::User()->department_id == 2) || (\Auth::User()->department_id == 7)) {
             return redirect()->route('process.index');
         }
@@ -41,7 +41,7 @@ class HomeController extends Controller
             return redirect()->route('resignation.create');
            }
         else{
-            return redirect()->route('resignation.index');
+            return redirect()->route('progress');
        }
     }
 }

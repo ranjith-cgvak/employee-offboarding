@@ -53,7 +53,7 @@
             <div class="form-group row">
                 <label for="dateOfLeaving" class="col-sm-4 form-label">Change DOL: </label>
                 <div class="col-sm-6">
-                    <input type="date" class="form-control disablePast" value="<?php echo e($emp_resignation->changed_dol); ?>" id="dateOfLeaving" name="dateOfLeaving">
+                    <input type="text" class="form-control jquery-datepicker" value="<?php echo e($emp_resignation->changed_dol); ?>" id="dateOfLeaving" name="dateOfLeaving">
                     <?php $__errorArgs = ['dateOfLeaving'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -505,66 +505,42 @@ unset($__errorArgs, $__bag); ?>
                                         </div>
                                         <div class="box-body">
                                             <table class="table table-bordered">
-                                                <tr>
-                                                <td rowspan="2"><h3 class="text-center">Present Skill Set</h3></td>
-                                                <td><label for="primary_skill" class="form-label">Primary</label></td></td>
-                                                <?php if(Auth::User()->department_id == 2): ?>
-                                                    <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_primary); ?></td>
-                                                <?php endif; ?>
-                                                <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                    <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_primary); ?>" required>
-                                                        <?php $__errorArgs = ['primary_skill'];
+                                                <thead>
+                                                    <th><h3>Present Skill Set</h3></th>
+                                                    <th></th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label for="primary_skill" class="form-label">Primary</label></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                        <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_primary); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                        <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_primary); ?>" required>
+                                                            <?php $__errorArgs = ['primary_skill'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                        <br>
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                        </span>
+                                                            <br>
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                            </span>
                                                         <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                                    </td>
-                                                <?php endif; ?>
-                                                </tr>
-                                                <tr>
-                                                <td><label for="secondary_skill" class="form-label">Secondary</label</td>
-                                                <?php if(Auth::User()->department_id == 2): ?>
-                                                    <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_secondary); ?></td>
-                                                <?php endif; ?>
-                                                <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                    <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?>" required>
-                                                        <?php $__errorArgs = ['secondary_skill'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                        <br>
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                        </span>
-                                                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                    </td>
-                                                <?php endif; ?>
-                                                </tr>
-
-                                                <tr>
-                                                <td><h3 class="text-center">Last worked project</h3></td>
-                                                    <td>
-                                                    <label for="last_worked_project" class="form-label">Project Name:</label</td>
-                                                    </td>
-                                                    <?php if(Auth::User()->department_id == 2): ?>
-                                                        <td><?php echo e((!$feedback) ? 'N/A' : $feedback->last_worked_project); ?></td>
-                                                    <?php endif; ?>
-                                                    <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                        <td colspan="2">
-                                                            <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->last_worked_project); ?>" required>
-                                                            <?php $__errorArgs = ['last_worked_project'];
+                                                        </td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="secondary_skill" class="form-label">Secondary</label</td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                        <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_secondary); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                        <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?>" required>
+                                                            <?php $__errorArgs = ['secondary_skill'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -578,14 +554,39 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                                         </td>
-                                                    <?php endif; ?>
-
-                                                </tr>
-
-                                            </table>
-                                            </br>
-                                            <table class="table table-bordered">
-
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h3>Last Worked Project</h3></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label for="last_worked_project" class="form-label">Project Name:</label</td>
+                                                        </td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                        <td><?php echo e((!$feedback) ? 'N/A' : $feedback->last_worked_project); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                            <td colspan="2">
+                                                                <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->last_worked_project); ?>" required>
+                                                                <?php $__errorArgs = ['last_worked_project'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                            </td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                             </br>
                                             <table class="table table-bordered">
@@ -1462,7 +1463,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="date_of_leaving">Date Of Leaving</label>
                                                 <div class="col-sm-4">
-                                                <input type="date" class="form-control" id="date_of_leaving" name="date_of_leaving" value="<?php echo e(($emp_resignation->changed_dol == NULL) ? $emp_resignation->date_of_leaving : $emp_resignation->changed_dol); ?>" readonly>
+                                                <input type="text" class="form-control" id="date_of_leaving" name="date_of_leaving" value="<?php echo e(($emp_resignation->changed_dol == NULL) ? $emp_resignation->date_of_leaving : $emp_resignation->changed_dol); ?>" readonly>
                                                 <?php $__errorArgs = ['date_of_leaving'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1647,23 +1648,47 @@ unset($__errorArgs, $__bag); ?>
                                                 <div class="col-sm-4">
                                                 <input type="file" name="RelievingLetter" id="RelievingLetter" class="form-control">
                                                 </div>
+                                                <?php if($finalCheckList): ?>
+                                                <?php if($finalCheckList->relieving_document): ?>
+                                                <div class="col-sm-4">
+                                                   <a href="<?php echo e(route('downloadDocs', ['filename' => $finalCheckList->relieving_document] )); ?>" class="btn btn-success"> <i class="fa fa-download" aria-hidden="true"></i></a> <?php echo e($finalCheckList->relieving_document); ?>
+
+                                                </div>
+                                                <?php endif; ?>
+                                                <?php endif; ?>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="documents">Experience Letter</label>
                                                 <div class="col-sm-4">
                                                 <input type="file" name="ExperienceLetter" id="ExperienceLetter" class="form-control">
                                                 </div>
+                                                <?php if($finalCheckList): ?>
+                                                <?php if($finalCheckList->experience_document): ?>
+                                                <div class="col-sm-4">
+                                                   <a href="<?php echo e(route('downloadDocs', ['filename' => $finalCheckList->experience_document] )); ?>" class="btn btn-success"> <i class="fa fa-download" aria-hidden="true"></i></a> <?php echo e($finalCheckList->experience_document); ?>
+
+                                                </div>
+                                                <?php endif; ?>
+                                                <?php endif; ?>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="control-label col-sm-2" for="documents">Salary Certificate</label>
                                                 <div class="col-sm-4">
                                                 <input type="file" name="SalaryCertificate" id="SalaryCertificate" class="form-control">
                                                 </div>
+                                                <?php if($finalCheckList): ?>
+                                                <?php if($finalCheckList->salary_document): ?>
+                                                <div class="col-sm-4">
+                                                   <a href="<?php echo e(route('downloadDocs', ['filename' => $finalCheckList->salary_document] )); ?>" class="btn btn-success"> <i class="fa fa-download" aria-hidden="true"></i></a> <?php echo e($finalCheckList->salary_document); ?>
+
+                                                </div>
+                                                <?php endif; ?>
+                                                <?php endif; ?>
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-sm-2">
                                                     <label class="control-label" for="date_of_entry"> Date: <span style="color: #757575;"><?php echo e(Date('d-m-Y')); ?></span> </label>
-                                                    <input type="hidden" name="date_of_entry" value="<?php echo e(Date('d-m-Y')); ?>">
+                                                    <input type="hidden" name="date_of_entry" value="<?php echo e(Date('Y-d-m')); ?>">
                                                 </div>
                                                 <div class="col-sm-4">
                                                 <label class="control-label pull-right" for="updated_by">Updated By:

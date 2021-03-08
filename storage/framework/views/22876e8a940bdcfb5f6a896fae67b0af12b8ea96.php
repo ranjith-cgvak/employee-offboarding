@@ -18,12 +18,21 @@
   <link rel="stylesheet" href="<?php echo e(asset('css/_all-skins.min.css')); ?>">
   <!-- Custom style -->
   <link rel="stylesheet" href="<?php echo e(asset('css/style.css')); ?>">
+  <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+         rel = "stylesheet">
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <!-- Toaster CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <!-- jQuery 3 -->
+    <script src="<?php echo e(asset('js/jquery.min.js')); ?>"></script>
 
+    <!-- jQuery UI 1.11.4 -->
+    <!-- <script src="<?php echo e(asset('js/jquery-ui.min.js')); ?>"></script> -->
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="<?php echo e(asset('vendor/bootstrap/dist/js/bootstrap.min.js')); ?>"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -96,12 +105,8 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery 3 -->
-<script src="<?php echo e(asset('js/jquery.min.js')); ?>"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="<?php echo e(asset('js/jquery-ui.min.js')); ?>"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="<?php echo e(asset('vendor/bootstrap/dist/js/bootstrap.min.js')); ?>"></script>
+
+
 <!-- AdminLTE App -->
 <script src="<?php echo e(asset('js/adminlte.min.js')); ?>"></script>
 <script src="<?php echo e(asset('js/script.js')); ?>"></script>
@@ -147,6 +152,23 @@
   break;
   }
   <?php endif; ?>
+
+
+  $( function() {
+    $( ".jquery-datepicker" ).datepicker({
+        dateFormat: 'dd-mm-yy',
+        minDate: 0,
+        beforeShowDay: function(date) {
+            var day = date.getDay();
+            return [(day != 0), ''];
+        },
+        onSelect : function(dateText, inst) {
+        var date = $(this).datepicker('getDate');
+        if($.datepicker.formatDate('DD', date) =='Saturday')
+            toastr.warning("You have selected Saturday. Please check whether it is working day or not");
+        }
+    });
+  } );
 
 </script>
 </body>

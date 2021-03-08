@@ -41,6 +41,7 @@ $(document).ready(function(){
     var today = new Date().toISOString().split('T')[0];
     document.getElementsByClassName("disablePast")[0].setAttribute('min', today);
 
+
     //HR EXIT INTERVIEW
     var max_fields      = 10; //maximum input boxes allowed
     var wrapper   		= $(".input_fields_wrap"); //Fields wrapper
@@ -76,6 +77,5 @@ $(document).ready(function(){
     $(tableBody).on("click",".remove_field", function(e){ //user click on remove text
       e.preventDefault(); $(this).parent('td').parent('tr').remove(); x--;
     })
-
 
 })

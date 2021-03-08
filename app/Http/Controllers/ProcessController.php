@@ -21,6 +21,10 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
+    function __constructor(){
+        $this->middleware(['auth','backendAccess']);
+    }
+
     public function index(){
         // Head
         if ( \Auth::User()->designation_id == 3 ) {
@@ -92,8 +96,9 @@ class ProcessController extends Controller
     */
 
     public function edit( $id ){
+
         $emp_resignation = \DB::table( 'resignations' )
-        ->select( 'resignations.id', 'employee_id', 'display_name', 'department_name', 'comment_on_resignation', 'name', 'designation', 'joining_date', 'date_of_resignation', 'date_of_leaving',\DB::raw("DATE_FORMAT(date_of_withdraw, '%d-%m-%Y') as date_of_withdraw"), 'lead', 'users.created_at', 'reason', 'comment_on_withdraw', 'changed_dol', 'other_reason' )
+        ->select( 'resignations.id', 'employee_id', 'display_name', 'department_name', 'comment_on_resignation', 'name', 'designation', 'joining_date', 'date_of_resignation', 'date_of_leaving',\DB::raw("DATE_FORMAT(date_of_withdraw, '%d-%m-%Y') as date_of_withdraw"), 'lead', 'users.created_at', 'reason', 'comment_on_withdraw',\DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'other_reason' )
         ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
         ->where( 'resignations.id', $id )
         ->first();
@@ -249,7 +254,6 @@ class ProcessController extends Controller
         $hr_list = \DB::table( 'users' )
         ->where( 'department_id', 2 )
         ->get();
-
         return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance','acceptanceValue','acceptanceComment','is_reviewed','displayNodue','showAnswers','hrExitInterviewComments','is_feedback_enable','completed_no_due','hr_list'));
     }
 
@@ -295,7 +299,7 @@ class ProcessController extends Controller
         ] );
         $resignationId = $request->get( 'resignationId' );
         $resignation = Resignation::find( $resignationId );
-        $resignation->changed_dol = $request->get( 'dateOfLeaving' );
+        $resignation->changed_dol = Carbon::createFromFormat('d-m-Y', $request->get( 'dateOfLeaving' ))->format('Y-m-d') ;
 
         if ( ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadDolCommentId' ) == NULL ) ) || ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headDolCommentId' ) == NULL ) ) || ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrDolCommentId' ) == NULL ) ) ) {
             $addOrUpdateDolComment = new Comments( [
@@ -774,6 +778,9 @@ class ProcessController extends Controller
             'final_comment'=>'required'
         ] );
 
+        $RelievingLetterName = NULL;
+        $ExperienceLetterName = NULL;
+        $SalaryCertificateName = NULL;
         $resignationId = $request->get( 'resignationId' );
             if ( $request->file( 'RelievingLetter' ) ) {
                 $RelievingLetterPath = $request->file( 'RelievingLetter' );
@@ -804,7 +811,7 @@ class ProcessController extends Controller
         $finalCheckList = new FinalExitChecklist( [
             'resignation_id' => $request->get( 'resignationId' ),
             'type_of_exit' => $request->get( 'type_of_exit' ),
-            'date_of_leaving' => $request->get( 'date_of_leaving' ),
+            'date_of_leaving' => Carbon::createFromFormat('d-m-Y', $request->get( 'date_of_leaving' ))->format('Y-m-d'),
             'reason_for_leaving' => $request->get( 'reason_for_leaving' ),
             'last_drawn_salary' => $request->get( 'last_drawn_salary' ),
             'consider_for_rehire' => $request->get( 'consider_for_rehire' ),
@@ -813,18 +820,19 @@ class ProcessController extends Controller
             'experience_letter' => $request->get( 'experience_letter' ),
             'salary_certificate' => $request->get( 'salary_certificate' ),
             'final_comment' => $request->get( 'final_comment' ),
-            'relieving_document' => $RelievingLetterFilepath,
-            'experience_document' => $ExperienceLetterFilepath,
-            'salary_document' => $SalaryCertificateFilepath,
+            'relieving_document' => $RelievingLetterName,
+            'experience_document' => $ExperienceLetterName,
+            'salary_document' => $SalaryCertificateName,
             'date_of_entry' => $request->get( 'date_of_entry' ),
             'updated_by' => $request->get( 'updated_by' )
         ] );
         $finalCheckList->save();
 
-        \DB::table('resignations')
-        ->where('id', $resignationId)
-        ->update(['is_completed' => 1]);
-
+        if(($request->get( 'relieving_letter' ) == 'Given') && ($request->get( 'experience_letter' ) == 'Given') && ($request->get( 'salary_certificate' ) == 'Given')) {
+            \DB::table('resignations')
+            ->where('id', $resignationId)
+            ->update(['is_completed' => 1]);
+        }
         $notification=array(
             'message' => 'Final checklist has been recorded!',
             'alert-type' => 'success'
@@ -872,7 +880,7 @@ class ProcessController extends Controller
         $updateFinalCheckList = FinalExitChecklist::find( $finalCheckListId );
         $updateFinalCheckList->resignation_id = $request->get( 'resignationId' );
         $updateFinalCheckList->type_of_exit = $request->get( 'type_of_exit' );
-        $updateFinalCheckList->date_of_leaving = $request->get( 'date_of_leaving' );
+        $updateFinalCheckList->date_of_leaving = Carbon::createFromFormat('d-m-Y', $request->get( 'date_of_leaving' ))->format('Y-m-d');
         $updateFinalCheckList->reason_for_leaving = $request->get( 'reason_for_leaving' );
         $updateFinalCheckList->last_drawn_salary = $request->get( 'last_drawn_salary' );
         $updateFinalCheckList->consider_for_rehire = $request->get( 'consider_for_rehire' );
@@ -883,18 +891,23 @@ class ProcessController extends Controller
         $updateFinalCheckList->final_comment = $request->get( 'final_comment' );
         if ( ( $request->file( 'RelievingLetter' ) ) || ( $request->file( 'ExperienceLetter' ) ) || ( $request->file( 'SalaryCertificate' ) ) ) {
             if ( $request->file( 'RelievingLetter' ) ) {
-                $updateFinalCheckList->relieving_document = $RelievingLetterFilepath;
+                $updateFinalCheckList->relieving_document = $RelievingLetterName;
             }
             if ( $request->file( 'ExperienceLetter' ) ) {
-                $updateFinalCheckList->experience_document = $ExperienceLetterFilepath;
+                $updateFinalCheckList->experience_document = $ExperienceLetterName;
             }
             if ( $request->file( 'SalaryCertificate' ) ) {
-                $updateFinalCheckList->salary_document = $SalaryCertificateFilepath;
+                $updateFinalCheckList->salary_document = $SalaryCertificateName;
             }
         }
         $updateFinalCheckList->date_of_entry = $request->get( 'date_of_entry' );
         $updateFinalCheckList->updated_by = $request->get( 'updated_by' );
         $updateFinalCheckList->save();
+        if(($request->get( 'relieving_letter' ) == 'Given') && ($request->get( 'experience_letter' ) == 'Given') && ($request->get( 'salary_certificate' ) == 'Given')) {
+            \DB::table('resignations')
+            ->where('id', $resignationId)
+            ->update(['is_completed' => 1]);
+        }
         $notification=array(
             'message' => 'Final checklist has been updated!',
             'alert-type' => 'success'
@@ -925,6 +938,11 @@ class ProcessController extends Controller
         );
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
 
+    }
+
+    public function downloadDocs($filename){
+
+        return response()->download(storage_path("app\public\uploads/" .$filename ));
     }
     /**
     * Remove the specified resource from storage.
