@@ -33,6 +33,9 @@
     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('js/adminlte.min.js') }}"></script>
+<script src="{{ asset('js/script.js') }}"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -63,7 +66,7 @@
               </li>
               <li>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
-                  <i class="fa fa-power-off fa-fw pull-right"></i> Log out
+                Log out <i class="fa fa-power-off fa-fw"></i>
                 </a>
                 <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
                   {{ csrf_field() }}
@@ -106,9 +109,7 @@
 
 
 
-<!-- AdminLTE App -->
-<script src="{{ asset('js/adminlte.min.js') }}"></script>
-<script src="{{ asset('js/script.js') }}"></script>
+
 <!-- Toaster CDN -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js">
 </script>
@@ -169,6 +170,44 @@
     });
   } );
 
+  $(function(){
+      //HR EXIT INTERVIEW
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper   		= $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    var tableBody = $(".table_body_wrap");
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+      e.preventDefault();
+      if(x < max_fields){ //max input box allowed
+        x++; //text box increment
+        // $(wrapper).append('<div><input type="text" name="mytext[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+        $(tableBody).append(`
+        <tr>
+        <td>
+            <input type="text" name='hr_exitinterview_comment[]' class="form-control" required>
+        </td>
+        <td>
+            <select name="hr_exitinterview_actionarea[]" class="form-control" required>
+                <option value="">Select</option>
+                <option value="Salary">Salary</option>
+                <option value="Leave and Holiday">Leave and Holiday</option>
+                <option value="Benifits">Benifits</option>
+            </select>
+        </td>
+        <td>
+        <button type="button" class="remove_field btn btn-danger">Remove</button>
+        <td>
+        </tr>
+        `);
+      }
+
+    });
+
+    $(tableBody).on("click",".remove_field", function(e){ //user click on remove text
+      e.preventDefault(); $(this).parent('td').parent('tr').remove(); x--;
+    })
+  })
 </script>
 </body>
 </html>

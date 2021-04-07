@@ -47,7 +47,7 @@
                         <div class="form-group row">
                             <label for="withdrawDate" class="col-sm-2 form-label">Withdraw Date <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
-                                <input type="date" class="form-control" value="{{ Date('Y-m-d')}}" id="withdrawDate" name="withdrawDate">
+                                <input type="date" class="form-control disablePast" value="{{ Date('Y-m-d')}}" id="withdrawDate" name="withdrawDate">
                                 @error('withdrawDate')
                                 <br>
                                 <span class="invalid-feedback" role="alert">

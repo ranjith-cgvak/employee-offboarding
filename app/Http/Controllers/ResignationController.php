@@ -154,6 +154,7 @@ class ResignationController extends Controller
         ->where('user_answers.resignation_id',$myResignation->id)
         ->first();
 
+
         $completed_no_due = \DB::table( 'no_dues' )
         ->where([
             ['no_dues.resignation_id', $myResignation->id],

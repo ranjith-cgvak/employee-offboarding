@@ -71,7 +71,7 @@
                     </table>
                     <br>
                     @if($completed_no_due)
-                    <a href="{{ route('questions.index')}}" class="btn btn-primary" style="float: right;">Exit Interview</a>
+                    <a href="{{ route('questions.index')}}" class="btn btn-primary" style="float: right;" @if($answers) disabled title="You have already done this!" @endif>Exit Interview</a>
                     @endif
                 </div>
             </div>

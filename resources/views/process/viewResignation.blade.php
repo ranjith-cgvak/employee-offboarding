@@ -17,7 +17,7 @@
                     <p><b>Employee ID: </b>{{ $emp_resignation->employee_id }}</p>
                 </div>
                 <div class="col-xs-4">
-                    <p><b>Date of joinig: </b>{{ $converted_dates['joining_date'] }}</p>
+                    <p><b>Date Of Joining: </b>{{ $converted_dates['joining_date'] }}</p>
                 </div>
             </div>
             <div class="row">
@@ -461,7 +461,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td><label for="primary_skill" class="form-label">Primary</label></td>
+                                                        <td><label for="primary_skill" class="form-label">Primary <span class="text-danger">*</span></label></td>
                                                         @if(Auth::User()->department_id == 2)
                                                         <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_primary }}</td>
                                                         @endif
@@ -477,7 +477,7 @@
                                                         @endif
                                                     </tr>
                                                     <tr>
-                                                        <td><label for="secondary_skill" class="form-label">Secondary</label</td>
+                                                        <td><label for="secondary_skill" class="form-label">Secondary <span class="text-danger">*</span></label</td>
                                                         @if(Auth::User()->department_id == 2)
                                                         <td>{{ (!$feedback) ? 'N/A' : $feedback->skill_set_secondary }}</td>
                                                         @endif
@@ -498,7 +498,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <label for="last_worked_project" class="form-label">Project Name:</label</td>
+                                                            <label for="last_worked_project" class="form-label">Project Name <span class="text-danger">*</span></label</td>
                                                         </td>
                                                         @if(Auth::User()->department_id == 2)
                                                         <td>{{ (!$feedback) ? 'N/A' : $feedback->last_worked_project }}</td>
@@ -525,7 +525,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td><label for="attendance" class="form-label">Attendance</label></td>
+                                                        <td><label for="attendance" class="form-label">Attendance <span class="text-danger">*</span></label></td>
                                                         @if(Auth::User()->department_id == 2)
                                                             <td>{{ (!$feedback) ? 'N/A' : $feedback->attendance_rating }}</td>
                                                         @endif
@@ -548,7 +548,7 @@
                                                         @endif
                                                     </tr>
                                                     <tr>
-                                                        <td><label for="reponsiveness" class="form-label">Reponsiveness</label></td>
+                                                        <td><label for="reponsiveness" class="form-label">Reponsiveness <span class="text-danger">*</span></label></td>
                                                         @if(Auth::User()->department_id == 2)
                                                             <td>{{ (!$feedback) ? 'N/A' : $feedback->responsiveness_rating }}</td>
                                                         @endif
@@ -571,7 +571,7 @@
                                                         @endif
                                                     </tr>
                                                     <tr>
-                                                        <td><label for="reponsibility" class="form-label">Reponsibility</label></td>
+                                                        <td><label for="reponsibility" class="form-label">Reponsibility <span class="text-danger">*</span></label></td>
                                                         @if(Auth::User()->department_id == 2)
                                                             <td>{{ (!$feedback) ? 'N/A' : $feedback->responsibility_rating }}</td>
                                                         @endif
@@ -594,7 +594,7 @@
                                                         @endif
                                                     </tr>
                                                     <tr>
-                                                        <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery</label></td>
+                                                        <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery <span class="text-danger">*</span></label></td>
                                                         @if(Auth::User()->department_id == 2)
                                                             <td>{{ (!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating }}</td>
                                                         @endif
@@ -617,7 +617,7 @@
                                                         @endif
                                                     </tr>
                                                     <tr>
-                                                        <td><label for="technical_knowledge" class="form-label">Technical Knowledge</label></td>
+                                                        <td><label for="technical_knowledge" class="form-label">Technical Knowledge <span class="text-danger">*</span></label></td>
                                                         @if(Auth::User()->department_id == 2)
                                                             <td>{{ (!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating }}</td>
                                                         @endif
@@ -640,7 +640,7 @@
                                                         @endif
                                                     </tr>
                                                     <tr>
-                                                        <td><label for="logical_ablitiy" class="form-label">Logical Ability</label></td>
+                                                        <td><label for="logical_ablitiy" class="form-label">Logical Ability <span class="text-danger">*</span></label></td>
                                                         @if(Auth::User()->department_id == 2)
                                                             <td>{{ (!$feedback) ? 'N/A' : $feedback->logical_ability_rating }}</td>
                                                         @endif
@@ -663,7 +663,7 @@
                                                         @endif
                                                     </tr>
                                                     <tr>
-                                                        <td><label for="attitude" class="form-label">Attitude</label></td>
+                                                        <td><label for="attitude" class="form-label">Attitude <span class="text-danger">*</span></label></td>
                                                         @if(Auth::User()->department_id == 2)
                                                             <td>{{ (!$feedback) ? 'N/A' : $feedback->attitude_rating }}</td>
                                                         @endif
@@ -686,7 +686,7 @@
                                                         @endif
                                                     </tr>
                                                     <tr>
-                                                        <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software</label></td>
+                                                        <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software <span class="text-danger">*</span></label></td>
                                                         @if(Auth::User()->department_id == 2)
                                                             <td>{{ (!$feedback) ? 'N/A' : $feedback->overall_rating }}</td>
                                                         @endif
@@ -726,7 +726,7 @@
                                             @endif
                                             @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
                                                 <div class="form-group">
-                                                    <label for="feedback_comments" class="form-label">Comments</label>
+                                                    <label for="feedback_comments" class="form-label">Comments <span class="text-danger">*</span></label>
                                                     <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required>{{ (!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment) }}</textarea>
                                                     @error('feedback_comments')
                                                     <br>
@@ -1096,7 +1096,7 @@
                                             {{ method_field('PUT') }}
                                         <div class="box-body">
                                             <div class="input_fields_wrap">
-                                                <button class="add_field_button btn btn-success" style="float: right;">Add More Fields</button>
+                                                <button type="button" class="add_field_button btn btn-success" style="float: right;">Add More Fields</button>
 
                                                 <table class="table table-striped" style="clear: both;">
                                                     <thead>

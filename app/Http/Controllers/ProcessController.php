@@ -933,7 +933,7 @@ class ProcessController extends Controller
 
         }
         $notification=array(
-            'message' => 'Exit interviewComments has been recorded!',
+            'message' => 'Exit interview comments has been recorded!',
             'alert-type' => 'success'
         );
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);

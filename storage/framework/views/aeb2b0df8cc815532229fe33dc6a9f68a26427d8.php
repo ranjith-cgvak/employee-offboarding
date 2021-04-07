@@ -46,7 +46,7 @@
                         <div class="form-group row">
                             <label for="withdrawDate" class="col-sm-2 form-label">Withdraw Date <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
-                                <input type="date" class="form-control" value="<?php echo e(Date('Y-m-d')); ?>" id="withdrawDate" name="withdrawDate">
+                                <input type="date" class="form-control disablePast" value="<?php echo e(Date('Y-m-d')); ?>" id="withdrawDate" name="withdrawDate">
                                 <?php $__errorArgs = ['withdrawDate'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

@@ -228,3 +228,11 @@ a:hover {
 }
 
 /* Progress bar nd */
+
+
+/*  */
+
+.nav-tabs-custom>.nav-tabs>li>a:hover {
+    color: white;
+}
+

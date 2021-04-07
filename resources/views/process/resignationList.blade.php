@@ -42,16 +42,18 @@
                   <td><a href="{{ route('process.edit', $emp->id )}}">View</a></td>
                   <!-- Assiging lead form by head -->
                   @if(Auth::user()->designation_id == 3)
+                  <form method="post" action="{{ route('process.update' , $emp->employee_id ) }}">
                   <td>
-                    <form method="post" action="{{ route('process.update' , $emp->employee_id ) }}">
-                      @csrf
-                      {{ method_field('PUT') }}
-                      <div class="form-group">
+                    @csrf
+                    {{ method_field('PUT') }}
+                    <div class="form-group">
                         <div class="col-sm-6">
                         <select class="form-control" name="lead" id="lead">
+                        @if($emp->lead == NULL)
                         <option value="{{ ($emp->lead == NULL) ? '' : $emp->lead }}">{{ ($emp->lead == NULL) ? 'Select' : $emp->lead }}</option>
+                        @endif
                           @foreach($lead_list as $lead)
-                          <option value="{{ $lead->display_name }}">{{ $lead->display_name }}</option>
+                          <option value="{{ $lead->display_name }}" {{ ($emp->lead == $lead->display_name) ? 'selected' : "" }}>{{ $lead->display_name }}</option>
                           @endforeach
                         </select>
                         </div>
@@ -59,8 +61,8 @@
                           <button class="btn btn-primary" type="submit">Save</button>
                         </div>
                       </div>
-                    </form>
                   </td>
+                  </form>
                   @endif
                 </tr>
                 @endforeach

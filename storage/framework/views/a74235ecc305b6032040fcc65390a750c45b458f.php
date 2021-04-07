@@ -70,7 +70,7 @@
                     </table>
                     <br>
                     <?php if($completed_no_due): ?>
-                    <a href="<?php echo e(route('questions.index')); ?>" class="btn btn-primary" style="float: right;">Exit Interview</a>
+                    <a href="<?php echo e(route('questions.index')); ?>" class="btn btn-primary" style="float: right;" <?php if($answers): ?> disabled title="You have already done this!" <?php endif; ?>>Exit Interview</a>
                     <?php endif; ?>
                 </div>
             </div>

@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 
 <!-- Listing the resignations -->
@@ -42,17 +40,19 @@
                   <td><a href="<?php echo e(route('process.edit', $emp->id )); ?>">View</a></td>
                   <!-- Assiging lead form by head -->
                   <?php if(Auth::user()->designation_id == 3): ?>
+                  <form method="post" action="<?php echo e(route('process.update' , $emp->employee_id )); ?>">
                   <td>
-                    <form method="post" action="<?php echo e(route('process.update' , $emp->employee_id )); ?>">
-                      <?php echo csrf_field(); ?>
-                      <?php echo e(method_field('PUT')); ?>
+                    <?php echo csrf_field(); ?>
+                    <?php echo e(method_field('PUT')); ?>
 
-                      <div class="form-group">
+                    <div class="form-group">
                         <div class="col-sm-6">
                         <select class="form-control" name="lead" id="lead">
+                        <?php if($emp->lead == NULL): ?>
                         <option value="<?php echo e(($emp->lead == NULL) ? '' : $emp->lead); ?>"><?php echo e(($emp->lead == NULL) ? 'Select' : $emp->lead); ?></option>
+                        <?php endif; ?>
                           <?php $__currentLoopData = $lead_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lead): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <option value="<?php echo e($lead->display_name); ?>"><?php echo e($lead->display_name); ?></option>
+                          <option value="<?php echo e($lead->display_name); ?>" <?php echo e(($emp->lead == $lead->display_name) ? 'selected' : ""); ?>><?php echo e($lead->display_name); ?></option>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                         </div>
@@ -60,8 +60,8 @@
                           <button class="btn btn-primary" type="submit">Save</button>
                         </div>
                       </div>
-                    </form>
                   </td>
+                  </form>
                   <?php endif; ?>
                 </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

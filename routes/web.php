@@ -49,6 +49,7 @@ Route::get('progress','ResignationController@resignationProgress')->middleware('
 Route::get('acceptanceStatus','ResignationController@showAcceptanceStatus')->middleware('auth')->name('acceptanceStatus');
 Route::get('noDueStatus','ResignationController@noDueStatus')->middleware('auth')->name('noDueStatus');
 Route::get('withdrawForm','ResignationController@showWithdrawForm')->middleware('auth')->name('withdrawForm');
+Route::get('getUser','UserDetailsController@index')->name('getUser');
 
 
 // Route::get('send-mail', function () {
