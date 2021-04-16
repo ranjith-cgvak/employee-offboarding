@@ -443,7 +443,7 @@
                 @endif
 
                 @if(\Auth::User()->department_id != 7 && $is_feedback_enable)
-                <!-- Feedback form -->
+                <!-- Feedback form Software-->
                 <div class="tab-pane" id="tab_3-2">
                     <div class="container-fluid">
                         <div class="row">
@@ -758,7 +758,236 @@
 
                 </div>
                 <!-- /.tab-pane -->
-                <!-- /End of feedback -->
+                <!-- /End of feedback Software-->
+                <!-- Feedback form Accounts -->
+                <!-- <div class="tab-pane" id="tab_3-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form method="get" action="{{ (!$feedback) ? route('storeFeedback') : route('updateFeedback') }}">
+                                    <div class="box box-secondary">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">Feedback</h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <th><h3>Attributes</h3></th>
+                                                    <th><h3>Ratings</h3></th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label for="attendance" class="form-label">Attendance <span class="text-danger">*</span></label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->attendance_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="attendance" id="attendance" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->attendance_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attendance_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('attendance')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="learning&responsiveness" class="form-label">Learning & Responsiveness <span class="text-danger">*</span></label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->responsiveness_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="learning&responsiveness" id="learning&responsiveness" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->responsiveness_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsiveness_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('reponsiveness')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="reponsibility" class="form-label">Reponsibility <span class="text-danger">*</span></label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->responsibility_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="reponsibility" id="reponsibility" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->responsibility_rating }}">{{ (!$feedback) ? 'Select' : $feedback->responsibility_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('reponsibility')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="commitment&integrity" class="form-label">Commitment & Integrity <span class="text-danger">*</span></label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="commitment&integrity" id="commitment&integrity" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating }}">{{ (!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('commit_on_task_delivery')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="sales_performance" class="form-label">Sales Performance <span class="text-danger">*</span></label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="sales_performance" id="sales_performance" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->technical_knowledge_rating }}">{{ (!$feedback) ? 'Select' : $feedback->technical_knowledge_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('technical_knowledge')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="attitude" class="form-label">Attitude <span class="text-danger">*</span></label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->attitude_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="attitude" id="attitude" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->attitude_rating }}">{{ (!$feedback) ? 'Select' : $feedback->attitude_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('attitude')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software <span class="text-danger">*</span></label></td>
+                                                        @if(Auth::User()->department_id == 2)
+                                                            <td>{{ (!$feedback) ? 'N/A' : $feedback->overall_rating }}</td>
+                                                        @endif
+                                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                            <td>
+                                                                <select name="overall_performance" id="overall_performance" class="form-control" required>
+                                                                    <option value="{{ (!$feedback) ? '' : $feedback->overall_rating }}">{{ (!$feedback) ? 'Select' : $feedback->overall_rating }}</option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                @error('overall_performance')
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger">{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            </br>
+                                            @if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3))
+                                                <div class="form-group">
+                                                    <label class="form-label">Lead Comments</label>
+                                                    <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->lead_comment  }}</textarea>
+                                                </div>
+                                            @endif
+                                            @if(Auth::User()->department_id == 2)
+                                                <div class="form-group">
+                                                    <label class="form-label">Head Comments</label>
+                                                    <textarea class="form-control" readonly>{{ (!$feedback) ? 'N/A' :  $feedback->head_comment  }}</textarea>
+                                                </div>
+                                            @endif
+                                            @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                                <div class="form-group">
+                                                    <label for="feedback_comments" class="form-label">Comments <span class="text-danger">*</span></label>
+                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required>{{ (!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment) }}</textarea>
+                                                    @error('feedback_comments')
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-xs-12">
+                                                        <label class="form-label">Thankyou for your valuable feedback</label>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            <input type="hidden" id="resignationId" name="resignationId" value="{{ $emp_resignation->id }}">
+                                            <input type="hidden" id="feedbackId" name="feedbackId" value="{{ (!$feedback) ? '' : $feedback->id }}">
+                                        </div>
+                                        @if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3))
+                                            <div class="box-footer">
+                                                <button type="submit" class="btn btn-primary" id="myBtn" @if(Auth::User()->designation_id == 2) {{ (!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')}} @endif >{{ (!$feedback) ? 'Submit' : 'Update' }} </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> -->
+                <!-- /.tab-pane -->
+                <!-- /End of feedback Accounts-->
                 @endif
 
                 @if($displayNodue)
@@ -771,7 +1000,7 @@
                                     <div class="box-header with-border">
                                         <h3 class="box-title">No Due</h3>
                                     </div>
-                                    <form method="get" action="{{ (!$nodue) ? route('storeNodue') : route('updateNodue') }}">
+                                    <form method="get" action="{{ route('addOrUpdateNodue') }}">
                                         <div class="box-body">
                                             <table class="table table-bordered">
                                                 <thead>
@@ -785,9 +1014,9 @@
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required @if($nodue) {{ ($nodue->knowledge_transfer_lead != NULL) ? 'checked' : '' }} @endif> Knowledge Transfer
+                                                                        <input type="checkbox" name="attribute[]" value="Knowledge Transfer" required>Knowledge Transfer
                                                                     </label>
-                                                                    @error('knowledge_transfer')
+                                                                    @error('attribute')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -797,8 +1026,8 @@
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->knowledge_transfer_lead_comment  }}</textarea>
-                                                                    @error('knowledge_transfer_comment')
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -811,9 +1040,9 @@
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required @if($nodue) {{ ($nodue->mail_id_closure_lead != NULL) ? 'checked' : '' }} @endif> Mail ID closure
+                                                                        <input type="checkbox" name="attribute[]" value="Mail ID closure" required> Mail ID closure
                                                                     </label>
-                                                                    @error('mail_id_closure')
+                                                                    @error('attribute')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -823,8 +1052,8 @@
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->mail_id_closure_lead_comment  }}</textarea>
-                                                                    @error('mail_id_closure_comment')
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -895,9 +1124,9 @@
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="id_card" value="completed" required @if($nodue) {{ ($nodue->id_card != NULL) ? 'checked' : '' }} @endif> ID Card
+                                                                        <input type="checkbox" name="attribute[]" value="ID Card" required> ID Card
                                                                     </label>
-                                                                    @error('id_card')
+                                                                    @error('attribute')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -907,8 +1136,8 @@
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="id_card_comment" class="form-control" id="id_card_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->id_card_comment  }}</textarea>
-                                                                    @error('id_card_comment')
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -921,9 +1150,9 @@
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="nda" value="completed" required @if($nodue) {{ ($nodue->nda != NULL) ? 'checked' : '' }} @endif> NDA
+                                                                        <input type="checkbox" name="attribute[]" value="NDA" required> NDA
                                                                     </label>
-                                                                    @error('nda')
+                                                                    @error('attribute')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -933,8 +1162,34 @@
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="nda_comment" class="form-control" id="nda_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->nda_comment  }}</textarea>
-                                                                    @error('nda_comment')
+                                                                    <textarea name="comment[]" class="form-control"cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Professional Tax" required> Professional Tax
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -950,9 +1205,9 @@
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="official_email_id" value="completed" required @if($nodue) {{ ($nodue->official_email_id != NULL) ? 'checked' : '' }} @endif> Official Email ID
+                                                                        <input type="checkbox" name="attribute[]" value="Official Email ID" required> Official Email ID
                                                                     </label>
-                                                                    @error('official_email_id')
+                                                                    @error('attribute')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -962,8 +1217,8 @@
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="official_email_id_comment" class="form-control" id="official_email_id_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->official_email_id_comment  }}</textarea>
-                                                                    @error('official_email_id_comment')
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -976,9 +1231,9 @@
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="skype_account" value="completed" required @if($nodue) {{ ($nodue->skype_account != NULL) ? 'checked' : '' }} @endif> NDA
+                                                                        <input type="checkbox" name="attribute[]" value="Skype Account" required> Skype Account
                                                                     </label>
-                                                                    @error('skype_account')
+                                                                    @error('attribute')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>
@@ -988,8 +1243,751 @@
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="skype_account_comment" class="form-control" id="skype_account_comment" cols="30" rows="3" required>{{ (!$nodue) ? '' :  $nodue->skype_account_comment  }}</textarea>
-                                                                    @error('skype_account_comment')
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Gmail or Yahoo Testing Purpose" required> Gmail or Yahoo Testing Purpose
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Testing Tools" required> Testing Tools
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Linux or Mac Machine Password" required> Linux or Mac Machine Password
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Specific Tools For Renewal Details" required> Specific Tools For Renewal Details
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Handover Testing Device" required> Handover Testing Device
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Headset" required> Headset
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Machine Port Forwarding" required> Machine Port Forwarding
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="SVN & VSS & TFS Login Details" required> SVN & VSS & TFS Login Details
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="RDP, VPN Connection" required> RDP, VPN Connection
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Laptop and Data Card" required> Laptop and Data Card
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for Accounts -->
+                                                    @if(Auth::User()->designation_id == null)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Salary Advance Due" required> Salary Advance Due
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Income Tax Due" required > Income Tax Due
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Documents For IT" required> Documents For IT
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for Admin -->
+                                                    @if(Auth::User()->designation_id == null)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Laptop" required> Laptop
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Data Card" required> Data Card
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Official Property If Any" required> Official Property If Any
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for Quality -->
+                                                    @if(Auth::User()->designation_id == null)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Exit Process Completion From Core Departments" required> Exit Process Completion From Core Departments
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="ISMS/QMS Incidents & Tickets Closure Status" required> ISMS/QMS Incidents & Tickets Closure Status
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Disable All Access Control" required> Disable All Access Control
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for Technical Team -->
+                                                    @if(Auth::User()->designation_id == null)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="KT completed for all the current and old projects" required> KT completed for all the current and old projects
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Relieving date informed and accepted by client" required> Relieving date informed and accepted by client
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)" required> All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)" required> Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    <!-- No due forms for Marketing Team -->
+                                                    @if(Auth::User()->designation_id == null)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Handing over CLIENT details (Excel)" required> Handing over CLIENT details (Excel)
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="KT on HOT & WARM prospects" required> KT on HOT & WARM prospects
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Introducing new account manager to CLIENTS via Email" required> Introducing new account manager to CLIENTS via Email
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Completion of Data Categorization" required> Completion of Data Categorization
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="RFP System updation" required> RFP System updation
+                                                                    </label>
+                                                                    @error('attribute')
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger">{{ $message }}</strong>
+                                                                    </span>
+                                                                    @enderror
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    @error('comment')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong class="text-danger">{{ $message }}</strong>

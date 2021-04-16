@@ -235,19 +235,19 @@ class ProcessController extends Controller
         ->get();
 
         //completed no due
-        $completed_no_due = \DB::table( 'no_dues' )
-        ->where([
-            ['no_dues.resignation_id', $id],
-            ['knowledge_transfer_lead','!=',NULL],
-            ['mail_id_closure_lead','!=',NULL],
-            ['knowledge_transfer_head','!=',NULL],
-            ['mail_id_closure_head','!=',NULL],
-            ['id_card','!=',NULL],
-            ['nda','!=',NULL],
-            ['official_email_id','!=',NULL],
-            ['skype_account','!=',NULL]
-            ])
-        ->first();
+        // $completed_no_due = \DB::table( 'no_dues' )
+        // ->where([
+        //     ['no_dues.resignation_id', $id],
+        //     ['knowledge_transfer_lead','!=',NULL],
+        //     ['mail_id_closure_lead','!=',NULL],
+        //     ['knowledge_transfer_head','!=',NULL],
+        //     ['mail_id_closure_head','!=',NULL],
+        //     ['id_card','!=',NULL],
+        //     ['nda','!=',NULL],
+        //     ['official_email_id','!=',NULL],
+        //     ['skype_account','!=',NULL]
+        //     ])
+        // ->first();
 
         //HR list for select the name in final exit checklist
 
@@ -757,6 +757,35 @@ class ProcessController extends Controller
         $updateNodue->save();
         $notification=array(
             'message' => 'No-due has been updated!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
+    }
+
+    public function addOrUpdateNodue( Request $request ) {
+        $request->validate( [
+            'attribute'=>'required',
+            'comment'=>'required'
+        ] );
+        $resignationId = $request->get( 'resignationId' );
+        for($arraySize = 0; $arraySize < count($request->attribute) ; $arraySize++ ) {
+            $noDue = NoDue::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'attribute' => $request->attribute[$arraySize],
+            ],
+            [
+                'comment' => $request->comment[$arraySize],
+            ]
+            );
+            $noDue->save();
+            // echo $request->attribute[$arraySize];
+            // echo '<pre>';
+            // echo $request->comment[$arraySize];
+            // echo '<pre>';
+
+        }
+        $notification=array(
+            'message' => 'No-due has been recorded!',
             'alert-type' => 'success'
         );
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);

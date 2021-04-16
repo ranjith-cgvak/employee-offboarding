@@ -42,6 +42,7 @@ Route::get('updateNodue' , 'ProcessController@updateNodue')->middleware(['auth',
 Route::get('storeFeedback' , 'ProcessController@storeFeedback')->middleware(['auth','backendAccess'])->name('storeFeedback');
 Route::get('updateFeedback' , 'ProcessController@updateFeedback')->middleware(['auth','backendAccess'])->name('updateFeedback');
 Route::get('addOrUpdateHrInterview' , 'ProcessController@addOrUpdateHrInterview')->middleware(['auth','backendAccess'])->name('addOrUpdateHrInterview');
+Route::get('addOrUpdateNodue' , 'ProcessController@addOrUpdateNodue')->middleware(['auth','backendAccess'])->name('addOrUpdateNodue');
 Route::post('storeFinalCheckList' , 'ProcessController@storeFinalCheckList')->middleware(['auth','backendAccess'])->name('storeFinalCheckList');
 Route::post('updateFinalCheckList' , 'ProcessController@updateFinalCheckList')->middleware(['auth','backendAccess'])->name('updateFinalCheckList');
 Route::get('resignationDetails','ResignationController@index')->middleware('auth')->name('resignationDetails');

@@ -493,7 +493,7 @@ unset($__errorArgs, $__bag); ?>
                 <?php endif; ?>
 
                 <?php if(\Auth::User()->department_id != 7 && $is_feedback_enable): ?>
-                <!-- Feedback form -->
+                <!-- Feedback form Software-->
                 <div class="tab-pane" id="tab_3-2">
                     <div class="container-fluid">
                         <div class="row">
@@ -892,7 +892,292 @@ unset($__errorArgs, $__bag); ?>
 
                 </div>
                 <!-- /.tab-pane -->
-                <!-- /End of feedback -->
+                <!-- /End of feedback Software-->
+                <!-- Feedback form Accounts -->
+                <!-- <div class="tab-pane" id="tab_3-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form method="get" action="<?php echo e((!$feedback) ? route('storeFeedback') : route('updateFeedback')); ?>">
+                                    <div class="box box-secondary">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">Feedback</h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <th><h3>Attributes</h3></th>
+                                                    <th><h3>Ratings</h3></th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label for="attendance" class="form-label">Attendance <span class="text-danger">*</span></label></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attendance_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                            <td>
+                                                                <select name="attendance" id="attendance" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attendance_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attendance_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['attendance'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                            </td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="learning&responsiveness" class="form-label">Learning & Responsiveness <span class="text-danger">*</span></label></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsiveness_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                            <td>
+                                                                <select name="learning&responsiveness" id="learning&responsiveness" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsiveness_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsiveness_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['reponsiveness'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                            </td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="reponsibility" class="form-label">Reponsibility <span class="text-danger">*</span></label></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsibility_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                            <td>
+                                                                <select name="reponsibility" id="reponsibility" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsibility_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsibility_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['reponsibility'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                            </td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="commitment&integrity" class="form-label">Commitment & Integrity <span class="text-danger">*</span></label></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                            <td>
+                                                                <select name="commitment&integrity" id="commitment&integrity" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['commit_on_task_delivery'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                            </td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="sales_performance" class="form-label">Sales Performance <span class="text-danger">*</span></label></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                            <td>
+                                                                <select name="sales_performance" id="sales_performance" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->technical_knowledge_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->technical_knowledge_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['technical_knowledge'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                            </td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="attitude" class="form-label">Attitude <span class="text-danger">*</span></label></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attitude_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                            <td>
+                                                                <select name="attitude" id="attitude" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attitude_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attitude_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['attitude'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                            </td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software <span class="text-danger">*</span></label></td>
+                                                        <?php if(Auth::User()->department_id == 2): ?>
+                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->overall_rating); ?></td>
+                                                        <?php endif; ?>
+                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                            <td>
+                                                                <select name="overall_performance" id="overall_performance" class="form-control" required>
+                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->overall_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->overall_rating); ?></option>
+                                                                    <option value="Excellent">Excellent</option>
+                                                                    <option value="Good">Good</option>
+                                                                    <option value="Satisfactory">Satisfactory</option>
+                                                                    <option value="Poor">Poor</option>
+                                                                </select>
+                                                                <?php $__errorArgs = ['overall_performance'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                <br>
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                </span>
+                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                            </td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            </br>
+                                            <?php if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                <div class="form-group">
+                                                    <label class="form-label">Lead Comments</label>
+                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->lead_comment); ?></textarea>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if(Auth::User()->department_id == 2): ?>
+                                                <div class="form-group">
+                                                    <label class="form-label">Head Comments</label>
+                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->head_comment); ?></textarea>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                                <div class="form-group">
+                                                    <label for="feedback_comments" class="form-label">Comments <span class="text-danger">*</span></label>
+                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment)); ?></textarea>
+                                                    <?php $__errorArgs = ['feedback_comments'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <br>
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                    </span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-xs-12">
+                                                        <label class="form-label">Thankyou for your valuable feedback</label>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
+                                            <input type="hidden" id="feedbackId" name="feedbackId" value="<?php echo e((!$feedback) ? '' : $feedback->id); ?>">
+                                        </div>
+                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
+                                            <div class="box-footer">
+                                                <button type="submit" class="btn btn-primary" id="myBtn" <?php if(Auth::User()->designation_id == 2): ?> <?php echo e((!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')); ?> <?php endif; ?> ><?php echo e((!$feedback) ? 'Submit' : 'Update'); ?> </button>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> -->
+                <!-- /.tab-pane -->
+                <!-- /End of feedback Accounts-->
                 <?php endif; ?>
 
                 <?php if($displayNodue): ?>
@@ -905,7 +1190,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="box-header with-border">
                                         <h3 class="box-title">No Due</h3>
                                     </div>
-                                    <form method="get" action="<?php echo e((!$nodue) ? route('storeNodue') : route('updateNodue')); ?>">
+                                    <form method="get" action="<?php echo e(route('addOrUpdateNodue')); ?>">
                                         <div class="box-body">
                                             <table class="table table-bordered">
                                                 <thead>
@@ -919,9 +1204,9 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->knowledge_transfer_lead != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Knowledge Transfer
+                                                                        <input type="checkbox" name="attribute[]" value="Knowledge Transfer" required>Knowledge Transfer
                                                                     </label>
-                                                                    <?php $__errorArgs = ['knowledge_transfer'];
+                                                                    <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -938,8 +1223,8 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->knowledge_transfer_lead_comment); ?></textarea>
-                                                                    <?php $__errorArgs = ['knowledge_transfer_comment'];
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -959,9 +1244,9 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->mail_id_closure_lead != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Mail ID closure
+                                                                        <input type="checkbox" name="attribute[]" value="Mail ID closure" required> Mail ID closure
                                                                     </label>
-                                                                    <?php $__errorArgs = ['mail_id_closure'];
+                                                                    <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -978,8 +1263,8 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->mail_id_closure_lead_comment); ?></textarea>
-                                                                    <?php $__errorArgs = ['mail_id_closure_comment'];
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -1085,9 +1370,9 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="id_card" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->id_card != NULL) ? 'checked' : ''); ?> <?php endif; ?>> ID Card
+                                                                        <input type="checkbox" name="attribute[]" value="ID Card" required> ID Card
                                                                     </label>
-                                                                    <?php $__errorArgs = ['id_card'];
+                                                                    <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -1104,8 +1389,8 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="id_card_comment" class="form-control" id="id_card_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->id_card_comment); ?></textarea>
-                                                                    <?php $__errorArgs = ['id_card_comment'];
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -1125,9 +1410,9 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="nda" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->nda != NULL) ? 'checked' : ''); ?> <?php endif; ?>> NDA
+                                                                        <input type="checkbox" name="attribute[]" value="NDA" required> NDA
                                                                     </label>
-                                                                    <?php $__errorArgs = ['nda'];
+                                                                    <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -1144,8 +1429,48 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="nda_comment" class="form-control" id="nda_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->nda_comment); ?></textarea>
-                                                                    <?php $__errorArgs = ['nda_comment'];
+                                                                    <textarea name="comment[]" class="form-control"cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Professional Tax" required> Professional Tax
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -1168,9 +1493,9 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="official_email_id" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->official_email_id != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Official Email ID
+                                                                        <input type="checkbox" name="attribute[]" value="Official Email ID" required> Official Email ID
                                                                     </label>
-                                                                    <?php $__errorArgs = ['official_email_id'];
+                                                                    <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -1187,8 +1512,8 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="official_email_id_comment" class="form-control" id="official_email_id_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->official_email_id_comment); ?></textarea>
-                                                                    <?php $__errorArgs = ['official_email_id_comment'];
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -1208,9 +1533,9 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="skype_account" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->skype_account != NULL) ? 'checked' : ''); ?> <?php endif; ?>> NDA
+                                                                        <input type="checkbox" name="attribute[]" value="Skype Account" required> Skype Account
                                                                     </label>
-                                                                    <?php $__errorArgs = ['skype_account'];
+                                                                    <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -1227,8 +1552,1143 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="skype_account_comment" class="form-control" id="skype_account_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->skype_account_comment); ?></textarea>
-                                                                    <?php $__errorArgs = ['skype_account_comment'];
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Gmail or Yahoo Testing Purpose" required> Gmail or Yahoo Testing Purpose
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Testing Tools" required> Testing Tools
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Linux or Mac Machine Password" required> Linux or Mac Machine Password
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Specific Tools For Renewal Details" required> Specific Tools For Renewal Details
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Handover Testing Device" required> Handover Testing Device
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Headset" required> Headset
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Machine Port Forwarding" required> Machine Port Forwarding
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="SVN & VSS & TFS Login Details" required> SVN & VSS & TFS Login Details
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="RDP, VPN Connection" required> RDP, VPN Connection
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Laptop and Data Card" required> Laptop and Data Card
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endif; ?>
+                                                    <!-- No due forms for Accounts -->
+                                                    <?php if(Auth::User()->designation_id == null): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Salary Advance Due" required> Salary Advance Due
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Income Tax Due" required > Income Tax Due
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Documents For IT" required> Documents For IT
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endif; ?>
+                                                    <!-- No due forms for Admin -->
+                                                    <?php if(Auth::User()->designation_id == null): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Laptop" required> Laptop
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Data Card" required> Data Card
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Official Property If Any" required> Official Property If Any
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endif; ?>
+                                                    <!-- No due forms for Quality -->
+                                                    <?php if(Auth::User()->designation_id == null): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Exit Process Completion From Core Departments" required> Exit Process Completion From Core Departments
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="ISMS/QMS Incidents & Tickets Closure Status" required> ISMS/QMS Incidents & Tickets Closure Status
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Disable All Access Control" required> Disable All Access Control
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endif; ?>
+                                                    <!-- No due forms for Technical Team -->
+                                                    <?php if(Auth::User()->designation_id == null): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="KT completed for all the current and old projects" required> KT completed for all the current and old projects
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Relieving date informed and accepted by client" required> Relieving date informed and accepted by client
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)" required> All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)" required> Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endif; ?>
+                                                    <!-- No due forms for Marketing Team -->
+                                                    <?php if(Auth::User()->designation_id == null): ?>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Handing over CLIENT details (Excel)" required> Handing over CLIENT details (Excel)
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="KT on HOT & WARM prospects" required> KT on HOT & WARM prospects
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Introducing new account manager to CLIENTS via Email" required> Introducing new account manager to CLIENTS via Email
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="Completion of Data Categorization" required> Completion of Data Categorization
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="attribute[]" value="RFP System updation" required> RFP System updation
+                                                                    </label>
+                                                                    <?php $__errorArgs = ['attribute'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                                    <br>
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
+                                                                    </span>
+                                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
