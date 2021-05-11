@@ -50,24 +50,13 @@ class ResignationController extends Controller
             ['date_of_withdraw', '=', NULL],
         ])
         ->first();
-        $noDueStatus = \DB::table('no_dues')->where('resignation_id',$myResignation->id)->first();
-        $completed_no_due = \DB::table( 'no_dues' )
-        ->where([
-            ['no_dues.resignation_id', $myResignation->id],
-            ['knowledge_transfer_lead','!=',NULL],
-            ['mail_id_closure_lead','!=',NULL],
-            ['knowledge_transfer_head','!=',NULL],
-            ['mail_id_closure_head','!=',NULL],
-            ['id_card','!=',NULL],
-            ['nda','!=',NULL],
-            ['official_email_id','!=',NULL],
-            ['skype_account','!=',NULL]
-            ])
-        ->first();
+        $completed_acceptance = \DB::table('acceptance_statuses')->where('resignation_id',$myResignation->id)->where('reviewed_by','hr')->first();
+        $noDueStatus = 'sdsds';
+        $completed_no_due = NULL;
         $exitInterview = \DB::table('user_answers')->where('resignation_id',$myResignation->id)->first();
         $finalChecklist = \DB::table('final_exit_checklists')->where('resignation_id',$myResignation->id)->first();
         $user = \DB::table('users')->where('emp_id',$empId)->first();
-        return view('resignation.progress', compact('myResignation','user','noDueStatus','exitInterview','finalChecklist','completed_no_due'));
+        return view('resignation.progress', compact('myResignation','user','noDueStatus','exitInterview','finalChecklist','completed_no_due','completed_acceptance'));
     }
 
     //Acceptance status of the resignation
@@ -154,21 +143,119 @@ class ResignationController extends Controller
         ->where('user_answers.resignation_id',$myResignation->id)
         ->first();
 
+        $nodues = \DB::table( 'no_dues' )
+        ->where( 'no_dues.resignation_id', $myResignation->id )
+        ->get();
+        $nodueAttribute = NULL;
+        foreach($nodues as $nodue) {
+            if($nodue->attribute == 'Knowledge Transfer') {
+                $nodueAttribute['knowledge_transfer_comment'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Mail ID closure') {
+                $nodueAttribute['mail_closure'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'ID Card') {
+                $nodueAttribute['id_card'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'NDA') {
+                $nodueAttribute['nda'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Professional Tax') {
+                $nodueAttribute['professional_tax'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Official Email ID') {
+                $nodueAttribute['official_email_id'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Skype Account') {
+                $nodueAttribute['skype_account'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Gmail or Yahoo Testing Purpose') {
+                $nodueAttribute['gmail_yahoo'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Testing Tools') {
+                $nodueAttribute['testing_tools'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Linux or Mac Machine Password') {
+                $nodueAttribute['linux_mac_password'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Specific Tools For Renewal Details') {
+                $nodueAttribute['renewal_tools'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Handover Testing Device') {
+                $nodueAttribute['testing_device'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Headset') {
+                $nodueAttribute['headset'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Machine Port Forwarding') {
+                $nodueAttribute['machine_port_forwarding'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'SVN & VSS & TFS Login Details') {
+                $nodueAttribute['svn_vss_tfs'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'RDP, VPN Connection') {
+                $nodueAttribute['rdp_vpn'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Laptop and Data Card') {
+                $nodueAttribute['laptop_datacard'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Salary Advance Due') {
+                $nodueAttribute['salary_advance_due'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Income Tax Due') {
+                $nodueAttribute['income_tax_due'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Documents For IT') {
+                $nodueAttribute['documents_it'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Laptop') {
+                $nodueAttribute['laptop'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Data Card') {
+                $nodueAttribute['data_card'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Official Property If Any') {
+                $nodueAttribute['official_property'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Exit Process Completion From Core Departments') {
+                $nodueAttribute['exit_process_completion'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'ISMS/QMS Incidents & Tickets Closure Status') {
+                $nodueAttribute['isms_qms'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Disable All Access Control') {
+                $nodueAttribute['disable_access'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'KT completed for all the current and old projects') {
+                $nodueAttribute['kt_completion'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Relieving date informed and accepted by client') {
+                $nodueAttribute['relieving_date_informed'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)') {
+                $nodueAttribute['internal_client_souce_code'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)') {
+                $nodueAttribute['project_detail_document'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Handing over CLIENT details (Excel)') {
+                $nodueAttribute['client_details_handle'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'KT on HOT & WARM prospects') {
+                $nodueAttribute['kt_hot_warm'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Introducing new account manager to CLIENTS via Email') {
+                $nodueAttribute['intro_new_acc_manager'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Completion of Data Categorization') {
+                $nodueAttribute['data_categorization'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'RFP System updation') {
+                $nodueAttribute['rfp_system'] = $nodue->comment;
+            }
+        }
 
-        $completed_no_due = \DB::table( 'no_dues' )
-        ->where([
-            ['no_dues.resignation_id', $myResignation->id],
-            ['knowledge_transfer_lead','!=',NULL],
-            ['mail_id_closure_lead','!=',NULL],
-            ['knowledge_transfer_head','!=',NULL],
-            ['mail_id_closure_head','!=',NULL],
-            ['id_card','!=',NULL],
-            ['nda','!=',NULL],
-            ['official_email_id','!=',NULL],
-            ['skype_account','!=',NULL]
-            ])
-        ->first();
-        return view('resignation.noDueStatus', compact('myResignation','user','converted_dates','nodue','answers','completed_no_due'));
+        return view('resignation.noDueStatus', compact('myResignation','user','converted_dates','nodue','answers','completed_no_due','nodueAttribute'));
     }
 
     //Withdraw for the resignation

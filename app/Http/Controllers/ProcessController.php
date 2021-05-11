@@ -115,12 +115,6 @@ class ProcessController extends Controller
 
         $converted_dates = array( 'joining_date'=>$converted_joining_date, 'date_of_resignation'=>$converted_resignation_date, 'date_of_leaving'=>$converted_leaving_date, 'changed_dol'=>$converted_changed_dol );
 
-        $feedback = \DB::table( 'feedback' )
-        ->where( 'feedback.resignation_id', $id )
-        ->first();
-        $nodue = \DB::table( 'no_dues' )
-        ->where( 'no_dues.resignation_id', $id )
-        ->first();
         $emp_id = \Auth::User()->emp_id ;
 
         $answers = \DB::table( 'user_answers' )
@@ -251,10 +245,181 @@ class ProcessController extends Controller
 
         //HR list for select the name in final exit checklist
 
+        $nodues = \DB::table( 'no_dues' )
+        ->where( 'no_dues.resignation_id', $id )
+        ->get();
+
+        $nodueAttribute = NULL;
+        foreach($nodues as $nodue) {
+            if($nodue->attribute == 'Knowledge Transfer') {
+                $nodueAttribute['knowledge_transfer_comment'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Mail ID closure') {
+                $nodueAttribute['mail_closure'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'ID Card') {
+                $nodueAttribute['id_card'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'NDA') {
+                $nodueAttribute['nda'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Professional Tax') {
+                $nodueAttribute['professional_tax'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Official Email ID') {
+                $nodueAttribute['official_email_id'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Skype Account') {
+                $nodueAttribute['skype_account'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Gmail or Yahoo Testing Purpose') {
+                $nodueAttribute['gmail_yahoo'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Testing Tools') {
+                $nodueAttribute['testing_tools'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Linux or Mac Machine Password') {
+                $nodueAttribute['linux_mac_password'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Specific Tools For Renewal Details') {
+                $nodueAttribute['renewal_tools'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Handover Testing Device') {
+                $nodueAttribute['testing_device'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Headset') {
+                $nodueAttribute['headset'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Machine Port Forwarding') {
+                $nodueAttribute['machine_port_forwarding'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'SVN & VSS & TFS Login Details') {
+                $nodueAttribute['svn_vss_tfs'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'RDP, VPN Connection') {
+                $nodueAttribute['rdp_vpn'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Laptop and Data Card') {
+                $nodueAttribute['laptop_datacard'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Salary Advance Due') {
+                $nodueAttribute['salary_advance_due'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Income Tax Due') {
+                $nodueAttribute['income_tax_due'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Documents For IT') {
+                $nodueAttribute['documents_it'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Laptop') {
+                $nodueAttribute['laptop'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Data Card') {
+                $nodueAttribute['data_card'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Official Property If Any') {
+                $nodueAttribute['official_property'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Exit Process Completion From Core Departments') {
+                $nodueAttribute['exit_process_completion'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'ISMS/QMS Incidents & Tickets Closure Status') {
+                $nodueAttribute['isms_qms'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Disable All Access Control') {
+                $nodueAttribute['disable_access'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'KT completed for all the current and old projects') {
+                $nodueAttribute['kt_completion'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Relieving date informed and accepted by client') {
+                $nodueAttribute['relieving_date_informed'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)') {
+                $nodueAttribute['internal_client_souce_code'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)') {
+                $nodueAttribute['project_detail_document'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Handing over CLIENT details (Excel)') {
+                $nodueAttribute['client_details_handle'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'KT on HOT & WARM prospects') {
+                $nodueAttribute['kt_hot_warm'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Introducing new account manager to CLIENTS via Email') {
+                $nodueAttribute['intro_new_acc_manager'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Completion of Data Categorization') {
+                $nodueAttribute['data_categorization'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'RFP System updation') {
+                $nodueAttribute['rfp_system'] = $nodue->comment;
+            }
+        }
+
+        $feedbacks = \DB::table( 'feedback' )
+        ->where( 'feedback.resignation_id', $id )
+        ->get();
+
+        $feedbackValues = NULL;
+        foreach($feedbacks as $feedback) {
+            if($feedback->attribute == 'Primary') {
+                $feedbackValues['primary'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Secondary') {
+                $feedbackValues['secondary'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Project Name') {
+                $feedbackValues['project_name'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Attendance') {
+                $feedbackValues['attendance'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Reponsiveness') {
+                $feedbackValues['reponsiveness'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Reponsibility') {
+                $feedbackValues['reponsibility'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Commit on Task Delivery') {
+                $feedbackValues['commit_on_task_delivery'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Technical Knowledge') {
+                $feedbackValues['technical_knowledge'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Logical Ability') {
+                $feedbackValues['logical_ability'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Attitude') {
+                $feedbackValues['attitude'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Overall performance during the tenure with CG-VAK Software') {
+                $feedbackValues['overall_performance'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Lead Comment') {
+                $feedbackValues['lead_comment'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Head Comment') {
+                $feedbackValues['head_comment'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Learning & Responsiveness') {
+                $feedbackValues['learning_responsiveness'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Commitment & Integrity') {
+                $feedbackValues['commitment_integrity'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Sales Performance') {
+                $feedbackValues['sales_performance'] = $feedback->comment_rating;
+            }
+        }
+
+
         $hr_list = \DB::table( 'users' )
         ->where( 'department_id', 2 )
         ->get();
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance','acceptanceValue','acceptanceComment','is_reviewed','displayNodue','showAnswers','hrExitInterviewComments','is_feedback_enable','completed_no_due','hr_list'));
+
+        return view('process.viewResignation' , compact('emp_resignation','feedback','converted_dates','nodues','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance','acceptanceValue','acceptanceComment','is_reviewed','displayNodue','showAnswers','hrExitInterviewComments','is_feedback_enable','completed_no_due','hr_list','nodueAttribute','feedbackValues'));
     }
 
     /**
@@ -451,7 +616,6 @@ class ProcessController extends Controller
 
     }
 
-
     //add or update date of withdraw comment
 
     public function addOrUpdateDowComment( Request $request ) {
@@ -499,268 +663,38 @@ class ProcessController extends Controller
         );
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
-
-    //Storing feedback for the resignation
-
-    public function storeFeedback( Request $request ) {
+    //Store or Updating feedback for the resignation
+    public function addOrUpdateFeedback(Request $request){
         $request->validate( [
-            'primary_skill'=>'required',
-            'secondary_skill'=>'required',
-            'last_worked_project'=>'required',
-            'attendance'=>'required',
-            'reponsiveness'=>'required',
-            'reponsibility'=>'required',
-            'commit_on_task_delivery'=>'required',
-            'technical_knowledge'=>'required',
-            'logical_ablitiy'=>'required',
-            'attitude'=>'required',
-            'overall_performance'=>'required',
-            'feedback_comments'=>'required'
+            'attribute'=>'required',
+            'value'=>'required'
         ] );
         $resignationId = $request->get( 'resignationId' );
-        $feedbackDate = date( 'Y-m-d', strtotime( $request->get( 'date_of_feedback' ) ) );
-        $feedback = new feedback( [
-            'resignation_id' => $request->get( 'resignationId' ),
-            'skill_set_primary' => $request->get( 'primary_skill' ),
-            'skill_set_secondary' => $request->get( 'secondary_skill' ),
-            'last_worked_project' => $request->get( 'last_worked_project' ),
-            'attendance_rating' => $request->get( 'attendance' ),
-            'responsiveness_rating' => $request->get( 'reponsiveness' ),
-            'responsibility_rating' => $request->get( 'reponsibility' ),
-            'commitment_on_task_delivery_rating' => $request->get( 'commit_on_task_delivery' ),
-            'technical_knowledge_rating' => $request->get( 'technical_knowledge' ),
-            'logical_ability_rating' => $request->get( 'logical_ablitiy' ),
-            'attitude_rating' => $request->get( 'attitude' ),
-            'overall_rating' => $request->get( 'overall_performance' )
-        ] );
-        //Head login
-        if ( \Auth::User()->designation_id == 3 ) {
-            $feedback->head_comment = $request->get( 'feedback_comments' );
+        for($arraySize = 0; $arraySize < count($request->attribute) ; $arraySize++ ) {
+            $feedback = Feedback::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'attribute' => $request->attribute[$arraySize],
+            ],
+            [
+                'comment_rating' => $request->value[$arraySize],
+            ]
+            );
+            $feedback->save();
+            // echo $request->attribute[$arraySize];
+            // echo '<pre>';
+            // echo $request->comment[$arraySize];
+            // echo '<pre>';
+
         }
-        //lead
-        else {
-            $feedback->lead_comment = $request->get( 'feedback_comments' );
-        }
-        $feedback->feedback_date = $feedbackDate;
-        $feedback->save();
         $notification=array(
-            'message' => 'Your feedbacks has been recorded!',
-            'alert-type' => 'success'
-        );
-
-        //Sending mail
-        $empname = Resignation::find( $resignationId )
-        ->select('display_name')
-        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
-        ->first();
-
-        $subject = "User feedback has been added!";
-        $template = "emails.feedbackMail";
-        $details = [
-            'name' => $empname->display_name,
-            'content' => "has been added!"
-        ];
-
-        \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
-
-        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
-    }
-
-    //Updating feedback for the resignation
-
-    public function updateFeedback( Request $request ) {
-        $request->validate( [
-            'primary_skill'=>'required',
-            'secondary_skill'=>'required',
-            'last_worked_project'=>'required',
-            'attendance'=>'required',
-            'reponsiveness'=>'required',
-            'reponsibility'=>'required',
-            'commit_on_task_delivery'=>'required',
-            'technical_knowledge'=>'required',
-            'logical_ablitiy'=>'required',
-            'attitude'=>'required',
-            'overall_performance'=>'required',
-            'feedback_comments'=>'required'
-        ] );
-        $feedbackId = $request->get( 'feedbackId' );
-        $resignationId = $request->get( 'resignationId' );
-        $feedbackDate = date( 'Y-m-d', strtotime( $request->get( 'date_of_feedback' ) ) );
-        $updateFeedback = Feedback::find( $feedbackId );
-        $updateFeedback->skill_set_primary =  $request->get( 'primary_skill' );
-        $updateFeedback->skill_set_secondary = $request->get( 'secondary_skill' );
-        $updateFeedback->last_worked_project = $request->get( 'last_worked_project' );
-        $updateFeedback->attendance_rating = $request->get( 'attendance' );
-        $updateFeedback->responsiveness_rating = $request->get( 'reponsiveness' );
-        $updateFeedback->responsibility_rating = $request->get( 'reponsibility' );
-        $updateFeedback->commitment_on_task_delivery_rating = $request->get( 'commit_on_task_delivery' );
-        $updateFeedback->technical_knowledge_rating = $request->get( 'technical_knowledge' );
-        $updateFeedback->logical_ability_rating = $request->get( 'logical_ablitiy' );
-        $updateFeedback->attitude_rating = $request->get( 'attitude' );
-        $updateFeedback->overall_rating = $request->get( 'overall_performance' );
-        $updateFeedback->feedback_date = $feedbackDate;
-
-        if ( \Auth::User()->designation_id == 3 ) {
-            $updateFeedback->head_comment = $request->get( 'feedback_comments' );
-        } else {
-            $updateFeedback->lead_comment = $request->get( 'feedback_comments' );
-        }
-        $updateFeedback->save();
-        $notification=array(
-            'message' => 'Your feedbacks has been updated!',
-            'alert-type' => 'success'
-        );
-
-        //Sending mail
-        $empname = Resignation::find( $resignationId )
-        ->select('display_name')
-        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
-        ->first();
-
-        $subject = "User feedback has been updated!";
-        $template = "emails.feedbackMail";
-        $details = [
-            'name' => $empname->display_name,
-            'content' => "has been updated!"
-        ];
-
-        \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
-
-        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
-    }
-
-    //Storing No Due forms for the resignation
-
-    public function storeNodue( Request $request ) {
-
-        $resignationId = $request->get( 'resignationId' );
-        $nodue = new NoDue( [
-            'resignation_id' => $request->get( 'resignationId' )
-        ] );
-        //Head or lead login
-        if ( ( \Auth::User()->designation_id == 3 ) || ( \Auth::User()->designation_id == 2 ) ) {
-            $request->validate( [
-                'knowledge_transfer'=>'required',
-                'knowledge_transfer_comment'=>'required',
-                'mail_id_closure'=>'required',
-                'mail_id_closure_comment'=>'required'
-            ] );
-            //Lead login
-            if ( \Auth::User()->designation_id == 2 ) {
-                $nodue->knowledge_transfer_lead = $request->get( 'knowledge_transfer' );
-                $nodue->knowledge_transfer_lead_comment =  $request->get( 'knowledge_transfer_comment' );
-                $nodue->mail_id_closure_lead = $request->get( 'mail_id_closure' );
-                $nodue->mail_id_closure_lead_comment = $request->get( 'mail_id_closure_comment' );
-            }
-            //Head login
-            if ( \Auth::User()->designation_id == 3 ) {
-                $nodue->knowledge_transfer_head = $request->get( 'knowledge_transfer' );
-                $nodue->knowledge_transfer_head_comment =  $request->get( 'knowledge_transfer_comment' );
-                $nodue->mail_id_closure_head = $request->get( 'mail_id_closure' );
-                $nodue->mail_id_closure_head_comment = $request->get( 'mail_id_closure_comment' );
-            }
-        }
-        //HR Store
-        if ( \Auth::User()->department_id == 2 ) {
-            $request->validate( [
-                'id_card'=>'required',
-                'id_card_comment'=>'required',
-                'nda'=>'required',
-                'nda_comment'=>'required'
-            ] );
-
-            $nodue->id_card = $request->get( 'id_card' );
-            $nodue->id_card_comment =  $request->get( 'id_card_comment' );
-            $nodue->nda = $request->get( 'nda' );
-            $nodue->nda_comment = $request->get( 'nda_comment' );
-        }
-        //SA store
-        if ( \Auth::User()->department_id == 7 ) {
-            $request->validate( [
-                'official_email_id'=>'required',
-                'official_email_id_comment'=>'required',
-                'skype_account'=>'required',
-                'skype_account_comment'=>'required'
-            ] );
-
-            $nodue->official_email_id = $request->get( 'official_email_id' );
-            $nodue->official_email_id_comment =  $request->get( 'official_email_id_comment' );
-            $nodue->skype_account = $request->get( 'skype_account' );
-            $nodue->skype_account_comment = $request->get( 'skype_account_comment' );
-        }
-        $nodue->save();
-        $notification=array(
-            'message' => 'No-due has been recorded!',
+            'message' => 'Feedback has been recorded!',
             'alert-type' => 'success'
         );
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
+
     }
 
-    //Update No due forms for resignation
-
-    public function updateNodue( Request $request ) {
-        $nodueId = $request->get( 'nodueId' );
-        $resignationId = $request->get( 'resignationId' );
-        $updateNodue = NoDue::find( $nodueId );
-
-        //Head or Lead update
-        if ( ( \Auth::User()->designation_id == 3 ) || ( \Auth::User()->designation_id == 2 ) ) {
-            $request->validate( [
-                'knowledge_transfer'=>'required',
-                'knowledge_transfer_comment'=>'required',
-                'mail_id_closure'=>'required',
-                'mail_id_closure_comment'=>'required'
-            ] );
-            if ( \Auth::User()->designation_id == 2 ) {
-                $updateNodue->knowledge_transfer_lead = $request->get( 'knowledge_transfer' );
-                $updateNodue->knowledge_transfer_lead_comment =  $request->get( 'knowledge_transfer_comment' );
-                $updateNodue->mail_id_closure_lead = $request->get( 'mail_id_closure' );
-                $updateNodue->mail_id_closure_lead_comment = $request->get( 'mail_id_closure_comment' );
-            }
-            if ( \Auth::User()->designation_id == 3 ) {
-                $updateNodue->knowledge_transfer_head = $request->get( 'knowledge_transfer' );
-                $updateNodue->knowledge_transfer_head_comment =  $request->get( 'knowledge_transfer_comment' );
-                $updateNodue->mail_id_closure_head = $request->get( 'mail_id_closure' );
-                $updateNodue->mail_id_closure_head_comment = $request->get( 'mail_id_closure_comment' );
-            }
-        }
-
-        //HR update
-        if ( \Auth::User()->department_id == 2 ) {
-            $request->validate( [
-                'id_card'=>'required',
-                'id_card_comment'=>'required',
-                'nda'=>'required',
-                'nda_comment'=>'required'
-            ] );
-
-            $updateNodue->id_card = $request->get( 'id_card' );
-            $updateNodue->id_card_comment =  $request->get( 'id_card_comment' );
-            $updateNodue->nda = $request->get( 'nda' );
-            $updateNodue->nda_comment = $request->get( 'nda_comment' );
-        }
-
-        //SA update
-        if ( \Auth::User()->department_id == 7 ) {
-            $request->validate( [
-                'official_email_id'=>'required',
-                'official_email_id_comment'=>'required',
-                'skype_account'=>'required',
-                'skype_account_comment'=>'required'
-            ] );
-
-            $updateNodue->official_email_id = $request->get( 'official_email_id' );
-            $updateNodue->official_email_id_comment =  $request->get( 'official_email_id_comment' );
-            $updateNodue->skype_account = $request->get( 'skype_account' );
-            $updateNodue->skype_account_comment = $request->get( 'skype_account_comment' );
-        }
-        $updateNodue->save();
-        $notification=array(
-            'message' => 'No-due has been updated!',
-            'alert-type' => 'success'
-        );
-        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
-    }
+    //Storing or update No Due forms for the resignation
 
     public function addOrUpdateNodue( Request $request ) {
         $request->validate( [
@@ -972,6 +906,10 @@ class ProcessController extends Controller
     public function downloadDocs($filename){
 
         return response()->download(storage_path("app\public\uploads/" .$filename ));
+    }
+
+    public function workflow(){
+        return view('process.workflow');
     }
     /**
     * Remove the specified resource from storage.

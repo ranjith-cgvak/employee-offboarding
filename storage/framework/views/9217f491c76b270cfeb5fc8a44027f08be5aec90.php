@@ -127,7 +127,7 @@ unset($__errorArgs, $__bag); ?>
                 <?php if(Auth::User()->department_id == 2 && $showAnswers != NULL): ?>
                 <li><a href="#tab_5-2" data-toggle="tab">Exit Interview Answers</a></li>
                 <?php endif; ?>
-                <?php if(\Auth::User()->department_id == 2 && $completed_no_due != NULL && $showAnswers != NULL): ?>
+                <?php if(\Auth::User()->department_id == 2 && $showAnswers != NULL): ?>
                 <li><a href="#tab_6-2" data-toggle="tab">Final Exit Checklist</a></li>
                 <?php endif; ?>
                 <?php endif; ?>
@@ -498,7 +498,7 @@ unset($__errorArgs, $__bag); ?>
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12">
-                                <form method="get" action="<?php echo e((!$feedback) ? route('storeFeedback') : route('updateFeedback')); ?>">
+                                <form method="get" action="<?php echo e(route('addOrUpdateFeedback')); ?>">
                                     <div class="box box-secondary">
                                         <div class="box-header with-border">
                                             <h3 class="box-title">Feedback</h3>
@@ -512,11 +512,12 @@ unset($__errorArgs, $__bag); ?>
                                                 <tbody>
                                                     <tr>
                                                         <td><label for="primary_skill" class="form-label">Primary <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Primary">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                        <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_primary); ?></td>
+                                                        <td><?php echo e((!$feedbackValues['primary']) ? 'N/A' : $feedbackValues['primary']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                        <td><input type="text" name="primary_skill" id="primary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_primary); ?>" required>
+                                                        <td><input type="text" name="value[]" id="primary_skill" class="form-control" value="<?php echo e($feedbackValues['primary']); ?>" required>
                                                             <?php $__errorArgs = ['primary_skill'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -534,12 +535,13 @@ unset($__errorArgs, $__bag); ?>
                                                         <?php endif; ?>
                                                     </tr>
                                                     <tr>
-                                                        <td><label for="secondary_skill" class="form-label">Secondary <span class="text-danger">*</span></label</td>
+                                                        <td><label for="secondary_skill" class="form-label">Secondary <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Secondary">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                        <td><?php echo e((!$feedback) ? 'N/A' : $feedback->skill_set_secondary); ?></td>
+                                                        <td><?php echo e((!$feedbackValues['secondary']) ? 'N/A' : $feedbackValues['secondary']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                        <td><input type="text" name="secondary_skill" id="secondary_skill" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->skill_set_secondary); ?>" required>
+                                                        <td><input type="text" name="value[]" id="secondary_skill" class="form-control" value="<?php echo e($feedbackValues['secondary']); ?>" required>
                                                             <?php $__errorArgs = ['secondary_skill'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -562,14 +564,15 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <label for="last_worked_project" class="form-label">Project Name <span class="text-danger">*</span></label</td>
+                                                            <label for="last_worked_project" class="form-label">Project Name <span class="text-danger">*</span></label></td>
+                                                            <input type="hidden" name="attribute[]" value="Project Name">
                                                         </td>
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                        <td><?php echo e((!$feedback) ? 'N/A' : $feedback->last_worked_project); ?></td>
+                                                        <td><?php echo e((!$feedbackValues['project_name']) ? 'N/A' : $feedbackValues['project_name']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td colspan="2">
-                                                                <input type="text" name="last_worked_project" id="last_worked_project" class="form-control" value="<?php echo e((!$feedback) ? '' : $feedback->last_worked_project); ?>" required>
+                                                                <input type="text" name="value[]" id="last_worked_project" class="form-control" value="<?php echo e($feedbackValues['project_name']); ?>" required>
                                                                 <?php $__errorArgs = ['last_worked_project'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -588,7 +591,7 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            </br>
+                                            <br>
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <th><h3>Attributes</h3></th>
@@ -597,17 +600,18 @@ unset($__errorArgs, $__bag); ?>
                                                 <tbody>
                                                     <tr>
                                                         <td><label for="attendance" class="form-label">Attendance <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Attendance">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attendance_rating); ?></td>
+                                                            <td><?php echo e((!$feedbackValues['attendance']) ? 'N/A' : $feedbackValues['attendance']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
-                                                                <select name="attendance" id="attendance" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attendance_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attendance_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
+                                                                <select name="value[]" id="attendance" class="form-control" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Excellent" <?php echo e(($feedbackValues['attendance'] == 'Excellent') ? 'selected' : ""); ?>>Excellent</option>
+                                                                    <option value="Good" <?php echo e(($feedbackValues['attendance'] == 'Good') ? 'selected' : ""); ?>>Good</option>
+                                                                    <option value="Satisfactory" <?php echo e(($feedbackValues['attendance'] == 'Satisfactory') ? 'selected' : ""); ?>>Satisfactory</option>
+                                                                    <option value="Poor" <?php echo e(($feedbackValues['attendance'] == 'Poor') ? 'selected' : ""); ?>>Poor</option>
                                                                 </select>
                                                                 <?php $__errorArgs = ['attendance'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -627,17 +631,18 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsiveness" class="form-label">Reponsiveness <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Reponsiveness">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsiveness_rating); ?></td>
+                                                            <td><?php echo e((!$feedbackValues['reponsiveness']) ? 'N/A' : $feedbackValues['reponsiveness']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
-                                                                <select name="reponsiveness" id="reponsiveness" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsiveness_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsiveness_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
+                                                                <select name="value[]" id="reponsiveness" class="form-control" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Excellent" <?php echo e(($feedbackValues['reponsiveness'] == 'Excellent') ? 'selected' : ""); ?>>Excellent</option>
+                                                                    <option value="Good" <?php echo e(($feedbackValues['reponsiveness'] == 'Good') ? 'selected' : ""); ?>>Good</option>
+                                                                    <option value="Satisfactory" <?php echo e(($feedbackValues['reponsiveness'] == 'Satisfactory') ? 'selected' : ""); ?>>Satisfactory</option>
+                                                                    <option value="Poor" <?php echo e(($feedbackValues['reponsiveness'] == 'Poor') ? 'selected' : ""); ?>>Poor</option>
                                                                 </select>
                                                                 <?php $__errorArgs = ['reponsiveness'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -657,17 +662,18 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="reponsibility" class="form-label">Reponsibility <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Reponsibility">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsibility_rating); ?></td>
+                                                            <td><?php echo e((!$feedbackValues['reponsibility']) ? 'N/A' : $feedbackValues['reponsibility']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
-                                                                <select name="reponsibility" id="reponsibility" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsibility_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsibility_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
+                                                                <select name="value[]" id="reponsibility" class="form-control" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Excellent" <?php echo e(($feedbackValues['reponsibility'] == 'Excellent') ? 'selected' : ""); ?>>Excellent</option>
+                                                                    <option value="Good" <?php echo e(($feedbackValues['reponsibility'] == 'Good') ? 'selected' : ""); ?>>Good</option>
+                                                                    <option value="Satisfactory" <?php echo e(($feedbackValues['reponsibility'] == 'Satisfactory') ? 'selected' : ""); ?>>Satisfactory</option>
+                                                                    <option value="Poor" <?php echo e(($feedbackValues['reponsibility'] == 'Poor') ? 'selected' : ""); ?>>Poor</option>
                                                                 </select>
                                                                 <?php $__errorArgs = ['reponsibility'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -687,17 +693,18 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="commit_on_task_delivery" class="form-label">Commit on Task Delivery <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Commit on Task Delivery">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating); ?></td>
+                                                            <td><?php echo e((!$feedbackValues['commit_on_task_delivery']) ? 'N/A' : $feedbackValues['commit_on_task_delivery']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
-                                                                <select name="commit_on_task_delivery" id="commit_on_task_delivery" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
+                                                                <select name="value[]" id="commit_on_task_delivery" class="form-control" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Excellent" <?php echo e(($feedbackValues['commit_on_task_delivery'] == 'Excellent') ? 'selected' : ""); ?>>Excellent</option>
+                                                                    <option value="Good" <?php echo e(($feedbackValues['commit_on_task_delivery'] == 'Good') ? 'selected' : ""); ?>>Good</option>
+                                                                    <option value="Satisfactory" <?php echo e(($feedbackValues['commit_on_task_delivery'] == 'Satisfactory') ? 'selected' : ""); ?>>Satisfactory</option>
+                                                                    <option value="Poor" <?php echo e(($feedbackValues['commit_on_task_delivery'] == 'Poor') ? 'selected' : ""); ?>>Poor</option>
                                                                 </select>
                                                                 <?php $__errorArgs = ['commit_on_task_delivery'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -717,17 +724,18 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="technical_knowledge" class="form-label">Technical Knowledge <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Technical Knowledge">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating); ?></td>
+                                                            <td><?php echo e((!$feedbackValues['technical_knowledge']) ? 'N/A' : $feedbackValues['technical_knowledge']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
-                                                                <select name="technical_knowledge" id="technical_knowledge" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->technical_knowledge_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->technical_knowledge_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
+                                                                <select name="value[]" id="technical_knowledge" class="form-control" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Excellent" <?php echo e(($feedbackValues['technical_knowledge'] == 'Excellent') ? 'selected' : ""); ?>>Excellent</option>
+                                                                    <option value="Good" <?php echo e(($feedbackValues['technical_knowledge'] == 'Good') ? 'selected' : ""); ?>>Good</option>
+                                                                    <option value="Satisfactory" <?php echo e(($feedbackValues['technical_knowledge'] == 'Satisfactory') ? 'selected' : ""); ?>>Satisfactory</option>
+                                                                    <option value="Poor" <?php echo e(($feedbackValues['technical_knowledge'] == 'Poor') ? 'selected' : ""); ?>>Poor</option>
                                                                 </select>
                                                                 <?php $__errorArgs = ['technical_knowledge'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -747,17 +755,18 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="logical_ablitiy" class="form-label">Logical Ability <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Logical Ability">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->logical_ability_rating); ?></td>
+                                                            <td><?php echo e((!$feedbackValues['logical_ability']) ? 'N/A' : $feedbackValues['logical_ability']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
-                                                                <select name="logical_ablitiy" id="logical_ablitiy" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->logical_ability_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->logical_ability_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
+                                                                <select name="value[]" id="logical_ablitiy" class="form-control" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Excellent" <?php echo e(($feedbackValues['logical_ability'] == 'Excellent') ? 'selected' : ""); ?>>Excellent</option>
+                                                                    <option value="Good" <?php echo e(($feedbackValues['logical_ability'] == 'Good') ? 'selected' : ""); ?>>Good</option>
+                                                                    <option value="Satisfactory" <?php echo e(($feedbackValues['logical_ability'] == 'Satisfactory') ? 'selected' : ""); ?>>Satisfactory</option>
+                                                                    <option value="Poor" <?php echo e(($feedbackValues['logical_ability'] == 'Poor') ? 'selected' : ""); ?>>Poor</option>
                                                                 </select>
                                                                 <?php $__errorArgs = ['logical_ablitiy'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -777,17 +786,18 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="attitude" class="form-label">Attitude <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Attitude">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attitude_rating); ?></td>
+                                                            <td><?php echo e((!$feedbackValues['attitude']) ? 'N/A' : $feedbackValues['attitude']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
-                                                                <select name="attitude" id="attitude" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attitude_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attitude_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
+                                                                <select name="value[]" id="attitude" class="form-control" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Excellent" <?php echo e(($feedbackValues['attitude'] == 'Excellent') ? 'selected' : ""); ?>>Excellent</option>
+                                                                    <option value="Good" <?php echo e(($feedbackValues['attitude'] == 'Good') ? 'selected' : ""); ?>>Good</option>
+                                                                    <option value="Satisfactory" <?php echo e(($feedbackValues['attitude'] == 'Satisfactory') ? 'selected' : ""); ?>>Satisfactory</option>
+                                                                    <option value="Poor" <?php echo e(($feedbackValues['attitude'] == 'Poor') ? 'selected' : ""); ?>>Poor</option>
                                                                 </select>
                                                                 <?php $__errorArgs = ['attitude'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -807,17 +817,18 @@ unset($__errorArgs, $__bag); ?>
                                                     </tr>
                                                     <tr>
                                                         <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software <span class="text-danger">*</span></label></td>
+                                                        <input type="hidden" name="attribute[]" value="Overall performance during the tenure with CG-VAK Software">
                                                         <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->overall_rating); ?></td>
+                                                            <td><?php echo e((!$feedbackValues['overall_performance']) ? 'N/A' : $feedbackValues['overall_performance']); ?></td>
                                                         <?php endif; ?>
                                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                             <td>
-                                                                <select name="overall_performance" id="overall_performance" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->overall_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->overall_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
+                                                                <select name="value[]" id="overall_performance" class="form-control" required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Excellent" <?php echo e(($feedbackValues['overall_performance'] == 'Excellent') ? 'selected' : ""); ?>>Excellent</option>
+                                                                    <option value="Good" <?php echo e(($feedbackValues['overall_performance'] == 'Good') ? 'selected' : ""); ?>>Good</option>
+                                                                    <option value="Satisfactory" <?php echo e(($feedbackValues['overall_performance'] == 'Satisfactory') ? 'selected' : ""); ?>>Satisfactory</option>
+                                                                    <option value="Poor" <?php echo e(($feedbackValues['overall_performance'] == 'Poor') ? 'selected' : ""); ?>>Poor</option>
                                                                 </select>
                                                                 <?php $__errorArgs = ['overall_performance'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -838,23 +849,31 @@ unset($__errorArgs, $__bag); ?>
                                                 </tbody>
                                             </table>
 
-                                            </br>
+                                            <br>
                                             <?php if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                 <div class="form-group">
                                                     <label class="form-label">Lead Comments</label>
-                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->lead_comment); ?></textarea>
+                                                    <textarea class="form-control" readonly><?php echo e((isset($feedbackValues['lead_comment'])) ? $feedbackValues['lead_comment'] : 'N/A'); ?></textarea>
                                                 </div>
                                             <?php endif; ?>
                                             <?php if(Auth::User()->department_id == 2): ?>
                                                 <div class="form-group">
                                                     <label class="form-label">Head Comments</label>
-                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->head_comment); ?></textarea>
+                                                    <textarea class="form-control" readonly><?php echo e((isset($feedbackValues['head_comment'])) ? $feedbackValues['head_comment'] : 'N/A'); ?></textarea>
                                                 </div>
                                             <?php endif; ?>
                                             <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                                 <div class="form-group">
                                                     <label for="feedback_comments" class="form-label">Comments <span class="text-danger">*</span></label>
-                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment)); ?></textarea>
+                                                        <?php if(Auth::User()->designation_id == 2): ?>
+                                                            <input type="hidden" name="attribute[]" value="Lead Comment">
+                                                            <textarea name="value[]" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((isset($feedbackValues['lead_comment'])) ? $feedbackValues['lead_comment'] : ''); ?></textarea>
+                                                        <?php endif; ?>
+                                                        <?php if(Auth::User()->designation_id == 3): ?>
+                                                            <input type="hidden" name="attribute[]" value="Head Comment">
+                                                            <textarea name="value[]" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((isset($feedbackValues['head_comment'])) ? $feedbackValues['head_comment'] : ''); ?></textarea>
+                                                        <?php endif; ?>
+
                                                     <?php $__errorArgs = ['feedback_comments'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -877,11 +896,10 @@ unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             <?php endif; ?>
                                             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
-                                            <input type="hidden" id="feedbackId" name="feedbackId" value="<?php echo e((!$feedback) ? '' : $feedback->id); ?>">
                                         </div>
                                         <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
                                             <div class="box-footer">
-                                                <button type="submit" class="btn btn-primary" id="myBtn" <?php if(Auth::User()->designation_id == 2): ?> <?php echo e((!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')); ?> <?php endif; ?> ><?php echo e((!$feedback) ? 'Submit' : 'Update'); ?> </button>
+                                                <button type="submit" class="btn btn-primary" id="myBtn" >Submit</button>
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -894,288 +912,7 @@ unset($__errorArgs, $__bag); ?>
                 <!-- /.tab-pane -->
                 <!-- /End of feedback Software-->
                 <!-- Feedback form Accounts -->
-                <!-- <div class="tab-pane" id="tab_3-2">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <form method="get" action="<?php echo e((!$feedback) ? route('storeFeedback') : route('updateFeedback')); ?>">
-                                    <div class="box box-secondary">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title">Feedback</h3>
-                                        </div>
-                                        <div class="box-body">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <th><h3>Attributes</h3></th>
-                                                    <th><h3>Ratings</h3></th>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td><label for="attendance" class="form-label">Attendance <span class="text-danger">*</span></label></td>
-                                                        <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attendance_rating); ?></td>
-                                                        <?php endif; ?>
-                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                            <td>
-                                                                <select name="attendance" id="attendance" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attendance_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attendance_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
-                                                                </select>
-                                                                <?php $__errorArgs = ['attendance'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                                <br>
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                                </span>
-                                                                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                            </td>
-                                                        <?php endif; ?>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><label for="learning&responsiveness" class="form-label">Learning & Responsiveness <span class="text-danger">*</span></label></td>
-                                                        <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsiveness_rating); ?></td>
-                                                        <?php endif; ?>
-                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                            <td>
-                                                                <select name="learning&responsiveness" id="learning&responsiveness" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsiveness_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsiveness_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
-                                                                </select>
-                                                                <?php $__errorArgs = ['reponsiveness'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                                <br>
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                                </span>
-                                                                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                            </td>
-                                                        <?php endif; ?>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><label for="reponsibility" class="form-label">Reponsibility <span class="text-danger">*</span></label></td>
-                                                        <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->responsibility_rating); ?></td>
-                                                        <?php endif; ?>
-                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                            <td>
-                                                                <select name="reponsibility" id="reponsibility" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->responsibility_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->responsibility_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
-                                                                </select>
-                                                                <?php $__errorArgs = ['reponsibility'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                                <br>
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                                </span>
-                                                                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                            </td>
-                                                        <?php endif; ?>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><label for="commitment&integrity" class="form-label">Commitment & Integrity <span class="text-danger">*</span></label></td>
-                                                        <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->commitment_on_task_delivery_rating); ?></td>
-                                                        <?php endif; ?>
-                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                            <td>
-                                                                <select name="commitment&integrity" id="commitment&integrity" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->commitment_on_task_delivery_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->commitment_on_task_delivery_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
-                                                                </select>
-                                                                <?php $__errorArgs = ['commit_on_task_delivery'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                                <br>
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                                </span>
-                                                                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                            </td>
-                                                        <?php endif; ?>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><label for="sales_performance" class="form-label">Sales Performance <span class="text-danger">*</span></label></td>
-                                                        <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->technical_knowledge_rating); ?></td>
-                                                        <?php endif; ?>
-                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                            <td>
-                                                                <select name="sales_performance" id="sales_performance" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->technical_knowledge_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->technical_knowledge_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
-                                                                </select>
-                                                                <?php $__errorArgs = ['technical_knowledge'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                                <br>
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                                </span>
-                                                                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                            </td>
-                                                        <?php endif; ?>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><label for="attitude" class="form-label">Attitude <span class="text-danger">*</span></label></td>
-                                                        <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->attitude_rating); ?></td>
-                                                        <?php endif; ?>
-                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                            <td>
-                                                                <select name="attitude" id="attitude" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->attitude_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->attitude_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
-                                                                </select>
-                                                                <?php $__errorArgs = ['attitude'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                                <br>
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                                </span>
-                                                                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                            </td>
-                                                        <?php endif; ?>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><label for="overall_performance" class="form-label">Overall performance during the tenure with CG-VAK Software <span class="text-danger">*</span></label></td>
-                                                        <?php if(Auth::User()->department_id == 2): ?>
-                                                            <td><?php echo e((!$feedback) ? 'N/A' : $feedback->overall_rating); ?></td>
-                                                        <?php endif; ?>
-                                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                            <td>
-                                                                <select name="overall_performance" id="overall_performance" class="form-control" required>
-                                                                    <option value="<?php echo e((!$feedback) ? '' : $feedback->overall_rating); ?>"><?php echo e((!$feedback) ? 'Select' : $feedback->overall_rating); ?></option>
-                                                                    <option value="Excellent">Excellent</option>
-                                                                    <option value="Good">Good</option>
-                                                                    <option value="Satisfactory">Satisfactory</option>
-                                                                    <option value="Poor">Poor</option>
-                                                                </select>
-                                                                <?php $__errorArgs = ['overall_performance'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                                <br>
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                                </span>
-                                                                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                            </td>
-                                                        <?php endif; ?>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                            </br>
-                                            <?php if((Auth::User()->department_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                <div class="form-group">
-                                                    <label class="form-label">Lead Comments</label>
-                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->lead_comment); ?></textarea>
-                                                </div>
-                                            <?php endif; ?>
-                                            <?php if(Auth::User()->department_id == 2): ?>
-                                                <div class="form-group">
-                                                    <label class="form-label">Head Comments</label>
-                                                    <textarea class="form-control" readonly><?php echo e((!$feedback) ? 'N/A' :  $feedback->head_comment); ?></textarea>
-                                                </div>
-                                            <?php endif; ?>
-                                            <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                                <div class="form-group">
-                                                    <label for="feedback_comments" class="form-label">Comments <span class="text-danger">*</span></label>
-                                                    <textarea name="feedback_comments" id="feedback_comments" cols="30" rows="10" class="form-control" required><?php echo e((!$feedback) ? '' : ((Auth::user()->designation_id == 2) ? $feedback->lead_comment : $feedback->head_comment)); ?></textarea>
-                                                    <?php $__errorArgs = ['feedback_comments'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                    <br>
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong class="text-danger"><?php echo e($message); ?></strong>
-                                                    </span>
-                                                    <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <div class="col-xs-12">
-                                                        <label class="form-label">Thankyou for your valuable feedback</label>
-                                                    </div>
-                                                </div>
-                                            <?php endif; ?>
-                                            <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
-                                            <input type="hidden" id="feedbackId" name="feedbackId" value="<?php echo e((!$feedback) ? '' : $feedback->id); ?>">
-                                        </div>
-                                        <?php if((Auth::User()->designation_id == 2) OR (Auth::User()->designation_id == 3)): ?>
-                                            <div class="box-footer">
-                                                <button type="submit" class="btn btn-primary" id="myBtn" <?php if(Auth::User()->designation_id == 2): ?> <?php echo e((!$feedback) ? '' : (($feedback->head_comment != NULL) ? 'disabled title= Head-Closed ' : '')); ?> <?php endif; ?> ><?php echo e((!$feedback) ? 'Submit' : 'Update'); ?> </button>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> -->
+                
                 <!-- /.tab-pane -->
                 <!-- /End of feedback Accounts-->
                 <?php endif; ?>
@@ -1204,7 +941,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Knowledge Transfer" required>Knowledge Transfer
+                                                                        <input type="checkbox" name="attribute[]" value="Knowledge Transfer" <?php if($nodueAttribute['knowledge_transfer_comment']): ?> checked <?php endif; ?> required>Knowledge Transfer
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1223,7 +960,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['knowledge_transfer_comment']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1244,7 +981,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Mail ID closure" required> Mail ID closure
+                                                                        <input type="checkbox" name="attribute[]" value="Mail ID closure" <?php if($nodueAttribute['mail_closure']): ?> checked <?php endif; ?> required> Mail ID closure
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1263,7 +1000,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['mail_closure']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1287,7 +1024,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->knowledge_transfer_head != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Knowledge Transfer
+                                                                        <input type="checkbox" name="knowledge_transfer" value="completed" required> Knowledge Transfer
                                                                     </label>
                                                                     <?php $__errorArgs = ['knowledge_transfer'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1306,7 +1043,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->knowledge_transfer_head_comment); ?></textarea>
+                                                                    <textarea name="knowledge_transfer_comment" class="form-control" id="knowledge_transfer_comment" cols="30" rows="3" required></textarea>
                                                                     <?php $__errorArgs = ['knowledge_transfer_comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1327,7 +1064,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required <?php if($nodue): ?> <?php echo e(($nodue->mail_id_closure_head != NULL) ? 'checked' : ''); ?> <?php endif; ?>> Mail ID closure
+                                                                        <input type="checkbox" name="mail_id_closure" value="completed" required> Mail ID closure
                                                                     </label>
                                                                     <?php $__errorArgs = ['mail_id_closure'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1346,7 +1083,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required><?php echo e((!$nodue) ? '' :  $nodue->mail_id_closure_head_comment); ?></textarea>
+                                                                    <textarea name="mail_id_closure_comment" class="form-control" id="mail_id_closure_comment" cols="30" rows="3" required></textarea>
                                                                     <?php $__errorArgs = ['mail_id_closure_comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1370,7 +1107,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="ID Card" required> ID Card
+                                                                        <input type="checkbox" name="attribute[]" value="ID Card" <?php if($nodueAttribute['id_card']): ?> checked <?php endif; ?> required> ID Card
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1389,7 +1126,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['id_card']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1410,7 +1147,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="NDA" required> NDA
+                                                                        <input type="checkbox" name="attribute[]" value="NDA" <?php if($nodueAttribute['nda']): ?> checked <?php endif; ?> required> NDA
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1429,7 +1166,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control"cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control"cols="30" rows="3" required><?php echo e($nodueAttribute['nda']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1450,7 +1187,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Professional Tax" required> Professional Tax
+                                                                        <input type="checkbox" name="attribute[]" value="Professional Tax" <?php if($nodueAttribute['professional_tax']): ?> checked <?php endif; ?> required> Professional Tax
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1469,7 +1206,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['professional_tax']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1493,7 +1230,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Official Email ID" required> Official Email ID
+                                                                        <input type="checkbox" name="attribute[]" value="Official Email ID" <?php if($nodueAttribute['official_email_id']): ?> checked <?php endif; ?> required> Official Email ID
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1512,7 +1249,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['official_email_id']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1533,7 +1270,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Skype Account" required> Skype Account
+                                                                        <input type="checkbox" name="attribute[]" value="Skype Account" <?php if($nodueAttribute['skype_account']): ?> checked <?php endif; ?> required> Skype Account
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1552,7 +1289,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['skype_account']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1573,7 +1310,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Gmail or Yahoo Testing Purpose" required> Gmail or Yahoo Testing Purpose
+                                                                        <input type="checkbox" name="attribute[]" value="Gmail or Yahoo Testing Purpose" <?php if($nodueAttribute['gmail_yahoo']): ?> checked <?php endif; ?> required> Gmail or Yahoo Testing Purpose
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1592,7 +1329,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['gmail_yahoo']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1613,7 +1350,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Testing Tools" required> Testing Tools
+                                                                        <input type="checkbox" name="attribute[]" value="Testing Tools" <?php if($nodueAttribute['testing_tools']): ?> checked <?php endif; ?> required> Testing Tools
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1632,7 +1369,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['testing_tools']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1653,7 +1390,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Linux or Mac Machine Password" required> Linux or Mac Machine Password
+                                                                        <input type="checkbox" name="attribute[]" value="Linux or Mac Machine Password" <?php if($nodueAttribute['linux_mac_password']): ?> checked <?php endif; ?> required> Linux or Mac Machine Password
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1672,7 +1409,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['linux_mac_password']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1693,7 +1430,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Specific Tools For Renewal Details" required> Specific Tools For Renewal Details
+                                                                        <input type="checkbox" name="attribute[]" value="Specific Tools For Renewal Details" <?php if($nodueAttribute['renewal_tools']): ?> checked <?php endif; ?> required> Specific Tools For Renewal Details
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1712,7 +1449,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['renewal_tools']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1733,7 +1470,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Handover Testing Device" required> Handover Testing Device
+                                                                        <input type="checkbox" name="attribute[]" value="Handover Testing Device" <?php if($nodueAttribute['testing_device']): ?> checked <?php endif; ?> required> Handover Testing Device
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1752,7 +1489,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['testing_device']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1773,7 +1510,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Headset" required> Headset
+                                                                        <input type="checkbox" name="attribute[]" value="Headset" <?php if($nodueAttribute['headset']): ?> checked <?php endif; ?> required> Headset
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1792,7 +1529,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['headset']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1813,7 +1550,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Machine Port Forwarding" required> Machine Port Forwarding
+                                                                        <input type="checkbox" name="attribute[]" value="Machine Port Forwarding" <?php if($nodueAttribute['machine_port_forwarding']): ?> checked <?php endif; ?> required> Machine Port Forwarding
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1832,7 +1569,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['machine_port_forwarding']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1853,7 +1590,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="SVN & VSS & TFS Login Details" required> SVN & VSS & TFS Login Details
+                                                                        <input type="checkbox" name="attribute[]" value="SVN & VSS & TFS Login Details" <?php if($nodueAttribute['svn_vss_tfs']): ?> checked <?php endif; ?> required> SVN & VSS & TFS Login Details
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1872,7 +1609,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['svn_vss_tfs']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1893,7 +1630,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="RDP, VPN Connection" required> RDP, VPN Connection
+                                                                        <input type="checkbox" name="attribute[]" value="RDP, VPN Connection" <?php if($nodueAttribute['rdp_vpn']): ?> checked <?php endif; ?> required> RDP, VPN Connection
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1912,7 +1649,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['rdp_vpn']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1933,7 +1670,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Laptop and Data Card" required> Laptop and Data Card
+                                                                        <input type="checkbox" name="attribute[]" value="Laptop and Data Card" <?php if($nodueAttribute['laptop_datacard']): ?> checked <?php endif; ?> required> Laptop and Data Card
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1952,7 +1689,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['laptop_datacard']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1976,7 +1713,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Salary Advance Due" required> Salary Advance Due
+                                                                        <input type="checkbox" name="attribute[]" value="Salary Advance Due" <?php if($nodueAttribute['salary_advance_due']): ?> checked <?php endif; ?> required> Salary Advance Due
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1995,7 +1732,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['salary_advance_due']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2016,7 +1753,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Income Tax Due" required > Income Tax Due
+                                                                        <input type="checkbox" name="attribute[]" value="Income Tax Due" <?php if($nodueAttribute['income_tax_due']): ?> checked <?php endif; ?> required > Income Tax Due
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2035,7 +1772,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['income_tax_due']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2056,7 +1793,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Documents For IT" required> Documents For IT
+                                                                        <input type="checkbox" name="attribute[]" value="Documents For IT" <?php if($nodueAttribute['documents_it']): ?> checked <?php endif; ?> required> Documents For IT
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2075,7 +1812,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['documents_it']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2099,7 +1836,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Laptop" required> Laptop
+                                                                        <input type="checkbox" name="attribute[]" value="Laptop" <?php if($nodueAttribute['laptop']): ?> checked <?php endif; ?> required> Laptop
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2118,7 +1855,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['laptop']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2139,7 +1876,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Data Card" required> Data Card
+                                                                        <input type="checkbox" name="attribute[]" value="Data Card" <?php if($nodueAttribute['data_card']): ?> checked <?php endif; ?> required> Data Card
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2158,7 +1895,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['data_card']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2179,7 +1916,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Official Property If Any" required> Official Property If Any
+                                                                        <input type="checkbox" name="attribute[]" value="Official Property If Any" <?php if($nodueAttribute['official_property']): ?> checked <?php endif; ?> required> Official Property If Any
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2198,7 +1935,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['official_property']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2222,7 +1959,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Exit Process Completion From Core Departments" required> Exit Process Completion From Core Departments
+                                                                        <input type="checkbox" name="attribute[]" value="Exit Process Completion From Core Departments" <?php if($nodueAttribute['exit_process_completion']): ?> checked <?php endif; ?> required> Exit Process Completion From Core Departments
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2241,7 +1978,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['exit_process_completion']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2262,7 +1999,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="ISMS/QMS Incidents & Tickets Closure Status" required> ISMS/QMS Incidents & Tickets Closure Status
+                                                                        <input type="checkbox" name="attribute[]" value="ISMS/QMS Incidents & Tickets Closure Status" <?php if($nodueAttribute['isms_qms']): ?> checked <?php endif; ?> required> ISMS/QMS Incidents & Tickets Closure Status
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2281,7 +2018,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['isms_qms']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2302,7 +2039,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Disable All Access Control" required> Disable All Access Control
+                                                                        <input type="checkbox" name="attribute[]" value="Disable All Access Control" <?php if($nodueAttribute['disable_access']): ?> checked <?php endif; ?> required> Disable All Access Control
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2321,7 +2058,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['disable_access']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2345,7 +2082,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="KT completed for all the current and old projects" required> KT completed for all the current and old projects
+                                                                        <input type="checkbox" name="attribute[]" value="KT completed for all the current and old projects" <?php if($nodueAttribute['kt_completion']): ?> checked <?php endif; ?> required> KT completed for all the current and old projects
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2364,7 +2101,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['kt_completion']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2385,7 +2122,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Relieving date informed and accepted by client" required> Relieving date informed and accepted by client
+                                                                        <input type="checkbox" name="attribute[]" value="Relieving date informed and accepted by client" <?php if($nodueAttribute['relieving_date_informed']): ?> checked <?php endif; ?> required> Relieving date informed and accepted by client
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2404,7 +2141,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['relieving_date_informed']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2425,7 +2162,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)" required> All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)
+                                                                        <input type="checkbox" name="attribute[]" value="All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)" <?php if($nodueAttribute['internal_client_souce_code']): ?> checked <?php endif; ?> required> All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2444,7 +2181,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['internal_client_souce_code']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2465,7 +2202,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)" required> Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)
+                                                                        <input type="checkbox" name="attribute[]" value="Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)" <?php if($nodueAttribute['project_detail_document']): ?> checked <?php endif; ?> required> Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2484,7 +2221,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['project_detail_document']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2508,7 +2245,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Handing over CLIENT details (Excel)" required> Handing over CLIENT details (Excel)
+                                                                        <input type="checkbox" name="attribute[]" value="Handing over CLIENT details (Excel)" <?php if($nodueAttribute['client_details_handle']): ?> checked <?php endif; ?> required> Handing over CLIENT details (Excel)
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2527,7 +2264,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['client_details_handle']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2548,7 +2285,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="KT on HOT & WARM prospects" required> KT on HOT & WARM prospects
+                                                                        <input type="checkbox" name="attribute[]" value="KT on HOT & WARM prospects" <?php if($nodueAttribute['kt_hot_warm']): ?> checked <?php endif; ?> required> KT on HOT & WARM prospects
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2567,7 +2304,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['kt_hot_warm']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2588,7 +2325,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Introducing new account manager to CLIENTS via Email" required> Introducing new account manager to CLIENTS via Email
+                                                                        <input type="checkbox" name="attribute[]" value="Introducing new account manager to CLIENTS via Email" <?php if($nodueAttribute['intro_new_acc_manager']): ?> checked <?php endif; ?> required> Introducing new account manager to CLIENTS via Email
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2607,7 +2344,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['intro_new_acc_manager']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2628,7 +2365,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Completion of Data Categorization" required> Completion of Data Categorization
+                                                                        <input type="checkbox" name="attribute[]" value="Completion of Data Categorization" <?php if($nodueAttribute['data_categorization']): ?> checked <?php endif; ?> required> Completion of Data Categorization
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2647,7 +2384,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['data_categorization']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2668,7 +2405,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="RFP System updation" required> RFP System updation
+                                                                        <input type="checkbox" name="attribute[]" value="RFP System updation" <?php if($nodueAttribute['rfp_system']): ?> checked <?php endif; ?> required> RFP System updation
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -2687,7 +2424,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['rfp_system']); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2710,7 +2447,7 @@ unset($__errorArgs, $__bag); ?>
 
                                         </div>
                                         <div class="box-footer">
-                                            <input type="hidden" id="nodueId" name="nodueId" value="<?php echo e((!$nodue) ? '' : $nodue->id); ?>">
+
                                             <input type="hidden" id="resignationId" name="resignationId" value="<?php echo e($emp_resignation->id); ?>">
                                             <button type="submit" id="myBtn" class="btn btn-primary">Submit</button>
                                         </div>
@@ -2731,23 +2468,91 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="box-body">
                                         <table class="table table-bordered">
                                             <thead>
-                                                <th>Lead</th>
-                                                <th>Department Head / Unit Head</th>
                                                 <th>HR</th>
-                                                <th>SA</th>
+                                                <th>Accounts</th>
+                                                <th>Admin</th>
+
+                                                <th>Qulaity</th>
+
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->knowledge_transfer_lead == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Knowledge Transfer</td>
-                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->knowledge_transfer_head == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Knowledge Transfer</td>
-                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->id_card == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>ID Card</td>
-                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->official_email_id == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Official Email ID</td>
+                                                    <td <?php if(isset($nodueAttribute['id_card'])): ?> class="<?php echo e(($nodueAttribute['id_card'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >ID Card</td>
+                                                    <td <?php if(isset($nodueAttribute['salary_advance_due'])): ?> class="<?php echo e(($nodueAttribute['salary_advance_due'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Salary Advance Due</td>
+                                                    <td <?php if(isset($nodueAttribute['laptop'])): ?> class="<?php echo e(($nodueAttribute['laptop'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Laptop</td>
+                                                    <td <?php if(isset($nodueAttribute['exit_process_completion'])): ?> class="<?php echo e(($nodueAttribute['exit_process_completion'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Exit Process Completion from Core Departments</td>
+
                                                 </tr>
                                                 <tr>
-                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->mail_id_closure_lead == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Mail ID Closure</td>
-                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->mail_id_closure_head == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Mail ID Closure</td>
-                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->nda == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>NDA</td>
-                                                    <td <?php if($nodue): ?> class="<?php echo e(($nodue->skype_account == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?>>Skype Account</td>
+                                                    <td <?php if(isset($nodueAttribute['nda'])): ?> class="<?php echo e(($nodueAttribute['nda'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >NDA</td>
+                                                    <td <?php if(isset($nodueAttribute['income_tax_due'])): ?> class="<?php echo e(($nodueAttribute['income_tax_due'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Income Tax Due</td>
+                                                    <td <?php if(isset($nodueAttribute['data_card'])): ?> class="<?php echo e(($nodueAttribute['data_card'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Data Card</td>
+                                                    <td <?php if(isset($nodueAttribute['isms_qms'])): ?> class="<?php echo e(($nodueAttribute['isms_qms'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >ISMS/QMS Incidents & Tickets Closure Status</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['professional_tax'])): ?> class="<?php echo e(($nodueAttribute['professional_tax'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Professional Tax</td>
+                                                    <td <?php if(isset($nodueAttribute['documents_it'])): ?> class="<?php echo e(($nodueAttribute['documents_it'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Documents for IT</td>
+                                                    <td <?php if(isset($nodueAttribute['official_property'])): ?> class="<?php echo e(($nodueAttribute['official_property'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Official Property If Any</td>
+                                                    <td <?php if(isset($nodueAttribute['disable_access'])): ?> class="<?php echo e(($nodueAttribute['disable_access'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Disable all Access Control</td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <br>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <th>SA</th>
+                                                <th>Technical Team</th>
+                                                <th>Marketing Team</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['official_email_id'])): ?> class="<?php echo e(($nodueAttribute['official_email_id'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Official Email Account</td>
+                                                    <td <?php if(isset($nodueAttribute['kt_completion'])): ?> class="<?php echo e(($nodueAttribute['kt_completion'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >KT completed for all the current and old projects</td>
+                                                    <td <?php if(isset($nodueAttribute['client_details_handle'])): ?> class="<?php echo e(($nodueAttribute['client_details_handle'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Handing over CLIENT details (Excel)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['skype_account'])): ?> class="<?php echo e(($nodueAttribute['skype_account'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Skype Account</td>
+                                                    <td <?php if(isset($nodueAttribute['relieving_date_informed'])): ?> class="<?php echo e(($nodueAttribute['relieving_date_informed'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Relieving date informed and accepted by client</td>
+                                                    <td <?php if(isset($nodueAttribute['kt_hot_warm'])): ?> class="<?php echo e(($nodueAttribute['kt_hot_warm'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >KT on HOT & WARM prospects</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['gmail_yahoo'])): ?> class="<?php echo e(($nodueAttribute['gmail_yahoo'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Gmail or Yahoo Testing Purpose</td>
+                                                    <td <?php if(isset($nodueAttribute['internal_client_souce_code'])): ?> class="<?php echo e(($nodueAttribute['internal_client_souce_code'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)</td>
+                                                    <td <?php if(isset($nodueAttribute['intro_new_acc_manager'])): ?> class="<?php echo e(($nodueAttribute['intro_new_acc_manager'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Introducing new account manager to CLIENTS via Email</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['testing_tools'])): ?> class="<?php echo e(($nodueAttribute['testing_tools'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Testing Tools</td>
+                                                    <td <?php if(isset($nodueAttribute['project_detail_document'])): ?> class="<?php echo e(($nodueAttribute['project_detail_document'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)</td>
+                                                    <td <?php if(isset($nodueAttribute['data_categorization'])): ?> class="<?php echo e(($nodueAttribute['data_categorization'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Completion of Data Categorization</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['linux_mac_password'])): ?> class="<?php echo e(($nodueAttribute['linux_mac_password'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Linux or Mac machine Password</td>
+                                                    <td></td>
+                                                    <td <?php if(isset($nodueAttribute['rfp_system'])): ?> class="<?php echo e(($nodueAttribute['rfp_system'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >RFP System updation</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['renewal_tools'])): ?> class="<?php echo e(($nodueAttribute['renewal_tools'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Specific tools for renewal details</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['testing_device'])): ?> class="<?php echo e(($nodueAttribute['testing_device'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Handover Testing Device</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['headset'])): ?> class="<?php echo e(($nodueAttribute['headset'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Headset</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['machine_port_forwarding'])): ?> class="<?php echo e(($nodueAttribute['machine_port_forwarding'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Machine Port Forwarding</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['svn_vss_tfs'])): ?> class="<?php echo e(($nodueAttribute['svn_vss_tfs'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >SVN & VSS & TFS Login Details</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['rdp_vpn'])): ?> class="<?php echo e(($nodueAttribute['rdp_vpn'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >RDP, VPN Connection</td>
+                                                </tr>
+                                                <tr>
+                                                    <td <?php if(isset($nodueAttribute['laptop_datacard'])): ?> class="<?php echo e(($nodueAttribute['laptop_datacard'] == NULL) ? 'bg-warning' : 'bg-success'); ?>" <?php else: ?> class="bg-warning" <?php endif; ?> >Laptop and Data card</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -2883,7 +2688,7 @@ unset($__errorArgs, $__bag); ?>
                 <!-- /.tab-pane -->
                 <?php endif; ?>
 
-                <?php if(\Auth::User()->department_id == 2 && $completed_no_due != NULL && $showAnswers != NULL): ?>
+                <?php if(\Auth::User()->department_id == 2 && $showAnswers != NULL): ?>
                 <!-- Final Exit check list -->
                 <div class="tab-pane" id="tab_6-2">
                     <div class="container-fluid">

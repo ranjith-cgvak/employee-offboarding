@@ -37,10 +37,7 @@ Route::get('addOrUpdateResignationAcceptance' , 'ProcessController@addOrUpdateRe
 Route::get('addOrUpdateDolComments' , 'ProcessController@addOrUpdateDolComments')->middleware(['auth','backendAccess'])->name('addOrUpdateDolComments');
 Route::get('addOrUpdateDowComment' , 'ProcessController@addOrUpdateDowComment')->middleware(['auth','backendAccess'])->name('addOrUpdateDowComment');
 Route::get('updateDowComment' , 'ProcessController@updateDowComment')->middleware(['auth','backendAccess'])->name('updateDowComment');
-Route::get('storeNodue' , 'ProcessController@storeNodue')->middleware(['auth','backendAccess'])->name('storeNodue');
-Route::get('updateNodue' , 'ProcessController@updateNodue')->middleware(['auth','backendAccess'])->name('updateNodue');
-Route::get('storeFeedback' , 'ProcessController@storeFeedback')->middleware(['auth','backendAccess'])->name('storeFeedback');
-Route::get('updateFeedback' , 'ProcessController@updateFeedback')->middleware(['auth','backendAccess'])->name('updateFeedback');
+Route::get('addOrUpdateFeedback' , 'ProcessController@addOrUpdateFeedback')->middleware(['auth','backendAccess'])->name('addOrUpdateFeedback');
 Route::get('addOrUpdateHrInterview' , 'ProcessController@addOrUpdateHrInterview')->middleware(['auth','backendAccess'])->name('addOrUpdateHrInterview');
 Route::get('addOrUpdateNodue' , 'ProcessController@addOrUpdateNodue')->middleware(['auth','backendAccess'])->name('addOrUpdateNodue');
 Route::post('storeFinalCheckList' , 'ProcessController@storeFinalCheckList')->middleware(['auth','backendAccess'])->name('storeFinalCheckList');
@@ -51,6 +48,7 @@ Route::get('acceptanceStatus','ResignationController@showAcceptanceStatus')->mid
 Route::get('noDueStatus','ResignationController@noDueStatus')->middleware('auth')->name('noDueStatus');
 Route::get('withdrawForm','ResignationController@showWithdrawForm')->middleware('auth')->name('withdrawForm');
 Route::get('getUser','UserDetailsController@index')->name('getUser');
+Route::get('workflow','ProcessController@workflow')->middleware('auth')->name('workflow');
 
 
 // Route::get('send-mail', function () {
