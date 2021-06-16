@@ -120,11 +120,11 @@
                                                 font-family: 'Montserrat', sans-serif;
                                                 font-weight: 700;
                                                 line-height: 1.4;
-                                                margin: 0; ">Exit interview form submitted!</h3>
+                                                margin: 0; ">Updation Details</h3>
                                              <br>
-                                             <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" >Hello HR,</div>
+                                             <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" >Hello Team,</div>
                                              <br>
-                                                <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" ><?php echo e($details['name']); ?> <?php echo e($details['content']); ?>.</div>
+                                                <div style="font-size: 14px; color: #4d4d4d; line-height: 24px;" ><?php echo e($details['name']); ?> <?php echo e($details['content']); ?> to <?php echo e($details['date']); ?>.</div>
                                           </td>
                                        </tr>
                                        <tr>
@@ -159,4 +159,4 @@
       </tr>
       </table>
    </body>
-</html><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/emails/interviewSubmissionMail.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/emails/dolChangeMail.blade.php ENDPATH**/ ?>

@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class NoDue extends Model
+class AcceptanceStatus extends Model
 {
     protected $fillable = [
         'resignation_id',
-        'attribute',
-        'comment'
+        'acceptance_status',
+        'reviewed_by'     
     ];
 }

@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 
 <!-- Employee details -->
@@ -13,7 +11,7 @@
                 <p><b>Employee ID: </b><?php echo e($user->emp_id); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joinig: </b><?php echo e($converted_dates['joining_date']); ?></p>
+                <p><b>Date of Joining: </b><?php echo e($converted_dates['joining_date']); ?></p>
             </div>
         </div>
         <div class="row">
@@ -48,7 +46,7 @@
                         <div class="form-group row">
                             <label for="withdrawDate" class="col-sm-2 form-label">Withdraw Date <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
-                                <input type="date" class="form-control" value="<?php echo e(Date('Y-m-d')); ?>" id="withdrawDate" name="withdrawDate">
+                                <input type="date" class="form-control disablePast" value="<?php echo e(Date('Y-m-d')); ?>" id="withdrawDate" name="withdrawDate">
                                 <?php $__errorArgs = ['withdrawDate'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -83,7 +81,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
-                        
+
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -98,4 +96,5 @@ unset($__errorArgs, $__bag); ?>
 
 
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/resignation/withdrawForm.blade.php ENDPATH**/ ?>
+
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/resignation/withdrawForm.blade.php ENDPATH**/ ?>

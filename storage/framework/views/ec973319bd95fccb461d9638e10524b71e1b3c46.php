@@ -43,7 +43,13 @@
         <i class="fa fa-comments"></i> <span>Exit Interview</span>
         </a>
     </li>
+    <li class=" <?php echo e((request()->segment(1) == 'workflow') ? 'active' : ''); ?> ">
+        <a href="<?php echo e(route('workflow')); ?>">
+        <i class="fa fa-comments"></i> <span>Work Flow</span>
+        </a>
+    </li>
     <?php endif; ?>
 
     </ul>
-</section><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/common/sidebar.blade.php ENDPATH**/ ?>
+</section>
+<?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/common/sidebar.blade.php ENDPATH**/ ?>

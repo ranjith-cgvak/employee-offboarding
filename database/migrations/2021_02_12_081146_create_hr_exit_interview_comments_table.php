@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNoDuesTable extends Migration
+class CreateHrExitInterviewCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateNoDuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('no_dues', function (Blueprint $table) {
+        Schema::create('hr_exit_interview_comments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('resignation_id');
             $table->foreign('resignation_id')->references('id')->on('resignations');
-            $table->string('attribute');
-            $table->text('comment');
+            $table->text('comments')->nullable();
+            $table->string('action_area')->nullable();
+            $table->string('commented_by')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateNoDuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('no_dues');
+        Schema::dropIfExists('hr_exit_interview_comments');
     }
 }

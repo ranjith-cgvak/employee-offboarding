@@ -13,7 +13,7 @@
                 <p><b>Employee ID: </b>{{ $user->emp_id }}</p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joinig: </b>{{ $converted_dates['joining_date'] }}</p>
+                <p><b>Date of Joining: </b>{{ $converted_dates['joining_date'] }}</p>
             </div>
         </div>
         <div class="row">
@@ -47,7 +47,7 @@
                         <div class="form-group row">
                             <label for="withdrawDate" class="col-sm-2 form-label">Withdraw Date <span class="text-danger">*</span></label>
                             <div class="col-sm-4">
-                                <input type="date" class="form-control" value="{{ Date('Y-m-d')}}" id="withdrawDate" name="withdrawDate">
+                                <input type="date" class="form-control disablePast" value="{{ Date('Y-m-d')}}" id="withdrawDate" name="withdrawDate">
                                 @error('withdrawDate')
                                 <br>
                                 <span class="invalid-feedback" role="alert">
@@ -68,7 +68,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

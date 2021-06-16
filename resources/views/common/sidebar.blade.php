@@ -43,6 +43,11 @@
         <i class="fa fa-comments"></i> <span>Exit Interview</span>
         </a>
     </li>
+    <li class=" {{ (request()->segment(1) == 'workflow') ? 'active' : '' }} ">
+        <a href="{{ route('workflow')}}">
+        <i class="fa fa-comments"></i> <span>Work Flow</span>
+        </a>
+    </li>
     @endif
 
     </ul>

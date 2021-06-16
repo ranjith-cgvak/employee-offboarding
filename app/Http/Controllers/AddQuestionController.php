@@ -72,15 +72,21 @@ class AddQuestionController extends Controller
             ] );
             $question->save();
             $id = Question::latest( 'id' )->first();
-            $question_options = array(
-
+            if($request->get( 4 )){
+                $question_options = array(
                 array( 'question_id' => $id->id, 'option_value' => $request->get( 1 ) ),
                 array( 'question_id' => $id->id, 'option_value' => $request->get( 2 ) ),
                 array( 'question_id' => $id->id, 'option_value' => $request->get( 3 ) ),
-                array( 'question_id' => $id->id, 'option_value' => $request->get( 4 ) ),
-                //...
-
+                array( 'question_id' => $id->id, 'option_value' => $request->get( 4 ) )
+                );
+            }
+            else{
+                $question_options = array(
+                array( 'question_id' => $id->id, 'option_value' => $request->get( 1 ) ),
+                array( 'question_id' => $id->id, 'option_value' => $request->get( 2 ) ),
+                array( 'question_id' => $id->id, 'option_value' => $request->get( 3 ) )
             );
+            }
             Question_option::insert( $question_options );
             $notification=array(
                 'message' => 'Question has been added!',

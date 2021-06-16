@@ -42,7 +42,7 @@ class QuestionController extends Controller {
         $Question = Question::all();
         $empId = \Auth::User()->emp_id;
         $myResignation = $request->get( 'ResignationId' );
-       
+
         foreach ( $Question as $questions ) {
             $emp_id = \Auth::User()->emp_id;
             $answers = new Answer( [
@@ -55,14 +55,14 @@ class QuestionController extends Controller {
         }
 
         //Sending mail
-        
+
         $subject = "Exit interview form submitted!";
         $template = "emails.interviewSubmissionMail";
         $details = [
             'name' => \Auth::User()->display_name,
             'content' => "has submitted the exit interview form!"
         ];
-       
+
         \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         $notification=array(
@@ -126,15 +126,21 @@ class QuestionController extends Controller {
                 $question->questions      = $request->get( 'question' );
                 $question->question_type = $request->get( 'question_type' );
                 $question->save();
-                $question_options = array(
-
-                    array( 'question_id' => $id, 'option_value' => $request->get( 1 ) ),
-                    array( 'question_id' => $id, 'option_value' => $request->get( 2 ) ),
-                    array( 'question_id' => $id, 'option_value' => $request->get( 3 ) ),
-                    array( 'question_id' => $id, 'option_value' => $request->get( 4 ) ),
-                    //...
-
+                if($request->get( 4 )){
+                    $question_options = array(
+                    array( 'question_id' => $id->id, 'option_value' => $request->get( 1 ) ),
+                    array( 'question_id' => $id->id, 'option_value' => $request->get( 2 ) ),
+                    array( 'question_id' => $id->id, 'option_value' => $request->get( 3 ) ),
+                    array( 'question_id' => $id->id, 'option_value' => $request->get( 4 ) )
+                    );
+                }
+                else{
+                    $question_options = array(
+                    array( 'question_id' => $id->id, 'option_value' => $request->get( 1 ) ),
+                    array( 'question_id' => $id->id, 'option_value' => $request->get( 2 ) ),
+                    array( 'question_id' => $id->id, 'option_value' => $request->get( 3 ) )
                 );
+                }
                 Question_option::insert( $question_options );
                 $notification=array(
                     'message' => 'Questions has been modified!',
@@ -185,7 +191,8 @@ class QuestionController extends Controller {
                 $question->question_type = $request->get( 'question_type' );
                 $question->save();
                 $options = Question_option::select( 'id' )->where( 'question_id', $id )->get();
-                for ( $i = 0; $i <= 3; $i++ ) {
+                $count=count($options);
+                for ( $i = 0; $i <= ($count-1); $i++ ) {
                     $opton_id = $options[$i]->id;
                     $gets = $i + 1;
                     $update_option = array( 'option_value' => $request->get( $gets ) );

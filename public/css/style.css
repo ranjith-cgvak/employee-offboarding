@@ -7,7 +7,7 @@
     background-color: transparent;
 }
 .modelBtn i {
-    
+
     margin-left: -10px;
 }
 
@@ -41,7 +41,7 @@ ol.progtrckr li.progtrckr-done {
     border-bottom: 4px solid yellowgreen;
 }
 ol.progtrckr li.progtrckr-todo {
-    color: silver; 
+    color: silver;
     border-bottom: 4px solid silver;
 }
 
@@ -84,8 +84,6 @@ ol.progtrckr li.progtrckr-todo:before {
 
 
   /* Progress bar start */
-
-  
   .clearfix:after {
     clear: both;
     content: "";
@@ -97,7 +95,8 @@ ol.progtrckr li.progtrckr-todo:before {
 	height: 400px;
 	vertical-align: middle;
 	text-align:center;
-	
+    position: relative;
+    left:40%;
 }
 
 
@@ -123,11 +122,14 @@ a:hover {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
-	user-select: none; 
+	user-select: none;
   transition: background-color 0.2s ease;
   text-transform: uppercase;
     font-weight: 600;
- 
+
+}
+.arrow-steps a:hover{
+	cursor: pointer;
 }
 
 .arrow-steps .step:after,
@@ -140,15 +142,15 @@ a:hover {
 	height: 0;
 	border-top: 28px solid transparent;
 	border-bottom: 28px solid transparent;
-	border-left: 17px solid #d9e3f7;	
-	z-index: 2;
+	/* border-left: 17px solid #d9e3f7;	 */
+	z-index: 1;
   transition: border-color 0.2s ease;
 }
 
 .arrow-steps .step:before {
 	right: auto;
 	left: 0;
-	border-left: 17px solid #fff;	
+	border-left: 17px solid white;
 	z-index: 0;
 }
 
@@ -182,12 +184,12 @@ a:hover {
 }
 
 .arrow-steps .step.current {
-	color: #000;
-	background-color: #f7f725;
+	color:#fff;
+	background-color: #dbe91e;
 }
 
 .arrow-steps .step.current:after {
-	border-left: 17px solid #f7f725;	
+	border-left: 17px solid #dbe91e;
 }
 
 .arrow-steps .step.current_prev {
@@ -196,7 +198,7 @@ a:hover {
 }
 
 .arrow-steps .step.current_prev:after {
-	border-left: 17px solid #3f883f;	
+	border-left: 17px solid #3f883f;
 }
 
 .arrow-steps .step.current_next {
@@ -206,14 +208,31 @@ a:hover {
 }
 
 .arrow-steps .step.current_next:after {
-	border-left: 17px solid #ea0000;	
+	border-left: 17px solid #ea0000;
 }
 .arrow-steps .clearfix {
    text-transform:uppercase;
 }
 .step.current_next.last_progress:after{
     display:none;
-	
+
+}
+.progress_content .arrow-steps a
+{
+	text-decoration: none;
+
+}
+.progress_content .arrow-steps a:hover span
+{
+	color:black;
 }
 
 /* Progress bar nd */
+
+
+/*  */
+
+.nav-tabs-custom>.nav-tabs>li>a:hover {
+    color: white;
+}
+

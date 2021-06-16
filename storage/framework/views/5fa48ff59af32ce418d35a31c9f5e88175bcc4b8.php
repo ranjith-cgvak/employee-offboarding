@@ -159,4 +159,4 @@
       </tr>
       </table>
    </body>
-</html><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/emails/resignationMail.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/emails/resignationMail.blade.php ENDPATH**/ ?>

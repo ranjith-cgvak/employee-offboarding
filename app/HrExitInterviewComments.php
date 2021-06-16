@@ -4,11 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class NoDue extends Model
+class HrExitInterviewComments extends Model
 {
     protected $fillable = [
         'resignation_id',
-        'attribute',
-        'comment'
+        'comments',
+        'action_area',
+        'commented_by'
     ];
 }

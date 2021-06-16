@@ -1,10 +1,12 @@
 <?php
-   
+
    return [
-       'HEAD_EMAIL' => 'gowthamraj2399@gmail.com',
-       'LEAD_EMAIL' => 'gowthamwarrior03@gmail.com',
-       'HR_EMAIL' => 'gowthamrajvijayakumar@gmail.com',
-       'IMAGE_UPLOAD_PATH' => 'public/img'
+       'HEAD_EMAIL' => 'phpmailercgvak@gmail.com',
+       'LEAD_EMAIL' => 'phpmailercgvak@gmail.com',
+       'HR_EMAIL' => 'phpmailercgvak@gmail.com',
+       'IMAGE_UPLOAD_PATH' => 'public/img',
+       'resignation_departments' => ['Technical','HR','Accounts','Marketing','System Admin','Administrator'],
+       'mailto_departments' => ['Technical','HR','Accounts','Marketing','System Admin','Administrator']
    ];
-  
+
 ?>

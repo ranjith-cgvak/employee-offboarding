@@ -4,7 +4,7 @@
 
 <div class="login-box">
   <div class="login-logo">
-    <a href=""><b>CG-VAK| OFFBOARDING</b></a>
+  <img src="https://www.cgvakindia.com/wp-content/uploads/2017/06/logo-white.png" alt="CG-VAK">
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
@@ -58,4 +58,4 @@ unset($__errorArgs, $__bag); ?>
 <!-- /.login-box -->
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app_login', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/auth/login.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app_login', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/auth/login.blade.php ENDPATH**/ ?>

@@ -13,7 +13,7 @@
                 <p><b>Employee ID: </b>{{ $user->emp_id }}</p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joinig: </b>{{ $converted_dates['joining_date'] }}</p>
+                <p><b>Date of Joining: </b>{{ $converted_dates['joining_date'] }}</p>
             </div>
         </div>
         <div class="row">
@@ -42,14 +42,14 @@
                 <div class="box-body">
                     <table class="table table-bordered">
                         <thead>
-                            <th>Lead</th>
-                            <th>Department Head / Unit Head</th>
-                            <th>HR</th>
+                            <th class="text-center">Lead</th>
+                            <th class="text-center">Department Head / Unit Head</th>
+                            <th class="text-center">HR</th>
                         </thead>
                         <tbody>
-                            <td class="{{ ($leadGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($leadGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
-                            <td class="{{ ($headGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($headGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
-                            <td class="{{ ($hrGeneralComment['comment'] == NULL) ? 'bg-warning' : 'bg-success' }}">{{ ($hrGeneralComment['comment'] == NULL) ? 'Pending' : 'Accepted' }}</td>
+                            <td class="text-center {{ ($leadAcceptance == NULL || $leadAcceptance == 'Pending' ) ? 'bg-warning' :( $leadAcceptance == 'Accepted' ? 'bg-success' : 'bg-danger' )}}">{{ ($leadAcceptance == NULL ) ? 'Pending' : $leadAcceptance }}</td>
+                            <td class="text-center {{ ($headAcceptance == NULL || $headAcceptance == 'Pending' ) ? 'bg-warning' :( $headAcceptance == 'Accepted' ? 'bg-success' : 'bg-danger' )}}">{{ ($headAcceptance == NULL ) ? 'Pending' : $headAcceptance }}</td>
+                            <td class="text-center {{ ($hrAcceptance == NULL || $hrAcceptance == 'Pending' ) ? 'bg-warning' :( $hrAcceptance == 'Accepted' ? 'bg-success' : 'bg-danger' )}}">{{ ($hrAcceptance == NULL ) ? 'Pending' : $hrAcceptance }}</td>
                         </tbody>
                     </table>
                 </div>

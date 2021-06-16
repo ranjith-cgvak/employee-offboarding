@@ -8,14 +8,14 @@ $(document).ready(function(){
         }
         return date;
     }
-    //converting a date function 
+    //converting a date function
     function convert(str) {
         var date = new Date(str),
           mnth = ("0" + (date.getMonth() + 1)).slice(-2),
           day = ("0" + date.getDate()).slice(-2);
-        return [mnth, day, date.getFullYear()].join("/");
+        return [ day,mnth, date.getFullYear()].join("-");
       }
-      
+
     //Hooking the input value to the date converted
     $('#dateOfResignation').change(function(){
         var date = new Date($('#dateOfResignation').val());
@@ -31,7 +31,7 @@ $(document).ready(function(){
         var convertedDate = convert(leavingdate);
         $('#dateOfLeaving').val(convertedDate);
     })
-    
+
     //Adding tooltip
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
@@ -40,4 +40,5 @@ $(document).ready(function(){
     //Disable the past dates in the date picker
     var today = new Date().toISOString().split('T')[0];
     document.getElementsByClassName("disablePast")[0].setAttribute('min', today);
+
 })

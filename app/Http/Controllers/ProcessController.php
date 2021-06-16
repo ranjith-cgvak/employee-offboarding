@@ -7,31 +7,41 @@ use App\Resignation;
 use App\User;
 use App\Feedback;
 use App\Comments;
+use App\AcceptanceStatus;
 use App\NoDue;
 use App\FinalExitChecklist;
+use App\HrExitInterviewComments;
+use App\workflow;
+use App\HeadSelect;
 use App\Support\Facades\DB;
-
+use Carbon\Carbon;
 class ProcessController extends Controller
  {
+
     /**
     * Display a listing of the resource.
     *
     * @return \Illuminate\Http\Response
     */
 
-    public function index()
- {
+    function __constructor(){
+        $this->middleware(['auth','backendAccess']);
+
+    }
+
+    public function index(){
+
         // Head
-        if ( \Auth::User()->designation_id == 3 ) {
+        if ( \Auth::User()->department_name == "Software Development" ) {
             $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->get();
         }
         //HR OR SA
-        else if ( ( \Auth::User()->department_id == 2 ) || ( \Auth::User()->department_id == 7 ) ) {
+        else if ( ( \Auth::User()->department_name == "Human Resource" ) || ( \Auth::User()->department_name == "System Administration" ) || ( \Auth::User()->department_name == "Administration" ) || ( \Auth::User()->department_name == "Marketing" ) || ( \Auth::User()->department_name == "Accounts" ) ) {
             $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->get();
         }
@@ -39,7 +49,7 @@ class ProcessController extends Controller
         else {
             $leadName = \Auth::User()->display_name;
             $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'changed_dol' )
+            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->where( 'lead', $leadName )
             ->get();
@@ -57,8 +67,7 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function create()
-    { 
+    public function create() {
         //
     }
 
@@ -69,8 +78,7 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function store( Request $request )
- {
+    public function store( Request $request ){
         //
     }
 
@@ -81,8 +89,7 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function show( $id )
- {
+    public function show( $id ){
         //
     }
 
@@ -93,10 +100,10 @@ class ProcessController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function edit( $id )
- {
+    public function edit( $id ){
+
         $emp_resignation = \DB::table( 'resignations' )
-        ->select( 'resignations.id', 'employee_id', 'display_name', 'department_name', 'comment_on_resignation', 'name', 'designation', 'joining_date', 'date_of_resignation', 'date_of_leaving', 'date_of_withdraw', 'lead', 'users.created_at', 'reason', 'comment_on_withdraw', 'changed_dol', 'other_reason' )
+        ->select( 'resignations.id', 'employee_id', 'display_name', 'department_name', 'comment_on_resignation', 'name', 'designation', 'joining_date', 'date_of_resignation', 'date_of_leaving',\DB::raw("DATE_FORMAT(date_of_withdraw, '%d-%m-%Y') as date_of_withdraw"), 'lead', 'users.created_at', 'reason', 'comment_on_withdraw',\DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'other_reason' )
         ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
         ->where( 'resignations.id', $id )
         ->first();
@@ -113,12 +120,6 @@ class ProcessController extends Controller
 
         $converted_dates = array( 'joining_date'=>$converted_joining_date, 'date_of_resignation'=>$converted_resignation_date, 'date_of_leaving'=>$converted_leaving_date, 'changed_dol'=>$converted_changed_dol );
 
-        $feedback = \DB::table( 'feedback' )
-        ->where( 'feedback.resignation_id', $id )
-        ->first();
-        $nodue = \DB::table( 'no_dues' )
-        ->where( 'no_dues.resignation_id', $id )
-        ->first();
         $emp_id = \Auth::User()->emp_id ;
 
         $answers = \DB::table( 'user_answers' )
@@ -172,8 +173,258 @@ class ProcessController extends Controller
                 $hrDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
             }
         }
+        $acceptanceStatuses = \DB::table( 'acceptance_statuses' )
+        ->where( 'acceptance_statuses.resignation_id', $id )
+        ->get();
 
-        return view('process.viewResignation' , compact('emp_resignation','isFeedback','feedback','converted_dates','nodue','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers'));
+        $leadAcceptance = NULL;
+        $headAcceptance = NULL;
+        $hrAcceptance = NULL;
+        foreach ( $acceptanceStatuses as $acceptanceStatus ) {
+            if( $acceptanceStatus->reviewed_by == 'lead') {
+                $leadAcceptance = $acceptanceStatus->acceptance_status;
+            }
+            if( $acceptanceStatus->reviewed_by == 'head') {
+                $headAcceptance = $acceptanceStatus->acceptance_status;
+            }
+            if( $acceptanceStatus->reviewed_by == 'hr') {
+                $hrAcceptance = $acceptanceStatus->acceptance_status;
+            }
+        }
+
+        $acceptanceValue = NULL;
+        $acceptanceComment = NULL;
+        $is_reviewed = false;
+        //Head
+        if ( \Auth::User()->designation_id == 3 ) {
+            $acceptanceValue = $headAcceptance;
+            $acceptanceComment = $headGeneralComment['comment'];
+            $is_reviewed = ($leadAcceptance == 'Accepted') ? true : false;
+        }
+        //HR
+        else if ( ( \Auth::User()->department_id == 2 ) ) {
+            $acceptanceValue = $hrAcceptance;
+            $acceptanceComment = $hrGeneralComment['comment'];
+            $is_reviewed = ($leadAcceptance == 'Accepted' && $headAcceptance == 'Accepted') ? true : false;
+        }
+        //LEAD
+        else {
+            $acceptanceValue = $leadAcceptance;
+            $acceptanceComment = $leadGeneralComment['comment'];
+            $is_reviewed = true;
+        }
+
+        //Feedback tab view enable
+
+        $is_feedback_enable = ($leadAcceptance == 'Accepted' && $headAcceptance == 'Accepted' && $hrAcceptance == 'Accepted') ? true : false;
+
+        //fixing no due when to appear
+        $today = Carbon::now();
+        $nodueDate = Carbon::parse(date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days')));
+        $displayNodue = $today >= $nodueDate;
+
+        //Exit interview answers
+        $showAnswers = \DB::table( 'user_answers' )
+        ->where( 'resignation_id', $id )
+        ->first();
+
+        //Exit interview comments
+        $hrExitInterviewComments = \DB::table( 'hr_exit_interview_comments' )
+        ->where( 'resignation_id', $id )
+        ->get();
+
+        //completed no due
+        // $completed_no_due = \DB::table( 'no_dues' )
+        // ->where([
+        //     ['no_dues.resignation_id', $id],
+        //     ['knowledge_transfer_lead','!=',NULL],
+        //     ['mail_id_closure_lead','!=',NULL],
+        //     ['knowledge_transfer_head','!=',NULL],
+        //     ['mail_id_closure_head','!=',NULL],
+        //     ['id_card','!=',NULL],
+        //     ['nda','!=',NULL],
+        //     ['official_email_id','!=',NULL],
+        //     ['skype_account','!=',NULL]
+        //     ])
+        // ->first();
+
+        //HR list for select the name in final exit checklist
+
+        $nodues = \DB::table( 'no_dues' )
+        ->where( 'no_dues.resignation_id', $id )
+        ->get();
+
+        $nodueAttribute = NULL;
+        foreach($nodues as $nodue) {
+            if($nodue->attribute == 'Knowledge Transfer') {
+                $nodueAttribute['knowledge_transfer_comment'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Mail ID closure') {
+                $nodueAttribute['mail_closure'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'ID Card') {
+                $nodueAttribute['id_card'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'NDA') {
+                $nodueAttribute['nda'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Professional Tax') {
+                $nodueAttribute['professional_tax'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Official Email ID') {
+                $nodueAttribute['official_email_id'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Skype Account') {
+                $nodueAttribute['skype_account'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Gmail or Yahoo Testing Purpose') {
+                $nodueAttribute['gmail_yahoo'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Testing Tools') {
+                $nodueAttribute['testing_tools'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Linux or Mac Machine Password') {
+                $nodueAttribute['linux_mac_password'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Specific Tools For Renewal Details') {
+                $nodueAttribute['renewal_tools'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Handover Testing Device') {
+                $nodueAttribute['testing_device'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Headset') {
+                $nodueAttribute['headset'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Machine Port Forwarding') {
+                $nodueAttribute['machine_port_forwarding'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'SVN & VSS & TFS Login Details') {
+                $nodueAttribute['svn_vss_tfs'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'RDP, VPN Connection') {
+                $nodueAttribute['rdp_vpn'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Laptop and Data Card') {
+                $nodueAttribute['laptop_datacard'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Salary Advance Due') {
+                $nodueAttribute['salary_advance_due'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Income Tax Due') {
+                $nodueAttribute['income_tax_due'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Documents For IT') {
+                $nodueAttribute['documents_it'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Laptop') {
+                $nodueAttribute['laptop'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Data Card') {
+                $nodueAttribute['data_card'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Official Property If Any') {
+                $nodueAttribute['official_property'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Exit Process Completion From Core Departments') {
+                $nodueAttribute['exit_process_completion'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'ISMS/QMS Incidents & Tickets Closure Status') {
+                $nodueAttribute['isms_qms'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Disable All Access Control') {
+                $nodueAttribute['disable_access'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'KT completed for all the current and old projects') {
+                $nodueAttribute['kt_completion'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Relieving date informed and accepted by client') {
+                $nodueAttribute['relieving_date_informed'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)') {
+                $nodueAttribute['internal_client_souce_code'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)') {
+                $nodueAttribute['project_detail_document'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Handing over CLIENT details (Excel)') {
+                $nodueAttribute['client_details_handle'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'KT on HOT & WARM prospects') {
+                $nodueAttribute['kt_hot_warm'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Introducing new account manager to CLIENTS via Email') {
+                $nodueAttribute['intro_new_acc_manager'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'Completion of Data Categorization') {
+                $nodueAttribute['data_categorization'] = $nodue->comment;
+            }
+            if($nodue->attribute == 'RFP System updation') {
+                $nodueAttribute['rfp_system'] = $nodue->comment;
+            }
+        }
+
+        $feedbacks = \DB::table( 'feedback' )
+        ->where( 'feedback.resignation_id', $id )
+        ->get();
+
+        $feedbackValues = NULL;
+        foreach($feedbacks as $feedback) {
+            if($feedback->attribute == 'Primary') {
+                $feedbackValues['primary'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Secondary') {
+                $feedbackValues['secondary'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Project Name') {
+                $feedbackValues['project_name'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Attendance') {
+                $feedbackValues['attendance'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Reponsiveness') {
+                $feedbackValues['reponsiveness'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Reponsibility') {
+                $feedbackValues['reponsibility'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Commit on Task Delivery') {
+                $feedbackValues['commit_on_task_delivery'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Technical Knowledge') {
+                $feedbackValues['technical_knowledge'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Logical Ability') {
+                $feedbackValues['logical_ability'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Attitude') {
+                $feedbackValues['attitude'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Overall performance during the tenure with CG-VAK Software') {
+                $feedbackValues['overall_performance'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Lead Comment') {
+                $feedbackValues['lead_comment'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Head Comment') {
+                $feedbackValues['head_comment'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Learning & Responsiveness') {
+                $feedbackValues['learning_responsiveness'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Commitment & Integrity') {
+                $feedbackValues['commitment_integrity'] = $feedback->comment_rating;
+            }
+            if($feedback->attribute == 'Sales Performance') {
+                $feedbackValues['sales_performance'] = $feedback->comment_rating;
+            }
+        }
+
+
+        $hr_list = \DB::table( 'users' )
+        ->where( 'department_id', 2 )
+        ->get();
+
+        return view('process.viewResignation' , compact('emp_resignation','feedback','converted_dates','nodues','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance','acceptanceValue','acceptanceComment','is_reviewed','displayNodue','showAnswers','hrExitInterviewComments','is_feedback_enable','completed_no_due','hr_list','nodueAttribute','feedbackValues'));
     }
 
     /**
@@ -186,8 +437,7 @@ class ProcessController extends Controller
 
     //Updating lead for the user in process.resignationList blade
 
-    public function update( Request $request, $id )
- {
+    public function update( Request $request, $id ){
         $request->validate( [
             'lead'=>'required'
         ] );
@@ -206,8 +456,8 @@ class ProcessController extends Controller
             'content' => 'has applied resignation',
             'date' => '2-2-2022'
         ];
-       
-        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));  
+
+        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         dd("mail sent now");
     }
@@ -219,7 +469,7 @@ class ProcessController extends Controller
         ] );
         $resignationId = $request->get( 'resignationId' );
         $resignation = Resignation::find( $resignationId );
-        $resignation->changed_dol = $request->get( 'dateOfLeaving' );
+        $resignation->changed_dol = Carbon::createFromFormat('d-m-Y', $request->get( 'dateOfLeaving' ))->format('Y-m-d') ;
 
         if ( ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadDolCommentId' ) == NULL ) ) || ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headDolCommentId' ) == NULL ) ) || ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrDolCommentId' ) == NULL ) ) ) {
             $addOrUpdateDolComment = new Comments( [
@@ -264,7 +514,7 @@ class ProcessController extends Controller
             'message' => 'Date of leaving has been changed!',
             'alert-type' => 'success'
         );
-        
+
         //Sending mail
         $empname = Resignation::find( $resignationId )
         ->select('display_name')
@@ -278,58 +528,97 @@ class ProcessController extends Controller
             'content' => "resignation's date of leaving has changed",
             'date' => $request->get( 'dateOfLeaving' )
         ];
-       
+
         \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
-    //add or update resignation comment
 
-    public function addOrUpdateResignationComment( Request $request ) {
+    //function to add or update acceptance details
+    public function addOrUpdateResignationAcceptance( Request $request ) {
         $resignationId = $request->get( 'resignationId' );
-        if ( ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadGeneralCommentId' ) == NULL ) ) || ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headGeneralCommentId' ) == NULL ) ) || ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrGeneralCommentId' ) == NULL ) ) ) {
-            $addOrUpdateResignationComment = new Comments( [
-                'resignation_id' => $request->get( 'resignationId' ),
-                'comment_type' => 'general'
-            ] );
-        } else if ( ( \Auth::User()->designation_id == 2 ) && ( $request->get( 'leadGeneralCommentId' ) != NULL ) ) {
-            $addOrUpdateResignationComment = Comments::find( $request->get( 'leadGeneralCommentId' ) );
-        } else if ( ( \Auth::User()->designation_id == 3 ) && ( $request->get( 'headGeneralCommentId' ) != NULL ) ) {
-            $addOrUpdateResignationComment = Comments::find( $request->get( 'headGeneralCommentId' ) );
-        } else if ( ( \Auth::User()->department_id == 2 ) && ( $request->get( 'hrGeneralCommentId' ) != NULL ) ) {
-            $addOrUpdateResignationComment = Comments::find( $request->get( 'hrGeneralCommentId' ) );
-        }
+
+        $request->validate( [
+            'acceptanceComment'=>'required',
+            'accepatanceStatus'=>'required'
+        ] );
 
         //Head
         if ( \Auth::User()->designation_id == 3 ) {
-            $request->validate( [
-                'headComment'=>'required'
-            ] );
-            $addOrUpdateResignationComment->comment_by = 'head';
-            $addOrUpdateResignationComment->comment = $request->get( 'headComment' );
+            $acceptanceStatusComment = Comments::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'comment_by' => 'head',
+                'comment_type' => 'general'
+            ],
+            [
+                'comment' => $request->get( 'acceptanceComment' )
+            ]
+            );
+            $acceptanceStatusComment->save();
+
+            $acceptanceStatus = AcceptanceStatus::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'reviewed_by' => 'head'
+            ],
+            [
+                'acceptance_status' => $request->get( 'accepatanceStatus' )
+            ]);
+            $acceptanceStatus->save();
         }
         //HR
         else if ( \Auth::User()->department_id == 2 ) {
-            $request->validate( [
-                'hrComment'=>'required'
-            ] );
-            $addOrUpdateResignationComment->comment_by = 'hr';
-            $addOrUpdateResignationComment->comment = $request->get( 'hrComment' );
+
+            $acceptanceStatusComment = Comments::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'comment_by' => 'hr',
+                'comment_type' => 'general'
+            ],
+            [
+                'comment' => $request->get( 'acceptanceComment' )
+            ]
+            );
+            $acceptanceStatusComment->save();
+
+            $acceptanceStatus = AcceptanceStatus::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'reviewed_by' => 'hr'
+            ],
+            [
+                'acceptance_status' => $request->get( 'accepatanceStatus' )
+            ]);
+            $acceptanceStatus->save();
         }
         //lead
         else {
-            $request->validate( [
-                'leadComment'=>'required'
-            ] );
-            $addOrUpdateResignationComment->comment_by = 'lead';
-            $addOrUpdateResignationComment->comment = $request->get( 'leadComment' );
+
+            $acceptanceStatusComment = Comments::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'comment_by' => 'lead',
+                'comment_type' => 'general'
+            ],
+            [
+                'comment' => $request->get( 'acceptanceComment' )
+            ]
+            );
+            $acceptanceStatusComment->save();
+
+            $acceptanceStatus = AcceptanceStatus::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'reviewed_by' => 'lead'
+            ],
+            [
+                'acceptance_status' => $request->get( 'accepatanceStatus' )
+            ]);
+            $acceptanceStatus->save();
         }
-        $addOrUpdateResignationComment->save();
+
+
         $notification=array(
             'message' => 'Comments has been recorded!',
             'alert-type' => 'success'
         );
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
+
     }
 
     //add or update date of withdraw comment
@@ -379,196 +668,61 @@ class ProcessController extends Controller
         );
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
-
-    //Storing feedback for the resignation
-
-    public function storeFeedback( Request $request ) {
+    //Store or Updating feedback for the resignation
+    public function addOrUpdateFeedback(Request $request){
         $request->validate( [
-            'primary_skill'=>'required',
-            'secondary_skill'=>'required',
-            'last_worked_project'=>'required',
-            'attendance'=>'required',
-            'reponsiveness'=>'required',
-            'reponsibility'=>'required',
-            'commit_on_task_delivery'=>'required',
-            'technical_knowledge'=>'required',
-            'logical_ablitiy'=>'required',
-            'attitude'=>'required',
-            'overall_performance'=>'required',
-            'feedback_comments'=>'required'
+            'attribute'=>'required',
+            'value'=>'required'
         ] );
         $resignationId = $request->get( 'resignationId' );
-        $feedbackDate = date( 'Y-m-d', strtotime( $request->get( 'date_of_feedback' ) ) );
-        $feedback = new feedback( [
-            'resignation_id' => $request->get( 'resignationId' ),
-            'skill_set_primary' => $request->get( 'primary_skill' ),
-            'skill_set_secondary' => $request->get( 'secondary_skill' ),
-            'last_worked_project' => $request->get( 'last_worked_project' ),
-            'attendance_rating' => $request->get( 'attendance' ),
-            'responsiveness_rating' => $request->get( 'reponsiveness' ),
-            'responsibility_rating' => $request->get( 'reponsibility' ),
-            'commitment_on_task_delivery_rating' => $request->get( 'commit_on_task_delivery' ),
-            'technical_knowledge_rating' => $request->get( 'technical_knowledge' ),
-            'logical_ability_rating' => $request->get( 'logical_ablitiy' ),
-            'attitude_rating' => $request->get( 'attitude' ),
-            'overall_rating' => $request->get( 'overall_performance' )
-        ] );
-        //Head login
-        if ( \Auth::User()->designation_id == 3 ) {
-            $feedback->head_comment = $request->get( 'feedback_comments' );
+        for($arraySize = 0; $arraySize < count($request->attribute) ; $arraySize++ ) {
+            $feedback = Feedback::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'attribute' => $request->attribute[$arraySize],
+            ],
+            [
+                'comment_rating' => $request->value[$arraySize],
+            ]
+            );
+            $feedback->save();
+            // echo $request->attribute[$arraySize];
+            // echo '<pre>';
+            // echo $request->comment[$arraySize];
+            // echo '<pre>';
+
         }
-        //lead
-        else {
-            $feedback->lead_comment = $request->get( 'feedback_comments' );
-        }
-        $feedback->feedback_date = $feedbackDate;
-        $feedback->save();
         $notification=array(
-            'message' => 'Your feedbacks has been recorded!',
+            'message' => 'Feedback has been recorded!',
             'alert-type' => 'success'
         );
-
-        //Sending mail
-        $empname = Resignation::find( $resignationId )
-        ->select('display_name')
-        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
-        ->first();
-
-        $subject = "User feedback has been added!";
-        $template = "emails.feedbackMail";
-        $details = [
-            'name' => $empname->display_name,
-            'content' => "has been added!"
-        ];
-       
-        \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
-
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
+
     }
 
-    //Updating feedback for the resignation
+    //Storing or update No Due forms for the resignation
 
-    public function updateFeedback( Request $request ) {
+    public function addOrUpdateNodue( Request $request ) {
         $request->validate( [
-            'primary_skill'=>'required',
-            'secondary_skill'=>'required',
-            'last_worked_project'=>'required',
-            'attendance'=>'required',
-            'reponsiveness'=>'required',
-            'reponsibility'=>'required',
-            'commit_on_task_delivery'=>'required',
-            'technical_knowledge'=>'required',
-            'logical_ablitiy'=>'required',
-            'attitude'=>'required',
-            'overall_performance'=>'required',
-            'feedback_comments'=>'required'
+            'attribute'=>'required',
+            'comment'=>'required'
         ] );
-        $feedbackId = $request->get( 'feedbackId' );
         $resignationId = $request->get( 'resignationId' );
-        $feedbackDate = date( 'Y-m-d', strtotime( $request->get( 'date_of_feedback' ) ) );
-        $updateFeedback = Feedback::find( $feedbackId );
-        $updateFeedback->skill_set_primary =  $request->get( 'primary_skill' );
-        $updateFeedback->skill_set_secondary = $request->get( 'secondary_skill' );
-        $updateFeedback->last_worked_project = $request->get( 'last_worked_project' );
-        $updateFeedback->attendance_rating = $request->get( 'attendance' );
-        $updateFeedback->responsiveness_rating = $request->get( 'reponsiveness' );
-        $updateFeedback->responsibility_rating = $request->get( 'reponsibility' );
-        $updateFeedback->commitment_on_task_delivery_rating = $request->get( 'commit_on_task_delivery' );
-        $updateFeedback->technical_knowledge_rating = $request->get( 'technical_knowledge' );
-        $updateFeedback->logical_ability_rating = $request->get( 'logical_ablitiy' );
-        $updateFeedback->attitude_rating = $request->get( 'attitude' );
-        $updateFeedback->overall_rating = $request->get( 'overall_performance' );
-        $updateFeedback->feedback_date = $feedbackDate;
+        for($arraySize = 0; $arraySize < count($request->attribute) ; $arraySize++ ) {
+            $noDue = NoDue::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'attribute' => $request->attribute[$arraySize],
+            ],
+            [
+                'comment' => $request->comment[$arraySize],
+            ]
+            );
+            $noDue->save();
+            // echo $request->attribute[$arraySize];
+            // echo '<pre>';
+            // echo $request->comment[$arraySize];
+            // echo '<pre>';
 
-        if ( \Auth::User()->designation_id == 3 ) {
-            $updateFeedback->head_comment = $request->get( 'feedback_comments' );
-        } else {
-            $updateFeedback->lead_comment = $request->get( 'feedback_comments' );
         }
-        $updateFeedback->save();
-        $notification=array(
-            'message' => 'Your feedbacks has been updated!',
-            'alert-type' => 'success'
-        );
-
-        //Sending mail
-        $empname = Resignation::find( $resignationId )
-        ->select('display_name')
-        ->join('users', 'resignations.employee_id', '=', 'users.emp_id')
-        ->first();
-
-        $subject = "User feedback has been updated!";
-        $template = "emails.feedbackMail";
-        $details = [
-            'name' => $empname->display_name,
-            'content' => "has been updated!"
-        ];
-       
-        \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
-
-        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
-    }
-
-    //Storing No Due forms for the resignation
-
-    public function storeNodue( Request $request ) {
-
-        $resignationId = $request->get( 'resignationId' );
-        $nodue = new NoDue( [
-            'resignation_id' => $request->get( 'resignationId' )
-        ] );
-        //Head or lead login
-        if ( ( \Auth::User()->designation_id == 3 ) || ( \Auth::User()->designation_id == 2 ) ) {
-            $request->validate( [
-                'knowledge_transfer'=>'required',
-                'knowledge_transfer_comment'=>'required',
-                'mail_id_closure'=>'required',
-                'mail_id_closure_comment'=>'required'
-            ] );
-            //Lead login
-            if ( \Auth::User()->designation_id == 2 ) {
-                $nodue->knowledge_transfer_lead = $request->get( 'knowledge_transfer' );
-                $nodue->knowledge_transfer_lead_comment =  $request->get( 'knowledge_transfer_comment' );
-                $nodue->mail_id_closure_lead = $request->get( 'mail_id_closure' );
-                $nodue->mail_id_closure_lead_comment = $request->get( 'mail_id_closure_comment' );
-            }
-            //Head login
-            if ( \Auth::User()->designation_id == 3 ) {
-                $nodue->knowledge_transfer_head = $request->get( 'knowledge_transfer' );
-                $nodue->knowledge_transfer_head_comment =  $request->get( 'knowledge_transfer_comment' );
-                $nodue->mail_id_closure_head = $request->get( 'mail_id_closure' );
-                $nodue->mail_id_closure_head_comment = $request->get( 'mail_id_closure_comment' );
-            }
-        }
-        //HR Store
-        if ( \Auth::User()->department_id == 2 ) {
-            $request->validate( [
-                'id_card'=>'required',
-                'id_card_comment'=>'required',
-                'nda'=>'required',
-                'nda_comment'=>'required'
-            ] );
-
-            $nodue->id_card = $request->get( 'id_card' );
-            $nodue->id_card_comment =  $request->get( 'id_card_comment' );
-            $nodue->nda = $request->get( 'nda' );
-            $nodue->nda_comment = $request->get( 'nda_comment' );
-        }
-        //SA store
-        if ( \Auth::User()->department_id == 7 ) {
-            $request->validate( [
-                'official_email_id'=>'required',
-                'official_email_id_comment'=>'required',
-                'skype_account'=>'required',
-                'skype_account_comment'=>'required'
-            ] );
-
-            $nodue->official_email_id = $request->get( 'official_email_id' );
-            $nodue->official_email_id_comment =  $request->get( 'official_email_id_comment' );
-            $nodue->skype_account = $request->get( 'skype_account' );
-            $nodue->skype_account_comment = $request->get( 'skype_account_comment' );
-        }
-        $nodue->save();
         $notification=array(
             'message' => 'No-due has been recorded!',
             'alert-type' => 'success'
@@ -576,71 +730,7 @@ class ProcessController extends Controller
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
 
-    //Update No due forms for resignation
-
-    public function updateNodue( Request $request ) {
-        $nodueId = $request->get( 'nodueId' );
-        $resignationId = $request->get( 'resignationId' );
-        $updateNodue = NoDue::find( $nodueId );
-
-        //Head or Lead update
-        if ( ( \Auth::User()->designation_id == 3 ) || ( \Auth::User()->designation_id == 2 ) ) {
-            $request->validate( [
-                'knowledge_transfer'=>'required',
-                'knowledge_transfer_comment'=>'required',
-                'mail_id_closure'=>'required',
-                'mail_id_closure_comment'=>'required'
-            ] );
-            if ( \Auth::User()->designation_id == 2 ) {
-                $updateNodue->knowledge_transfer_lead = $request->get( 'knowledge_transfer' );
-                $updateNodue->knowledge_transfer_lead_comment =  $request->get( 'knowledge_transfer_comment' );
-                $updateNodue->mail_id_closure_lead = $request->get( 'mail_id_closure' );
-                $updateNodue->mail_id_closure_lead_comment = $request->get( 'mail_id_closure_comment' );
-            }
-            if ( \Auth::User()->designation_id == 3 ) {
-                $updateNodue->knowledge_transfer_head = $request->get( 'knowledge_transfer' );
-                $updateNodue->knowledge_transfer_head_comment =  $request->get( 'knowledge_transfer_comment' );
-                $updateNodue->mail_id_closure_head = $request->get( 'mail_id_closure' );
-                $updateNodue->mail_id_closure_head_comment = $request->get( 'mail_id_closure_comment' );
-            }
-        }
-
-        //HR update
-        if ( \Auth::User()->department_id == 2 ) {
-            $request->validate( [
-                'id_card'=>'required',
-                'id_card_comment'=>'required',
-                'nda'=>'required',
-                'nda_comment'=>'required'
-            ] );
-
-            $updateNodue->id_card = $request->get( 'id_card' );
-            $updateNodue->id_card_comment =  $request->get( 'id_card_comment' );
-            $updateNodue->nda = $request->get( 'nda' );
-            $updateNodue->nda_comment = $request->get( 'nda_comment' );
-        }
-
-        //SA update
-        if ( \Auth::User()->department_id == 7 ) {
-            $request->validate( [
-                'official_email_id'=>'required',
-                'official_email_id_comment'=>'required',
-                'skype_account'=>'required',
-                'skype_account_comment'=>'required'
-            ] );
-
-            $updateNodue->official_email_id = $request->get( 'official_email_id' );
-            $updateNodue->official_email_id_comment =  $request->get( 'official_email_id_comment' );
-            $updateNodue->skype_account = $request->get( 'skype_account' );
-            $updateNodue->skype_account_comment = $request->get( 'skype_account_comment' );
-        }
-        $updateNodue->save();
-        $notification=array(
-            'message' => 'No-due has been updated!',
-            'alert-type' => 'success'
-        );
-        return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
-    }
+    //Final checklist store
 
     public function storeFinalCheckList( Request $request ) {
         $request->validate( [
@@ -656,6 +746,9 @@ class ProcessController extends Controller
             'final_comment'=>'required'
         ] );
 
+        $RelievingLetterName = NULL;
+        $ExperienceLetterName = NULL;
+        $SalaryCertificateName = NULL;
         $resignationId = $request->get( 'resignationId' );
             if ( $request->file( 'RelievingLetter' ) ) {
                 $RelievingLetterPath = $request->file( 'RelievingLetter' );
@@ -686,7 +779,7 @@ class ProcessController extends Controller
         $finalCheckList = new FinalExitChecklist( [
             'resignation_id' => $request->get( 'resignationId' ),
             'type_of_exit' => $request->get( 'type_of_exit' ),
-            'date_of_leaving' => $request->get( 'date_of_leaving' ),
+            'date_of_leaving' => Carbon::createFromFormat('d-m-Y', $request->get( 'date_of_leaving' ))->format('Y-m-d'),
             'reason_for_leaving' => $request->get( 'reason_for_leaving' ),
             'last_drawn_salary' => $request->get( 'last_drawn_salary' ),
             'consider_for_rehire' => $request->get( 'consider_for_rehire' ),
@@ -695,19 +788,27 @@ class ProcessController extends Controller
             'experience_letter' => $request->get( 'experience_letter' ),
             'salary_certificate' => $request->get( 'salary_certificate' ),
             'final_comment' => $request->get( 'final_comment' ),
-            'relieving_document' => $RelievingLetterFilepath,
-            'experience_document' => $ExperienceLetterFilepath,
-            'salary_document' => $SalaryCertificateFilepath,
+            'relieving_document' => $RelievingLetterName,
+            'experience_document' => $ExperienceLetterName,
+            'salary_document' => $SalaryCertificateName,
             'date_of_entry' => $request->get( 'date_of_entry' ),
             'updated_by' => $request->get( 'updated_by' )
         ] );
         $finalCheckList->save();
+
+        if(($request->get( 'relieving_letter' ) == 'Given') && ($request->get( 'experience_letter' ) == 'Given') && ($request->get( 'salary_certificate' ) == 'Given')) {
+            \DB::table('resignations')
+            ->where('id', $resignationId)
+            ->update(['is_completed' => 1]);
+        }
         $notification=array(
             'message' => 'Final checklist has been recorded!',
             'alert-type' => 'success'
         );
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
     }
+
+    //Final checklist update
 
     public function updateFinalCheckList( Request $request ) {
         $request->validate( [
@@ -747,7 +848,7 @@ class ProcessController extends Controller
         $updateFinalCheckList = FinalExitChecklist::find( $finalCheckListId );
         $updateFinalCheckList->resignation_id = $request->get( 'resignationId' );
         $updateFinalCheckList->type_of_exit = $request->get( 'type_of_exit' );
-        $updateFinalCheckList->date_of_leaving = $request->get( 'date_of_leaving' );
+        $updateFinalCheckList->date_of_leaving = Carbon::createFromFormat('d-m-Y', $request->get( 'date_of_leaving' ))->format('Y-m-d');
         $updateFinalCheckList->reason_for_leaving = $request->get( 'reason_for_leaving' );
         $updateFinalCheckList->last_drawn_salary = $request->get( 'last_drawn_salary' );
         $updateFinalCheckList->consider_for_rehire = $request->get( 'consider_for_rehire' );
@@ -758,23 +859,213 @@ class ProcessController extends Controller
         $updateFinalCheckList->final_comment = $request->get( 'final_comment' );
         if ( ( $request->file( 'RelievingLetter' ) ) || ( $request->file( 'ExperienceLetter' ) ) || ( $request->file( 'SalaryCertificate' ) ) ) {
             if ( $request->file( 'RelievingLetter' ) ) {
-                $updateFinalCheckList->relieving_document = $RelievingLetterFilepath;
+                $updateFinalCheckList->relieving_document = $RelievingLetterName;
             }
             if ( $request->file( 'ExperienceLetter' ) ) {
-                $updateFinalCheckList->experience_document = $ExperienceLetterFilepath;
+                $updateFinalCheckList->experience_document = $ExperienceLetterName;
             }
             if ( $request->file( 'SalaryCertificate' ) ) {
-                $updateFinalCheckList->salary_document = $SalaryCertificateFilepath;
+                $updateFinalCheckList->salary_document = $SalaryCertificateName;
             }
         }
         $updateFinalCheckList->date_of_entry = $request->get( 'date_of_entry' );
         $updateFinalCheckList->updated_by = $request->get( 'updated_by' );
         $updateFinalCheckList->save();
+        if(($request->get( 'relieving_letter' ) == 'Given') && ($request->get( 'experience_letter' ) == 'Given') && ($request->get( 'salary_certificate' ) == 'Given')) {
+            \DB::table('resignations')
+            ->where('id', $resignationId)
+            ->update(['is_completed' => 1]);
+        }
         $notification=array(
             'message' => 'Final checklist has been updated!',
             'alert-type' => 'success'
         );
         return redirect()->route( 'process.edit', ['process' => $resignationId] )->with($notification);
+    }
+
+    //Add and update HR exit interview comments
+
+    public function addOrUpdateHrInterview(Request $request) {
+        $resignationId = $request->get( 'resignationId' );
+        for($arraySize = 0; $arraySize < count($request->hr_exitinterview_comment) ; $arraySize++ ) {
+            $hrInterview = HrExitInterviewComments::updateOrCreate([
+                'resignation_id' => $request->get( 'resignationId' ),
+                'action_area' => $request->hr_exitinterview_actionarea[$arraySize],
+            ],
+            [
+                'comments' => $request->hr_exitinterview_comment[$arraySize],
+                'commented_by' => $request->commented_by
+            ]
+            );
+            $hrInterview->save();
+
+        }
+        $notification=array(
+            'message' => 'Exit interview comments has been recorded!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
+
+    }
+
+    public function downloadDocs($filename){
+
+        return response()->download(storage_path("app\public\uploads/" .$filename ));
+    }
+
+    public function getMailValue($resignation_department,$mailto_department,$workflows){
+            $data = 0;
+            foreach($workflows as $workflow){
+                if($workflow->resignation_department === $resignation_department && $workflow->mail_to_department === $mailto_department){
+                    $data = 1;
+                    continue;
+               }
+            }
+            return $data;
+    }
+
+    public function formatData($resignation_departments, $mailto_departments,$workflows){
+        $savedWorkflow= [];
+            foreach($resignation_departments as $resignation_department){
+               foreach($mailto_departments as $mailto_department){
+                   $savedWorkflow[$resignation_department][$mailto_department] = $this->getMailValue($resignation_department,$mailto_department, $workflows);
+               }
+           }
+       return $savedWorkflow;
+    }
+
+    public function getselectedDepartmentHeads($department_name){
+        $results = \DB::table( 'head_selects' )->select('emp_id')->where('department_name', $department_name)->get();
+        $data = [];
+        if(!empty($results)){
+            foreach($results as $result){
+                $data[] = $result->emp_id;
+            }
+        }
+        return $data;
+    }
+    public function workflow(){
+
+        $RegistationWorkflows = \DB::table( 'workflows' )->where('mail_type', 'Resignation')->get();
+        $NoDueWorkflows = \DB::table( 'workflows' )->where('mail_type', 'No Due')->get();
+        $selectedDepartmentHeads = \DB::table( 'head_selects' )->get();
+        $resignation_departments = config('constants.resignation_departments');
+        $mailto_departments = config('constants.mailto_departments');
+        $savedWorkflow = [];
+        $Registation = $this->formatData($resignation_departments, $mailto_departments, $RegistationWorkflows);
+        $Nodue = $this->formatData($resignation_departments, $mailto_departments, $NoDueWorkflows);
+
+        $department_heads = \DB::table( 'users' )
+        ->select('emp_id','display_name','department_name','department_id','designation')
+        ->whereNotIn('department_name', ['Management','IT Recruitment'])
+        ->whereIn('designation_id',[116,49,102,3,114,125,10,90,56,112,69,9,103])
+        ->get();
+
+        $department_users = [];
+        foreach($department_heads as $department_head) {
+            $department_users[$department_head->department_name]['list'][$department_head->emp_id] = $department_head->display_name;
+            $department_users[$department_head->department_name]['selected_users'] = json_encode($this->getselectedDepartmentHeads($department_head->department_name));
+        }
+
+
+       // dd($department_users);
+
+        return view('process.workflow', compact('Registation','Nodue', 'resignation_departments','department_users','selectedDepartmentHeads'));
+    }
+
+    public function workflowStore(Request $request){
+
+        $mailDepartment = array(
+                     $request->formData['Technical'] == 'true' ? "Technical": NULL,
+                     $request->formData['HR'] == 'true' ? "HR":NULL,
+                     $request->formData['Accounts'] == 'true' ? "Accounts":NULL,
+                     $request->formData['Marketing'] == 'true' ? "Marketing":NULL,
+                     $request->formData['System Admin'] == 'true' ? "System Admin":NULL,
+                     $request->formData['Administrator'] == 'true' ? "Administrator":NULL,
+                    );
+        $mailDepartment_count = count($mailDepartment);
+
+        $department = workflow::where('mail_type',$request->formData['mailType'])
+                                ->where('resignation_department',$request->formData['departmentName'])
+                                ->get();
+
+        if($department)
+        {
+            foreach($department as $depart)
+            {
+                workflow::where('id',$depart->id)->delete();
+            }
+
+            foreach($mailDepartment as $maildepart)
+            {   if($maildepart != NULL)
+                {
+                    workflow::insert([
+                        'mail_type' => $request->formData['mailType'],
+                        'resignation_department' => $request->formData['departmentName'],
+                        "mail_to_department" =>  $maildepart,
+                        ]);
+
+
+                }
+            }
+
+        }
+        else
+        {
+            foreach($mailDepartment as $maildepart)
+            {   if($maildepart != NULL)
+                {
+                    workflow::insert([
+                        'mail_type' => $request->formData['mailType'],
+                        'resignation_department' => $request->formData['departmentName'],
+                        "mail_to_department" =>  $maildepart,
+                        ]);
+
+
+                }
+            }
+
+        }
+        return response()->json(
+            [
+                'success' => true,
+                'message' => "Data saved successfully"
+            ]
+        );
+    }
+
+    public function headSelectStore(Request $request){
+
+        $previousRecords = HeadSelect::where('department_name',$request->formData['departmentName'])
+        ->get();
+
+        if($previousRecords) {
+            foreach($previousRecords as $previousRecord) {
+                HeadSelect::where('id',$previousRecord->id)->delete();
+            }
+            foreach($request->formData['headValues'] as $leadId){
+                $insertData = HeadSelect::insert([
+                    'department_name' => $request->formData['departmentName'],
+                    'emp_id' => $leadId
+                ]);
+            }
+        }
+        else {
+            foreach($request->formData['headValues'] as $leadId){
+                $insertData = HeadSelect::insert([
+                    'department_name' => $request->formData['departmentName'],
+                    'emp_id' => $leadId
+                ]);
+            }
+        }
+        if($insertData) {
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => "Data saved successfully"
+                ]
+            );
+        }
     }
     /**
     * Remove the specified resource from storage.
@@ -784,7 +1075,8 @@ class ProcessController extends Controller
     */
 
     public function destroy( $id )
- {
+    {
         //
     }
 }
+

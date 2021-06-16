@@ -31,7 +31,7 @@
                         <div class="form-group row">
                             <label for="question" class="col-sm-2 form-label">Question <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" required name="question" id="question">
+                                <input type="text" class="form-control" name="question" id="question" required>
                                 @error('question')
                                 <br>
                                 <span class="invalid-feedback" role="alert">
@@ -43,9 +43,8 @@
                         <div class="form-group row">
                             <label for="question_type" class="col-sm-2 form-label">Question Type <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
-                                <select id="selectBox" class="form-control " name="question_type" onchange="changeFunc();">
-                                    <option value="0">--Select--</option>
-
+                                <select id="selectBox" class="form-control " name="question_type" onchange="changeFunc();" required>
+                                    <option value="">Select</option>
                                     @foreach($QuestionType as $QuestionTypes)
                                     <option value="{{$QuestionTypes->id}}">{{$QuestionTypes->type}}</option>
                                     @endforeach
@@ -73,7 +72,7 @@
                         <div class="form-group row" style="display: none" id="textboxe2">
                             <label for="question" class="col-sm-2 form-label">Option-2 <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control"  name="2" id="option-2">
+                                <input type="text" class="form-control"  name="2" id="option-2" >
                                 @error('question')
                                 <br>
                                 <span class="invalid-feedback" role="alert">
@@ -85,7 +84,7 @@
                         <div class="form-group row" style="display: none" id="textboxe3">
                             <label for="question" class="col-sm-2 form-label">Option-3 <span class="text-danger">*</span></label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control"  name="3" id="option-3">
+                                <input type="text" class="form-control"  name="3" id="option-3" >
                                 @error('question')
                                 <br>
                                 <span class="invalid-feedback" role="alert">

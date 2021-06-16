@@ -38,20 +38,22 @@
                   <td>{{ $emp->designation }}</td>
                   <td>{{ $emp->date_of_resignation }}</td>
                   <td>{{ ($emp->changed_dol == NULL) ? $emp->date_of_leaving : $emp->changed_dol }}</td>
-                  <td><span class="label {{ ($emp->date_of_withdraw != NULL) ? 'label-danger' : 'label-primary'}}">{{ ($emp->date_of_withdraw != NULL) ? 'Withdrawn' : 'New'}}</span></td>
+                  <td><span class="label {{ ($emp->date_of_withdraw != NULL) ? 'label-danger' :($emp->is_completed == 1 ? 'label-success' : ($emp->lead ==NULL ? 'label-primary': 'label-warning' )) }}">{{ ($emp->date_of_withdraw != NULL) ? 'Withdrawn' :($emp->is_completed == 1 ? 'Completed' : ($emp->lead ==NULL ? 'New': 'On-Progress' ) ) }}</span></td>
                   <td><a href="{{ route('process.edit', $emp->id )}}">View</a></td>
                   <!-- Assiging lead form by head -->
                   @if(Auth::user()->designation_id == 3)
+                  <form method="post" action="{{ route('process.update' , $emp->employee_id ) }}">
                   <td>
-                    <form method="post" action="{{ route('process.update' , $emp->employee_id ) }}">
-                      @csrf
-                      {{ method_field('PUT') }}
-                      <div class="form-group">
+                    @csrf
+                    {{ method_field('PUT') }}
+                    <div class="form-group">
                         <div class="col-sm-6">
                         <select class="form-control" name="lead" id="lead">
+                        @if($emp->lead == NULL)
                         <option value="{{ ($emp->lead == NULL) ? '' : $emp->lead }}">{{ ($emp->lead == NULL) ? 'Select' : $emp->lead }}</option>
+                        @endif
                           @foreach($lead_list as $lead)
-                          <option value="{{ $lead->display_name }}">{{ $lead->display_name }}</option>
+                          <option value="{{ $lead->display_name }}" {{ ($emp->lead == $lead->display_name) ? 'selected' : "" }}>{{ $lead->display_name }}</option>
                           @endforeach
                         </select>
                         </div>
@@ -59,8 +61,8 @@
                           <button class="btn btn-primary" type="submit">Save</button>
                         </div>
                       </div>
-                    </form>
                   </td>
+                  </form>
                   @endif
                 </tr>
                 @endforeach

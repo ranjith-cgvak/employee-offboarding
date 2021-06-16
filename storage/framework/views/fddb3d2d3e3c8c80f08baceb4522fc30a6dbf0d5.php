@@ -152,4 +152,4 @@ unset($__errorArgs, $__bag); ?>
     }
 </script>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/resignation/questions.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/resignation/questions.blade.php ENDPATH**/ ?>

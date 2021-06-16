@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 
 
@@ -14,7 +12,7 @@
                 <p><b>Employee ID: </b><?php echo e($user->emp_id); ?></p>
             </div>
             <div class="col-xs-4">
-                <p><b>Date of joinig: </b><?php echo e($converted_dates['joining_date']); ?></p>
+                <p><b>Date of Joining: </b><?php echo e($converted_dates['joining_date']); ?></p>
             </div>
         </div>
         <div class="row">
@@ -46,7 +44,7 @@
                     <div class="box-body">
                         <div class="form-group row">
                             <label for="reason" class="col-sm-2 form-label">Reason For Leaving <span class="text-danger">*</span></label>
-                            
+
                             <div class="col-sm-6">
                                 <select name="reason" id="reason" class="form-control" onchange='CheckOthers(this.value)'>
                                 <option value="">Select</option>
@@ -128,7 +126,7 @@ unset($__errorArgs, $__bag); ?>
                         <div class="form-group row">
                             <label for="dateOfLeaving" class="col-sm-2 form-label">Date Of Leaving As Per Policy </label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" value="<?php echo e(Date('m/d/Y', strtotime('+3 months'))); ?>" id="dateOfLeaving" name="dateOfLeaving">
+                                <input type="text" readonly class="form-control" value="<?php echo e(Date('d-m-Y', strtotime('+3 months'))); ?>" id="dateOfLeaving" name="dateOfLeaving">
                                 <?php $__errorArgs = ['dateOfLeaving'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -142,7 +140,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            </div>     
+                            </div>
                         </div>
                     </div>
                     <!-- /.box-body -->
@@ -161,11 +159,11 @@ function CheckOthers(val){
     var element=document.getElementById('othersDiv');
     if(val=='others')
     element.style.display='block';
-    else  
+    else
         element.style.display='none';
     }
 </script>
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/resignation/create.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/resignation/create.blade.php ENDPATH**/ ?>

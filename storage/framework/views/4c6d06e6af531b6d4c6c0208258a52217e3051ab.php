@@ -40,4 +40,4 @@
 </script>
 </body>
 </html>
-<?php /**PATH C:\xampp\htdocs\employee-offboarding\resources\views/layouts/app_login.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\Office projects\employee-offboarding\resources\views/layouts/app_login.blade.php ENDPATH**/ ?>

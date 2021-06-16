@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNoDuesTable extends Migration
+class CreateWorkflowsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateNoDuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('no_dues', function (Blueprint $table) {
+        Schema::create('workflows', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('resignation_id');
-            $table->foreign('resignation_id')->references('id')->on('resignations');
-            $table->string('attribute');
-            $table->text('comment');
+            $table->enum('mail_type', ['Resignation ', 'No Due']);
+            $table->string('resignation_department')->nullable();
+            $table->string('mail_to_department')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateNoDuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('no_dues');
+        Schema::dropIfExists('workflows');
     }
 }

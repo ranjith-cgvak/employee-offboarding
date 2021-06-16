@@ -24,6 +24,7 @@ class CreateResignationsTable extends Migration
             $table->date('date_of_withdraw')->nullable();
             $table->text('comment_on_withdraw')->nullable();
             $table->date('changed_dol')->nullable();
+            $table->boolean('is_completed')->default(0);
             $table->timestamps();
         });
     }

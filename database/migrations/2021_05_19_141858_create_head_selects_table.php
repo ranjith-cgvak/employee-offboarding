@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNoDuesTable extends Migration
+class CreateHeadSelectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateNoDuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('no_dues', function (Blueprint $table) {
+        Schema::create('head_selects', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('resignation_id');
-            $table->foreign('resignation_id')->references('id')->on('resignations');
-            $table->string('attribute');
-            $table->text('comment');
+            $table->string('department_name')->nullable();
+            $table->string('emp_id')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateNoDuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('no_dues');
+        Schema::dropIfExists('head_selects');
     }
 }
