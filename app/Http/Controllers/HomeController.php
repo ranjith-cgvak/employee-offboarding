@@ -27,6 +27,14 @@ class HomeController extends Controller
     public function index()
     {
         $empId = \Auth::User()->emp_id;
+        $department_heads = \DB::table( 'head_selects' )
+        ->select('emp_id')
+        ->get();
+        $headId = [];
+        foreach($department_heads as $department_head){
+            $headId[] = $department_head->emp_id;
+        }
+
         $myResignation = \DB::table('resignations')
         ->where([
             ['employee_id', '=', $empId],
@@ -34,7 +42,7 @@ class HomeController extends Controller
         ])
         ->count();
 
-        if((\Auth::User()->designation_id == 2) || (\Auth::User()->designation_id == 3) || (\Auth::User()->department_id == 2) || (\Auth::User()->department_id == 7)) {
+        if(in_array($empId, $headId)) {
             return redirect()->route('process.index');
         }
         else if($myResignation == 0) {

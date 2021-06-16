@@ -1,41 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Employee offboarding</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="<?php echo e(asset('vendor/bootstrap/dist/css/bootstrap.min.css')); ?>">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="<?php echo e(asset('vendor/font-awesome/css/font-awesome.min.css')); ?>">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<?php echo e(asset('css/AdminLTE.min.css')); ?>">
-  <link rel="stylesheet" href="<?php echo e(asset('css/custom.css')); ?>">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="<?php echo e(asset('css/_all-skins.min.css')); ?>">
-  <!-- Custom style -->
-  <link rel="stylesheet" href="<?php echo e(asset('css/style.css')); ?>">
-  <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-         rel = "stylesheet">
-  <!-- Google Font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  <!-- Toaster CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Employee offboarding</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="<?php echo e(asset('vendor/bootstrap/dist/css/bootstrap.min.css')); ?>">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="<?php echo e(asset('vendor/font-awesome/css/font-awesome.min.css')); ?>">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="<?php echo e(asset('css/AdminLTE.min.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('css/custom.css')); ?>">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+        folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="<?php echo e(asset('css/_all-skins.min.css')); ?>">
+    <!-- Custom style -->
+    <link rel="stylesheet" href="<?php echo e(asset('css/style.css')); ?>">
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+            rel = "stylesheet">
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <!-- Toaster CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- jQuery 3 -->
     <script src="<?php echo e(asset('js/jquery.min.js')); ?>"></script>
-
+    
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
     <!-- <script src="<?php echo e(asset('js/jquery-ui.min.js')); ?>"></script> -->
     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="<?php echo e(asset('vendor/bootstrap/dist/js/bootstrap.min.js')); ?>"></script>
-<!-- AdminLTE App -->
-<script src="<?php echo e(asset('js/adminlte.min.js')); ?>"></script>
-<script src="<?php echo e(asset('js/script.js')); ?>"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="<?php echo e(asset('vendor/bootstrap/dist/js/bootstrap.min.js')); ?>"></script>
+    <!-- AdminLTE App -->
+    <script src="<?php echo e(asset('js/adminlte.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/script.js')); ?>"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -124,31 +128,23 @@
 
   toastr.options.timeOut = 10000;
   toastr.info("<?php echo e(Session::get('message')); ?>");
-  var audio = new Audio('audio.mp3');
-  audio.play();
   break;
   case 'success':
 
   toastr.options.timeOut = 10000;
   toastr.success("<?php echo e(Session::get('message')); ?>");
-  var audio = new Audio('audio.mp3');
-  audio.play();
 
   break;
   case 'warning':
 
   toastr.options.timeOut = 10000;
   toastr.warning("<?php echo e(Session::get('message')); ?>");
-  var audio = new Audio('audio.mp3');
-  audio.play();
 
   break;
   case 'error':
 
   toastr.options.timeOut = 10000;
   toastr.error("<?php echo e(Session::get('message')); ?>");
-  var audio = new Audio('audio.mp3');
-  audio.play();
 
   break;
   }

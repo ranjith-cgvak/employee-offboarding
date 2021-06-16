@@ -49,22 +49,7 @@ Route::get('noDueStatus','ResignationController@noDueStatus')->middleware('auth'
 Route::get('withdrawForm','ResignationController@showWithdrawForm')->middleware('auth')->name('withdrawForm');
 Route::get('getUser','UserDetailsController@index')->name('getUser');
 Route::get('workflow','ProcessController@workflow')->middleware('auth')->name('workflow');
-
-
-// Route::get('send-mail', function () {
-
-//     $details = [
-//         'title' => 'Mail from CG-VAK',
-//         'body' => 'This is for testing email using smtp'
-//     ];
-
-//     \Mail::to('gowthamraj2399@gmail.com')->send(new \App\Mail\MyTestMail($details));
-
-//     dd("Email is Sent.");
-// });
-
-// Route::get('test-mail','ProcessController@sendMail')->name('test-mail');
-
-// Route::get('view', 'ProcessController@view');
+Route::post('workflowStore','ProcessController@workflowStore')->middleware('auth')->name('workflowStore');
+Route::post('headSelectStore','ProcessController@headSelectStore')->middleware('auth')->name('headSelectStore');
 Route::get('get/{filename}', 'ProcessController@downloadDocs')->name('downloadDocs');
 

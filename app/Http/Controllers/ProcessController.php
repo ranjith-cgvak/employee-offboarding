@@ -11,10 +11,13 @@ use App\AcceptanceStatus;
 use App\NoDue;
 use App\FinalExitChecklist;
 use App\HrExitInterviewComments;
+use App\workflow;
+use App\HeadSelect;
 use App\Support\Facades\DB;
 use Carbon\Carbon;
 class ProcessController extends Controller
  {
+
     /**
     * Display a listing of the resource.
     *
@@ -23,18 +26,20 @@ class ProcessController extends Controller
 
     function __constructor(){
         $this->middleware(['auth','backendAccess']);
+
     }
 
     public function index(){
+
         // Head
-        if ( \Auth::User()->designation_id == 3 ) {
+        if ( \Auth::User()->department_name == "Software Development" ) {
             $emp_list = \DB::table( 'resignations' )
             ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
             ->get();
         }
         //HR OR SA
-        else if ( ( \Auth::User()->department_id == 2 ) || ( \Auth::User()->department_id == 7 ) ) {
+        else if ( ( \Auth::User()->department_name == "Human Resource" ) || ( \Auth::User()->department_name == "System Administration" ) || ( \Auth::User()->department_name == "Administration" ) || ( \Auth::User()->department_name == "Marketing" ) || ( \Auth::User()->department_name == "Accounts" ) ) {
             $emp_list = \DB::table( 'resignations' )
             ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
@@ -908,8 +913,159 @@ class ProcessController extends Controller
         return response()->download(storage_path("app\public\uploads/" .$filename ));
     }
 
+    public function getMailValue($resignation_department,$mailto_department,$workflows){
+            $data = 0;
+            foreach($workflows as $workflow){
+                if($workflow->resignation_department === $resignation_department && $workflow->mail_to_department === $mailto_department){
+                    $data = 1;
+                    continue;
+               }
+            }
+            return $data;
+    }
+
+    public function formatData($resignation_departments, $mailto_departments,$workflows){
+        $savedWorkflow= [];
+            foreach($resignation_departments as $resignation_department){
+               foreach($mailto_departments as $mailto_department){
+                   $savedWorkflow[$resignation_department][$mailto_department] = $this->getMailValue($resignation_department,$mailto_department, $workflows);
+               }
+           }
+       return $savedWorkflow;
+    }
+
+    public function getselectedDepartmentHeads($department_name){
+        $results = \DB::table( 'head_selects' )->select('emp_id')->where('department_name', $department_name)->get();
+        $data = [];
+        if(!empty($results)){
+            foreach($results as $result){
+                $data[] = $result->emp_id;
+            }
+        }
+        return $data;
+    }
     public function workflow(){
-        return view('process.workflow');
+
+        $RegistationWorkflows = \DB::table( 'workflows' )->where('mail_type', 'Resignation')->get();
+        $NoDueWorkflows = \DB::table( 'workflows' )->where('mail_type', 'No Due')->get();
+        $selectedDepartmentHeads = \DB::table( 'head_selects' )->get();
+        $resignation_departments = config('constants.resignation_departments');
+        $mailto_departments = config('constants.mailto_departments');
+        $savedWorkflow = [];
+        $Registation = $this->formatData($resignation_departments, $mailto_departments, $RegistationWorkflows);
+        $Nodue = $this->formatData($resignation_departments, $mailto_departments, $NoDueWorkflows);
+
+        $department_heads = \DB::table( 'users' )
+        ->select('emp_id','display_name','department_name','department_id','designation')
+        ->whereNotIn('department_name', ['Management','IT Recruitment'])
+        ->whereIn('designation_id',[116,49,102,3,114,125,10,90,56,112,69,9,103])
+        ->get();
+
+        $department_users = [];
+        foreach($department_heads as $department_head) {
+            $department_users[$department_head->department_name]['list'][$department_head->emp_id] = $department_head->display_name;
+            $department_users[$department_head->department_name]['selected_users'] = json_encode($this->getselectedDepartmentHeads($department_head->department_name));
+        }
+
+
+       // dd($department_users);
+
+        return view('process.workflow', compact('Registation','Nodue', 'resignation_departments','department_users','selectedDepartmentHeads'));
+    }
+
+    public function workflowStore(Request $request){
+
+        $mailDepartment = array(
+                     $request->formData['Technical'] == 'true' ? "Technical": NULL,
+                     $request->formData['HR'] == 'true' ? "HR":NULL,
+                     $request->formData['Accounts'] == 'true' ? "Accounts":NULL,
+                     $request->formData['Marketing'] == 'true' ? "Marketing":NULL,
+                     $request->formData['System Admin'] == 'true' ? "System Admin":NULL,
+                     $request->formData['Administrator'] == 'true' ? "Administrator":NULL,
+                    );
+        $mailDepartment_count = count($mailDepartment);
+
+        $department = workflow::where('mail_type',$request->formData['mailType'])
+                                ->where('resignation_department',$request->formData['departmentName'])
+                                ->get();
+
+        if($department)
+        {
+            foreach($department as $depart)
+            {
+                workflow::where('id',$depart->id)->delete();
+            }
+
+            foreach($mailDepartment as $maildepart)
+            {   if($maildepart != NULL)
+                {
+                    workflow::insert([
+                        'mail_type' => $request->formData['mailType'],
+                        'resignation_department' => $request->formData['departmentName'],
+                        "mail_to_department" =>  $maildepart,
+                        ]);
+
+
+                }
+            }
+
+        }
+        else
+        {
+            foreach($mailDepartment as $maildepart)
+            {   if($maildepart != NULL)
+                {
+                    workflow::insert([
+                        'mail_type' => $request->formData['mailType'],
+                        'resignation_department' => $request->formData['departmentName'],
+                        "mail_to_department" =>  $maildepart,
+                        ]);
+
+
+                }
+            }
+
+        }
+        return response()->json(
+            [
+                'success' => true,
+                'message' => "Data saved successfully"
+            ]
+        );
+    }
+
+    public function headSelectStore(Request $request){
+
+        $previousRecords = HeadSelect::where('department_name',$request->formData['departmentName'])
+        ->get();
+
+        if($previousRecords) {
+            foreach($previousRecords as $previousRecord) {
+                HeadSelect::where('id',$previousRecord->id)->delete();
+            }
+            foreach($request->formData['headValues'] as $leadId){
+                $insertData = HeadSelect::insert([
+                    'department_name' => $request->formData['departmentName'],
+                    'emp_id' => $leadId
+                ]);
+            }
+        }
+        else {
+            foreach($request->formData['headValues'] as $leadId){
+                $insertData = HeadSelect::insert([
+                    'department_name' => $request->formData['departmentName'],
+                    'emp_id' => $leadId
+                ]);
+            }
+        }
+        if($insertData) {
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => "Data saved successfully"
+                ]
+            );
+        }
     }
     /**
     * Remove the specified resource from storage.
@@ -919,7 +1075,8 @@ class ProcessController extends Controller
     */
 
     public function destroy( $id )
- {
+    {
         //
     }
 }
+
