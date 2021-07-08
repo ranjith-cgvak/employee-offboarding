@@ -1156,7 +1156,7 @@
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="ID Card" @if($nodueAttribute['id_card']) checked @endif required> ID Card
+                                                                        <input type="checkbox" name="attribute[]" value="ID Card" {{ isset($nodueAttribute['id_card']) ? 'checked' : '' }} required> ID Card
                                                                     </label>
                                                                     @error('attribute')
                                                                     <br>
@@ -1168,7 +1168,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required>{{ $nodueAttribute['id_card'] }}</textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required>{{ isset($nodueAttribute['id_card']) ? $nodueAttribute['id_card'] : ''  }}</textarea>
                                                                     @error('comment')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
@@ -1182,7 +1182,7 @@
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="NDA" @if($nodueAttribute['nda']) checked @endif required> NDA
+                                                                        <input type="checkbox" name="attribute[]" value="NDA" {{ isset($nodueAttribute['nda']) ? 'checked' : '' }} required> NDA
                                                                     </label>
                                                                     @error('attribute')
                                                                     <br>
@@ -1194,7 +1194,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control"cols="30" rows="3" required>{{ $nodueAttribute['nda'] }}</textarea>
+                                                                    <textarea name="comment[]" class="form-control"cols="30" rows="3" required>{{ isset($nodueAttribute['nda']) ? $nodueAttribute['nda'] : '' }}</textarea>
                                                                     @error('comment')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
@@ -1208,7 +1208,7 @@
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Professional Tax" @if($nodueAttribute['professional_tax']) checked @endif required> Professional Tax
+                                                                        <input type="checkbox" name="attribute[]" value="Professional Tax" {{ isset($nodueAttribute['professional_tax']) ? 'checked' : '' }} required> Professional Tax
                                                                     </label>
                                                                     @error('attribute')
                                                                     <br>
@@ -1220,7 +1220,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required>{{ $nodueAttribute['professional_tax'] }}</textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required>{{ isset($nodueAttribute['professional_tax']) ? $nodueAttribute['professional_tax'] : '' }}</textarea>
                                                                     @error('comment')
                                                                     <br>
                                                                     <span class="invalid-feedback" role="alert">
