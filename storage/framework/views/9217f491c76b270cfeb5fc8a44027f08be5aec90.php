@@ -1107,7 +1107,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="ID Card" <?php if($nodueAttribute['id_card']): ?> checked <?php endif; ?> required> ID Card
+                                                                        <input type="checkbox" name="attribute[]" value="ID Card" <?php echo e(isset($nodueAttribute['id_card']) ? 'checked' : ''); ?> required> ID Card
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1126,7 +1126,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['id_card']); ?></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e(isset($nodueAttribute['id_card']) ? $nodueAttribute['id_card'] : ''); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1147,7 +1147,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="NDA" <?php if($nodueAttribute['nda']): ?> checked <?php endif; ?> required> NDA
+                                                                        <input type="checkbox" name="attribute[]" value="NDA" <?php echo e(isset($nodueAttribute['nda']) ? 'checked' : ''); ?> required> NDA
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1166,7 +1166,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control"cols="30" rows="3" required><?php echo e($nodueAttribute['nda']); ?></textarea>
+                                                                    <textarea name="comment[]" class="form-control"cols="30" rows="3" required><?php echo e(isset($nodueAttribute['nda']) ? $nodueAttribute['nda'] : ''); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -1187,7 +1187,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <td>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" name="attribute[]" value="Professional Tax" <?php if($nodueAttribute['professional_tax']): ?> checked <?php endif; ?> required> Professional Tax
+                                                                        <input type="checkbox" name="attribute[]" value="Professional Tax" <?php echo e(isset($nodueAttribute['professional_tax']) ? 'checked' : ''); ?> required> Professional Tax
                                                                     </label>
                                                                     <?php $__errorArgs = ['attribute'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -1206,7 +1206,7 @@ unset($__errorArgs, $__bag); ?>
                                                             </td>
                                                             <td>
                                                                 <div class="form-group">
-                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e($nodueAttribute['professional_tax']); ?></textarea>
+                                                                    <textarea name="comment[]" class="form-control" cols="30" rows="3" required><?php echo e(isset($nodueAttribute['professional_tax']) ? $nodueAttribute['professional_tax'] : ''); ?></textarea>
                                                                     <?php $__errorArgs = ['comment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

@@ -958,7 +958,7 @@ class ProcessController extends Controller
         $department_heads = \DB::table( 'users' )
         ->select('emp_id','display_name','department_name','department_id','designation')
         ->whereNotIn('department_name', ['Management','IT Recruitment'])
-        ->whereIn('designation_id',[116,49,102,3,114,125,10,90,56,112,69,9,103])
+        ->whereIn('designation_id',config('constants.depatment_heads_designation_id'))
         ->get();
 
         $department_users = [];
@@ -1043,18 +1043,18 @@ class ProcessController extends Controller
             foreach($previousRecords as $previousRecord) {
                 HeadSelect::where('id',$previousRecord->id)->delete();
             }
-            foreach($request->formData['headValues'] as $leadId){
+            foreach($request->formData['headValues'] as $headId){
                 $insertData = HeadSelect::insert([
                     'department_name' => $request->formData['departmentName'],
-                    'emp_id' => $leadId
+                    'emp_id' => $headId
                 ]);
             }
         }
         else {
-            foreach($request->formData['headValues'] as $leadId){
+            foreach($request->formData['headValues'] as $headId){
                 $insertData = HeadSelect::insert([
                     'department_name' => $request->formData['departmentName'],
-                    'emp_id' => $leadId
+                    'emp_id' => $headId
                 ]);
             }
         }
