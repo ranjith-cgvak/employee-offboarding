@@ -2,7 +2,7 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
     <!-- For Lead, Head, HR, SA -->
-    @if((Auth::User()->department_id == 7) || (Auth::User()->department_id == 2) || (Auth::User()->designation_id == 2) || (Auth::User()->designation_id == 3) )
+    @if(in_array(\Auth::User()->emp_id, $headId) || in_array(\Auth::User()->emp_id, $leadId))
     <li class=" {{ (request()->segment(1) == 'process') ? 'active' : '' }}">
         <a href="{{ route('process.index')}}">
         <i class="fa fa-dashboard"></i> <span>Dashboard</span>

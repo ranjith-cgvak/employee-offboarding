@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Support\Facades\DB;
 use App\User;
 use App\Resignation;
+use App\lead_selects;
 
 class HomeController extends Controller
 {
@@ -26,6 +27,13 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        $department_leads = lead_selects::all();
+        $leadId =[];
+        foreach($department_leads as $department_lead){
+            $leadId[] = $department_lead->emp_id;
+        }
+
         $empId = \Auth::User()->emp_id;
         $department_heads = \DB::table( 'head_selects' )
         ->select('emp_id')
@@ -42,7 +50,7 @@ class HomeController extends Controller
         ])
         ->count();
 
-        if(in_array($empId, $headId)) {
+        if(in_array($empId, $headId) || in_array($empId, $leadId)) {
             return redirect()->route('process.index');
         }
         else if($myResignation == 0) {

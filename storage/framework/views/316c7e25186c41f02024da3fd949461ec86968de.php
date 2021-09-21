@@ -1,6 +1,6 @@
-@extends('layouts.app_home')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 
 <!-- TABLE: Resignation mail -->
 <div class="box box-info">
@@ -18,32 +18,33 @@
                 <input type="hidden" name="mailType" class="mailType" value="Resignation">
                 <thead>
                     <th>Department</th>
-                    @foreach ($resignation_departments as $title)
-                    <th>{{$title}}</th>
-                    @endforeach
+                    <?php $__currentLoopData = $resignation_departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $title): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <th><?php echo e($title); ?></th>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </thead>
-                @foreach ($Registation as $key => $item)
+                <?php $__currentLoopData = $Registation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
-                    <td><b class="department-name"> {{ $key }}</b></td>
-                    @foreach ($item as $k => $col)
+                    <td><b class="department-name"> <?php echo e($key); ?></b></td>
+                    <?php $__currentLoopData = $item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <td>
-                            @if($k == 'list')
+                            <?php if($k == 'list'): ?>
                             <select class="headSelect CC form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;">
-                                @foreach ($col as $key => $item)
-                                    <option value="{{ $key }}">{{ $item }}</option>
+                                <?php $__currentLoopData = $col; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($key); ?>"><?php echo e($item); ?></option>
                                     
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
-                            @else
-                                <input type="checkbox" class="form-input" name="{{$k}}"
-                                {{ $col ==1 ? 'checked' : '' }}
+                            <?php else: ?>
+                                <input type="checkbox" class="form-input" name="<?php echo e($k); ?>"
+                                <?php echo e($col ==1 ? 'checked' : ''); ?>
+
                                 >
-                            @endif
+                            <?php endif; ?>
                         </td>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <td> <button type="submit" class="btn btn-primary saveToDb">Save</button>
                 </tr>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </table>
         </div>
     <!-- /.table-responsive -->
@@ -67,31 +68,32 @@
                 <input type="hidden" class="mailType" value="No Due">
                 <thead>
                     <th>Department</th>
-                    @foreach ($resignation_departments as $title)
-                    <th>{{$title}}</th>
-                    @endforeach
+                    <?php $__currentLoopData = $resignation_departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $title): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <th><?php echo e($title); ?></th>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </thead>
-                @foreach ($Nodue as $key => $item)
+                <?php $__currentLoopData = $Nodue; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
-                    <td><b class="department-name"> {{ $key }}</b></td>
-                    @foreach ($item as $k => $col)
+                    <td><b class="department-name"> <?php echo e($key); ?></b></td>
+                    <?php $__currentLoopData = $item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <td>
-                        @if($k == 'list')
+                        <?php if($k == 'list'): ?>
                             <select class="headSelect CC form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;">
-                                @foreach ($col as $key => $item)
-                                    <option value="{{ $key }}">{{ $item }}</option>
-                                @endforeach
+                                <?php $__currentLoopData = $col; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($key); ?>"><?php echo e($item); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
-                        @else  
-                            <input type="checkbox" class="form-input" name="{{$k}}"
-                            {{ $col ==1 ? 'checked' : '' }}
+                        <?php else: ?>  
+                            <input type="checkbox" class="form-input" name="<?php echo e($k); ?>"
+                            <?php echo e($col ==1 ? 'checked' : ''); ?>
+
                             >
-                        @endif
+                        <?php endif; ?>
                     </td>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <td> <button type="submit" class="btn btn-primary saveToDb">Save</button>
                 </tr>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </table>
         </div>
     </div>
@@ -120,21 +122,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($department_users as $key => $department_user)
+                    <?php $__currentLoopData = $department_users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $department_user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td><b class="department-name">{{ $key }}</b></td>
+                            <td><b class="department-name"><?php echo e($key); ?></b></td>
                             <td>
-                                <div class="form-group department-head-selection" data-selected-user="{{ $department_user['selected_users'] }}">
+                                <div class="form-group department-head-selection" data-selected-user="<?php echo e($department_user['selected_users']); ?>">
                                     <select class="headSelect form-control form-input-head-select" name="departmentLeads[]" multiple="multiple" style="width:100%;">
-                                        @foreach ($department_user['list'] as $id => $name)
-                                        <option value="{{ $id }}">{{ $name}}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $department_user['list']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($id); ?>"><?php echo e($name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
                             </td>
                             <td><button type="submit" class="btn btn-primary headSave">Save</button></td>
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
@@ -168,11 +170,11 @@
             formData['CC'] = cc;
             console.log(formData);
             $.ajax({
-                url: "{{ route('workflowStore') }}",
+                url: "<?php echo e(route('workflowStore')); ?>",
                 type: "POST",
                 data: {
                     formData,
-                    _token: '{{csrf_token()}}'
+                    _token: '<?php echo e(csrf_token()); ?>'
                 },
                 cache: false,
                 success: function(dataResult){
@@ -202,11 +204,11 @@
             formData['mailType'] =mailType;
             console.log(formData);
             $.ajax({
-                url: "{{ route('headSelectStore') }}",
+                url: "<?php echo e(route('headSelectStore')); ?>",
                 type: "POST",
                 data: {
                     formData,
-                    _token: '{{csrf_token()}}'
+                    _token: '<?php echo e(csrf_token()); ?>'
                 },
                 cache: false,
                 success: function(dataResult){
@@ -218,4 +220,6 @@
     });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app_home', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\OfzProjects\Laravel\employee-offboarding\resources\views/process/workflow.blade.php ENDPATH**/ ?>

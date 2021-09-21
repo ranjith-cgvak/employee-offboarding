@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Resignation;
 use App\User;
-use App\Feedback;
-use App\Comments;
-use App\AcceptanceStatus;
 use App\NoDue;
-use App\FinalExitChecklist;
-use App\HrExitInterviewComments;
+use App\Comments;
+use App\Feedback;
 use App\workflow;
-use App\HeadSelect;
-use App\Support\Facades\DB;
 use Carbon\Carbon;
+use App\HeadSelect;
+use App\WorkflowCc;
+use App\Resignation;
+use App\lead_selects;
+use App\Helpers\Helper;
+use App\AcceptanceStatus;
+use App\FinalExitChecklist;
+use App\Support\Facades\DB;
+use Illuminate\Http\Request;
+use App\HrExitInterviewComments;
+use App\Jobs\ResignationEmailJob;
+
 class ProcessController extends Controller
  {
 
@@ -30,19 +35,42 @@ class ProcessController extends Controller
     }
 
     public function index(){
+        $leads_of_all_dept_list =  Helper::leadsList();
+        
+        $lead_dept_id = [];
+        foreach($leads_of_all_dept_list as $leads){
+            $lead_dept_id[] = $leads->designation_id;
+        }
+        
+        $department_heads = \DB::table( 'head_selects' )
+        ->select('emp_id')
+        ->get();
+        $headId = [];
+        foreach($department_heads as $department_head){
+            $headId[] = $department_head->emp_id;
+        }
+
+        $department_leads = lead_selects::all();
+        $leadId =[];
+        foreach($department_leads as $department_lead){
+            $leadId[] = $department_lead->emp_id;
+        }
 
         // Head
         if ( \Auth::User()->department_name == "Software Development" ) {
             $emp_list = \DB::table( 'resignations' )
             ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
+            ->where( 'users.department_id', \Auth::User()->department_id )
             ->get();
+
         }
         //HR OR SA
         else if ( ( \Auth::User()->department_name == "Human Resource" ) || ( \Auth::User()->department_name == "System Administration" ) || ( \Auth::User()->department_name == "Administration" ) || ( \Auth::User()->department_name == "Marketing" ) || ( \Auth::User()->department_name == "Accounts" ) ) {
             $emp_list = \DB::table( 'resignations' )
             ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
             ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
+            ->where( 'users.department_id', \Auth::User()->department_id )
             ->get();
         }
         //LEAD
@@ -54,11 +82,16 @@ class ProcessController extends Controller
             ->where( 'lead', $leadName )
             ->get();
         }
-        $lead_list = \DB::table( 'users' )
-        ->where( 'designation_id', 2 )
-        ->get();
 
-        return view( 'process.resignationList', compact( 'emp_list', 'lead_list' ) );
+        array_push($lead_dept_id,49,102);
+        $lead_list = \DB::table( 'users' )
+        ->where( 'users.department_id', \Auth::User()->department_id )
+        ->whereIn('designation_id', $lead_dept_id)
+        ->get();
+        
+
+
+        return view( 'process.resignationList', compact( 'emp_list', 'lead_list','headId','leadId' ) );
     }
 
     /**
@@ -127,6 +160,11 @@ class ProcessController extends Controller
         ->where( 'user_answers.resignation_id', $id )
         ->get();
 
+        // echo '<pre>';
+        // print_r($answers);
+        // echo '</pre>';
+        // die;
+
         $finalCheckList = \DB::table( 'final_exit_checklists' )
         ->where( 'final_exit_checklists.resignation_id', $id )
         ->first();
@@ -143,6 +181,11 @@ class ProcessController extends Controller
         $leadDolComment = NULL;
         $headDolComment = NULL;
         $hrDolComment = NULL;
+
+        // echo '<pre>';
+        // print_r($comments);
+        // echo '</pre>';
+        // die;
 
         foreach ( $comments as $comment ) {
             if ( $comment->comment_type == 'general' && $comment->comment_by == 'lead' ) {
@@ -209,6 +252,7 @@ class ProcessController extends Controller
         }
         //LEAD
         else {
+            dd($leadGeneralComment['comment']);
             $acceptanceValue = $leadAcceptance;
             $acceptanceComment = $leadGeneralComment['comment'];
             $is_reviewed = true;
@@ -441,9 +485,25 @@ class ProcessController extends Controller
         $request->validate( [
             'lead'=>'required'
         ] );
+
+        $previousRecords = lead_selects::where('assigned_to',$id)
+        ->get();
+
+        if($previousRecords){
+            lead_selects::where('assigned_to',$id)->delete();
+        }
+
+        $leadId = $request->get( 'lead' );
+        $lead = User::where( 'emp_id', $leadId )->first();
         $user = User::where( 'emp_id', $id )->first();
-        $user->lead = $request->get( 'lead' );
+        $user->lead = $lead->display_name;
         $user->save();
+
+        $lead_details = new lead_selects;
+        $lead_details->department_name = $lead->department_name;
+        $lead_details->emp_id = $lead->emp_id;
+        $lead_details->assigned_to = $id;
+        $lead_details->save();
 
         return redirect( '/process' );
     }
@@ -457,7 +517,8 @@ class ProcessController extends Controller
             'date' => '2-2-2022'
         ];
 
-        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+        // \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+        // dispatch(new ResignationEmailJob($details,$subject,$template));
 
         dd("mail sent now");
     }
@@ -529,7 +590,8 @@ class ProcessController extends Controller
             'date' => $request->get( 'dateOfLeaving' )
         ];
 
-        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+        // \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+
 
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
@@ -942,12 +1004,45 @@ class ProcessController extends Controller
                 $data[] = $result->emp_id;
             }
         }
+        
+        return $data;
+    }
+
+    public function getselectedWorkFlowCcs($department_name, $mail_type){
+        $results = WorkflowCc::where('resignation_department', $department_name)
+                    ->where('mail_type', $mail_type)
+                    ->get();
+        // echo '<pre>';
+        // echo $department_name;
+        // echo $mail_type;
+        // print_r($results);
+        // echo '</pre>';
+        // die;
+        
+        $data = [];
+        if(!empty($results)){
+            foreach($results as $result){
+                $data[] = $result->emp_id;
+            }
+        }
+
+        
         return $data;
     }
     public function workflow(){
 
+        $department_heads = \DB::table( 'head_selects' )
+        ->select('emp_id')
+        ->get();
+        $headId = [];
+        foreach($department_heads as $department_head){
+            $headId[] = $department_head->emp_id;
+        }
+
         $RegistationWorkflows = \DB::table( 'workflows' )->where('mail_type', 'Resignation')->get();
+        // $RegistationWorkflowsCC = \DB::table( 'workflow_cc' )->where('mail_type', 'Resignation')->get();
         $NoDueWorkflows = \DB::table( 'workflows' )->where('mail_type', 'No Due')->get();
+        // $NoDueWorkflowsCC = \DB::table( 'workflow_cc' )->where('mail_type', 'No Due')->get();
         $selectedDepartmentHeads = \DB::table( 'head_selects' )->get();
         $resignation_departments = config('constants.resignation_departments');
         $mailto_departments = config('constants.mailto_departments');
@@ -965,12 +1060,65 @@ class ProcessController extends Controller
         foreach($department_heads as $department_head) {
             $department_users[$department_head->department_name]['list'][$department_head->emp_id] = $department_head->display_name;
             $department_users[$department_head->department_name]['selected_users'] = json_encode($this->getselectedDepartmentHeads($department_head->department_name));
+            // $Registation[$department_head->department_name]['list'][$department_head->emp_id] = $department_users[$department_head->department_name]['list'][$department_head->emp_id];
         }
+
+        // foreach ( $resignation_departments as $resignation_department){
+        //     $resignation_departments[$resignation_department]['resignation']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs($resignation_department,'Resignation'));
+        //     $resignation_departments[$resignation_department]['noDue']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs($resignation_department,'No Due'));        
+        // } 
+
+        
+            $Registation['HR']['list'] = $department_users['Human Resource']['list'];
+            $Registation['Technical']['list'] = $department_users['Software Development']['list'];
+            $Registation['Accounts']['list'] = $department_users['Accounts']['list'];
+            $Registation['Marketing']['list'] = $department_users['Marketing']['list'];
+            $Registation['System Admin']['list'] = $department_users['System Administration']['list'];
+            $Registation['Administrator']['list'] = $department_users['Administration']['list'];
+
+            $Nodue['HR']['list'] = $department_users['Human Resource']['list'];
+            $Nodue['Technical']['list'] = $department_users['Software Development']['list'];
+            $Nodue['Accounts']['list'] = $department_users['Accounts']['list'];
+            $Nodue['Marketing']['list'] = $department_users['Marketing']['list'];
+            $Nodue['System Admin']['list'] = $department_users['System Administration']['list'];
+            $Nodue['Administrator']['list'] = $department_users['Administration']['list'];
+        
+            
+
+        
+
+        // echo '<pre>';
+        // echo 'resignation_departments';
+        // print_r($resignation_departments);
+        // print_r($Registation);
+        // print_r($NoDueWorkflows);
+        // echo 'department_users';
+        // print_r($department_users);
+        // echo '</pre>';
+        // die;
 
 
        // dd($department_users);
 
-        return view('process.workflow', compact('Registation','Nodue', 'resignation_departments','department_users','selectedDepartmentHeads'));
+        return view('process.workflow', compact('Registation','Nodue', 'resignation_departments','department_users','selectedDepartmentHeads','headId'));
+    }
+
+
+    public function manageCc($arrCc){
+        $departmentCc = WorkflowCc::where('mail_type',$arrCc['mailType'])
+                                ->where('resignation_department',$arrCc['departmentName'])
+                                ->delete();
+
+               if(!empty($arrCc['CC'])) {
+                foreach($arrCc['CC'] as $workflowCCEmpId)
+                    {   
+                            WorkflowCc::insert([
+                                'mail_type' => $arrCc['mailType'],
+                                'resignation_department' => $arrCc['departmentName'],
+                                "cc_emp_id" =>  $workflowCCEmpId,
+                                ]);                       
+                    }
+                }
     }
 
     public function workflowStore(Request $request){
@@ -987,14 +1135,7 @@ class ProcessController extends Controller
 
         $department = workflow::where('mail_type',$request->formData['mailType'])
                                 ->where('resignation_department',$request->formData['departmentName'])
-                                ->get();
-
-        if($department)
-        {
-            foreach($department as $depart)
-            {
-                workflow::where('id',$depart->id)->delete();
-            }
+                                ->delete();
 
             foreach($mailDepartment as $maildepart)
             {   if($maildepart != NULL)
@@ -1004,28 +1145,12 @@ class ProcessController extends Controller
                         'resignation_department' => $request->formData['departmentName'],
                         "mail_to_department" =>  $maildepart,
                         ]);
-
-
                 }
             }
+            
+            
+            $this->manageCc($request->formData);
 
-        }
-        else
-        {
-            foreach($mailDepartment as $maildepart)
-            {   if($maildepart != NULL)
-                {
-                    workflow::insert([
-                        'mail_type' => $request->formData['mailType'],
-                        'resignation_department' => $request->formData['departmentName'],
-                        "mail_to_department" =>  $maildepart,
-                        ]);
-
-
-                }
-            }
-
-        }
         return response()->json(
             [
                 'success' => true,

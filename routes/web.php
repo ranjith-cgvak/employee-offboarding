@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProcessController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,3 +54,4 @@ Route::post('workflowStore','ProcessController@workflowStore')->middleware('auth
 Route::post('headSelectStore','ProcessController@headSelectStore')->middleware('auth')->name('headSelectStore');
 Route::get('get/{filename}', 'ProcessController@downloadDocs')->name('downloadDocs');
 
+Route::get('/sendMail',[ProcessController::class,'sendMail']);

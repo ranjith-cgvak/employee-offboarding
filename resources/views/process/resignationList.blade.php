@@ -27,7 +27,7 @@
                   <th>Status</th>
                   <th>View</th>
                   <!-- Assiging lead by head -->
-                  @if(Auth::user()->designation_id == 3)
+                  @if(in_array(\Auth::User()->emp_id, $headId) || in_array(\Auth::User()->emp_id, $leadId))
                   <th>&nbsp;&nbsp;&nbsp;&nbsp; Assign Lead</th>
                   @endif
                 </tr>
@@ -41,7 +41,7 @@
                   <td><span class="label {{ ($emp->date_of_withdraw != NULL) ? 'label-danger' :($emp->is_completed == 1 ? 'label-success' : ($emp->lead ==NULL ? 'label-primary': 'label-warning' )) }}">{{ ($emp->date_of_withdraw != NULL) ? 'Withdrawn' :($emp->is_completed == 1 ? 'Completed' : ($emp->lead ==NULL ? 'New': 'On-Progress' ) ) }}</span></td>
                   <td><a href="{{ route('process.edit', $emp->id )}}">View</a></td>
                   <!-- Assiging lead form by head -->
-                  @if(Auth::user()->designation_id == 3)
+                  @if(in_array(\Auth::User()->emp_id, $headId) || in_array(\Auth::User()->emp_id, $leadId))
                   <form method="post" action="{{ route('process.update' , $emp->employee_id ) }}">
                   <td>
                     @csrf
@@ -53,7 +53,7 @@
                         <option value="{{ ($emp->lead == NULL) ? '' : $emp->lead }}">{{ ($emp->lead == NULL) ? 'Select' : $emp->lead }}</option>
                         @endif
                           @foreach($lead_list as $lead)
-                          <option value="{{ $lead->display_name }}" {{ ($emp->lead == $lead->display_name) ? 'selected' : "" }}>{{ $lead->display_name }}</option>
+                          <option value="{{ $lead->emp_id }}" {{ ($emp->lead == $lead->display_name) ? 'selected' : "" }}>{{ $lead->display_name }}</option>
                           @endforeach
                         </select>
                         </div>

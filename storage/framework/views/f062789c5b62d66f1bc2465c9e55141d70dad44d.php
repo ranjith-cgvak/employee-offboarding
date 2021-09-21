@@ -7,17 +7,17 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('vendor/bootstrap/dist/css/bootstrap.min.css')); ?>">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('vendor/font-awesome/css/font-awesome.min.css')); ?>">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('css/AdminLTE.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/AdminLTE.min.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('css/custom.css')); ?>">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="{{ asset('css/_all-skins.min.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/_all-skins.min.css')); ?>">
     <!-- Custom style -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/style.css')); ?>">
     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
             rel = "stylesheet">
     <!-- Google Font -->
@@ -25,21 +25,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <!-- Toaster CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
-    {{-- Multiselect select2 css --}}
+    
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <!-- jQuery 3 -->
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    {{-- Multiselect select2 js --}}
+    <script src="<?php echo e(asset('js/jquery.min.js')); ?>"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
-    <!-- <script src="{{ asset('js/jquery-ui.min.js') }}"></script> -->
+    <!-- <script src="<?php echo e(asset('js/jquery-ui.min.js')); ?>"></script> -->
     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <!-- Bootstrap 3.3.7 -->
-    <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="<?php echo e(asset('vendor/bootstrap/dist/js/bootstrap.min.js')); ?>"></script>
     <!-- AdminLTE App -->
-    <script src="{{ asset('js/adminlte.min.js') }}"></script>
-    <script src="{{ asset('js/script.js') }}"></script>
+    <script src="<?php echo e(asset('js/adminlte.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/script.js')); ?>"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -50,7 +50,7 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>CV</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><img src="{{ asset('img/cg-logo-01.png') }}"></span>
+      <span class="logo-lg"><img src="<?php echo e(asset('img/cg-logo-01.png')); ?>"></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -62,18 +62,19 @@
         <ul class="nav navbar-nav-custom pull-right">
           <li class="dropdown">
             <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              <img src="{{ asset('img/placeholders/avatars/avatar9.jpg') }}"  class="img-circle" height="30" width="30" alt="avatar">
+              <img src="<?php echo e(asset('img/placeholders/avatars/avatar9.jpg')); ?>"  class="img-circle" height="30" width="30" alt="avatar">
             </a>
             <ul class="dropdown-menu dropdown-menu-right">
               <li class="dropdown-header">
-                <strong>Hi {{ Auth::user()->name }} </strong>
+                <strong>Hi <?php echo e(Auth::user()->name); ?> </strong>
               </li>
               <li>
-                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
+                <a href="<?php echo e(route('logout')); ?>" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
                 Log out <i class="fa fa-power-off fa-fw"></i>
                 </a>
-                <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
-                  {{ csrf_field() }}
+                <form id="frm-logout" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                  <?php echo e(csrf_field()); ?>
+
                 </form>
               </li>
             </ul>
@@ -85,18 +86,18 @@
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
-    @include('common.sidebar')
+    <?php echo $__env->make('common.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <!-- /.sidebar -->
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
   
-  <div class="{{ Request::is('workflow') ? 'content-wrapper-workFlow' : '' }} content-wrapper">
+  <div class="<?php echo e(Request::is('workflow') ? 'content-wrapper-workFlow' : ''); ?> content-wrapper">
     <!-- Content Header (Page header) -->
 
     <!-- Main content -->
     <section class="content">
-    @yield('content')
+    <?php echo $__env->yieldContent('content'); ?>
     </section>
     <!-- /.content -->
   </div>
@@ -121,34 +122,34 @@
 
 <script>
 
-  @if (Session::has('message'))
-  var type = "{{ Session::get('alert-type', 'info') }}"
+  <?php if(Session::has('message')): ?>
+  var type = "<?php echo e(Session::get('alert-type', 'info')); ?>"
   switch(type){
   case 'info':
 
   toastr.options.timeOut = 10000;
-  toastr.info("{{Session::get('message')}}");
+  toastr.info("<?php echo e(Session::get('message')); ?>");
   break;
   case 'success':
 
   toastr.options.timeOut = 10000;
-  toastr.success("{{Session::get('message')}}");
+  toastr.success("<?php echo e(Session::get('message')); ?>");
 
   break;
   case 'warning':
 
   toastr.options.timeOut = 10000;
-  toastr.warning("{{Session::get('message')}}");
+  toastr.warning("<?php echo e(Session::get('message')); ?>");
 
   break;
   case 'error':
 
   toastr.options.timeOut = 10000;
-  toastr.error("{{Session::get('message')}}");
+  toastr.error("<?php echo e(Session::get('message')); ?>");
 
   break;
   }
-  @endif
+  <?php endif; ?>
 
 
   $( function() {
@@ -208,3 +209,4 @@
 </script>
 </body>
 </html>
+<?php /**PATH D:\xampp\htdocs\OfzProjects\Laravel\employee-offboarding\resources\views/layouts/app_home.blade.php ENDPATH**/ ?>

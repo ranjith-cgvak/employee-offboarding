@@ -63,7 +63,7 @@ class QuestionController extends Controller {
             'content' => "has submitted the exit interview form!"
         ];
 
-        \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+        // \Mail::to(config('constants.HR_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         $notification=array(
             'message' => 'Your answers has been recorded!',

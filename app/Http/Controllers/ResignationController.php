@@ -298,7 +298,15 @@ class ResignationController extends Controller
         $converted_joining_date = date( 'd-m-Y', $joining_date );
         $converted_dates = array( 'joining_date'=>$converted_joining_date );
 
-        return view( 'resignation.create', compact( 'myResignation', 'user', 'converted_dates' ) );
+        $department_heads = \DB::table( 'head_selects' )
+        ->select('emp_id')
+        ->get();
+        $headId = [];
+        foreach($department_heads as $department_head){
+            $headId[] = $department_head->emp_id;
+        }
+
+        return view( 'resignation.create', compact( 'myResignation', 'user', 'converted_dates','headId' ) );
     }
 
     /**
@@ -342,7 +350,7 @@ class ResignationController extends Controller
             'date' => $request->get( 'dateOfResignation' )
         ];
 
-        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+        // \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
         return redirect('/resignation')->with($notification);
     }
 
@@ -414,7 +422,7 @@ class ResignationController extends Controller
             'date' => $withdrawDate
         ];
 
-        \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+        // \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
 
         return redirect('/resignation/create')->with($notification);
     }

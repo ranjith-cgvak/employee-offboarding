@@ -4,12 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class workflow extends Model
+class WorkflowCc extends Model
 {
-    protected $table = "workflows";
+    protected $table = "workflow_cc";
     protected $fillable = [
         'mail_type',
         'resignation_department',
-        'mail_to_depatment',      
+        'cc_emp_id',      
+        // mail_type	resignation_department	cc_emp_id
     ];
 }
