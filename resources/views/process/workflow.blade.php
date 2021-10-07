@@ -21,20 +21,30 @@
                     @foreach ($resignation_departments as $title)
                     <th>{{$title}}</th>
                     @endforeach
+                    <th>CC</th>
                 </thead>
+                <?php 
+                // echo '<pre>';
+                // print_r($Registation);
+                // echo '</pre>';
+                // die;
+                ?>
                 @foreach ($Registation as $key => $item)
                 <tr>
                     <td><b class="department-name"> {{ $key }}</b></td>
                     @foreach ($item as $k => $col)
                         <td>
                             @if($k == 'list')
-                            <select class="headSelect CC form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;">
                                 @foreach ($col as $key => $item)
-                                    <option value="{{ $key }}">{{ $item }}</option>
-                                    
+                                    @if(is_array($item))
+                                    <select data-selected-user="{{ $col['selected_ccs'] }}" class="cc-selected form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;" >
+                                        @foreach ($item as $list => $listItem)
+                                            <option value="{{ $list }}">{{ $listItem }}</option>         
+                                        @endforeach
+                                    </select>
+                                    @endif
                                 @endforeach
-                            </select>
-                            @else
+                            @else  
                                 <input type="checkbox" class="form-input" name="{{$k}}"
                                 {{ $col ==1 ? 'checked' : '' }}
                                 >
@@ -77,16 +87,20 @@
                     @foreach ($item as $k => $col)
                     <td>
                         @if($k == 'list')
-                            <select class="headSelect CC form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;">
                                 @foreach ($col as $key => $item)
-                                    <option value="{{ $key }}">{{ $item }}</option>
+                                    @if(is_array($item))
+                                    <select data-selected-user="{{ $col['selected_ccs'] }}" class="cc-selected form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;" >
+                                        @foreach ($item as $list => $listItem)
+                                            <option value="{{ $list }}">{{ $listItem }}</option>         
+                                        @endforeach
+                                    </select>
+                                    @endif
                                 @endforeach
-                            </select>
-                        @else  
-                            <input type="checkbox" class="form-input" name="{{$k}}"
-                            {{ $col ==1 ? 'checked' : '' }}
-                            >
-                        @endif
+                            @else  
+                                <input type="checkbox" class="form-input" name="{{$k}}"
+                                {{ $col ==1 ? 'checked' : '' }}
+                                >
+                            @endif
                     </td>
                     @endforeach
                     <td> <button type="submit" class="btn btn-primary saveToDb">Save</button>
@@ -147,6 +161,7 @@
 <script>
     $(document).ready(function() {
         $('.headSelect').select2();
+        $('.cc-selected').select2();
         //make the selected value on the select options
 
         //Save regisnation mail and no due mail to DB
@@ -155,7 +170,7 @@
             var checkboxes = $(this).parents("tr").find('.form-input');
             var departmentName = $(this).parents("tr").find('.department-name').text();
             var mailType = $(this).parents("table").find('.mailType').val();
-            var cc = $(this).parents("tr").find('.CC').val();
+            var cc = $(this).parents("tr").find('.cc-selected').val();
             //   .map(function(){return $(this).val();}).get();
             console.log(cc);
             let formData = {};
@@ -186,6 +201,12 @@
             selectedUsers = JSON.parse(selectedUsers);
             $(this).find('.headSelect').css('border', 'red solid 2px');
             $(this).find('select').val(selectedUsers).trigger('change');
+        })
+
+        $.each($('.cc-selected'),function(){
+            let selectedUsers = $(this).attr('data-selected-user');
+            selectedUsers = JSON.parse(selectedUsers);
+            $(this).val(selectedUsers).trigger('change');
         })
         //To save department heads to DB
 

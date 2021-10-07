@@ -55,3 +55,4 @@ Route::post('headSelectStore','ProcessController@headSelectStore')->middleware('
 Route::get('get/{filename}', 'ProcessController@downloadDocs')->name('downloadDocs');
 
 Route::get('/sendMail',[ProcessController::class,'sendMail']);
+Route::get('/getselectedWorkFlowCcs/{department_name}/{mail_type}','ProcessController@getselectedWorkFlowCcs');

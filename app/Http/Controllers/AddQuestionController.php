@@ -36,7 +36,15 @@ class AddQuestionController extends Controller
         $Question_option = Question_option::all();
 
         $QuestionType = QuestionType::all();
-        return view( 'questions.create', compact( 'Question', 'answer', 'count', 'myResignation', 'Question_option', 'QuestionType' ) );
+
+        $department_heads = \DB::table( 'head_selects' )
+        ->select('emp_id')
+        ->get();
+        $headId = [];
+        foreach($department_heads as $department_head){
+            $headId[] = $department_head->emp_id;
+        }
+        return view( 'questions.create', compact( 'Question', 'answer', 'count', 'myResignation', 'Question_option', 'QuestionType' ,'headId') );
 
     }
 

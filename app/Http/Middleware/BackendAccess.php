@@ -15,7 +15,7 @@ class BackendAccess
      */
     public function handle($request, Closure $next)
     {
-        $allowedDesignation = [116,102,103,36,3,125,10,2,90,104,56,9,120,69,25];
+        $allowedDesignation = [116,102,103,36,3,125,10,2,90,104,56,9,120,69,25,49];
         $designationId = auth()->user()->designation_id;
         if(!in_array($designationId, $allowedDesignation)) {
             abort(403);
