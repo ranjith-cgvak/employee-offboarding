@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Support\Facades\DB;
 use App\User;
 use App\Resignation;
+use App\HeadSelect;
+use App\lead_selects;
 use App\AcceptanceStatus;
 use Illuminate\Http\Request;
 
@@ -37,8 +39,21 @@ class ResignationController extends Controller
         $converted_changed_dol = date( 'd-m-Y', $changed_dol );
 
         $converted_dates = array( 'joining_date'=>$converted_joining_date, 'date_of_resignation'=>$converted_resignation_date, 'date_of_leaving'=>$converted_leaving_date, 'changed_dol'=>$converted_changed_dol );
+        $department_heads = \DB::table( 'head_selects' )
+        ->select('emp_id')
+        ->get();
+        $headId = [];
+        foreach($department_heads as $department_head){
+            $headId[] = $department_head->emp_id;
+        }
 
-        return view( 'resignation.resignationDetails', compact( 'myResignation', 'user', 'converted_dates' ) );
+        $department_leads = lead_selects::all();
+        $leadId =[];
+        foreach($department_leads as $department_lead){
+            $leadId[] = $department_lead->emp_id;
+        }
+
+        return view( 'resignation.resignationDetails', compact( 'myResignation', 'user', 'converted_dates', 'leadId', 'headId' ) );
     }
 
     //Resignation progress status of the resignation
@@ -305,8 +320,13 @@ class ResignationController extends Controller
         foreach($department_heads as $department_head){
             $headId[] = $department_head->emp_id;
         }
+        $department_leads = lead_selects::all();
+        $leadId =[];
+        foreach($department_leads as $department_lead){
+            $leadId[] = $department_lead->emp_id;
+        }
 
-        return view( 'resignation.create', compact( 'myResignation', 'user', 'converted_dates','headId' ) );
+        return view( 'resignation.create', compact( 'myResignation', 'user', 'converted_dates','headId', 'leadId' ) );
     }
 
     /**

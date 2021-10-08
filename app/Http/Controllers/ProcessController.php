@@ -36,12 +36,12 @@ class ProcessController extends Controller
 
     public function index(){
         $leads_of_all_dept_list =  Helper::leadsList();
-        
+
         $lead_dept_id = [];
         foreach($leads_of_all_dept_list as $leads){
             $lead_dept_id[] = $leads->designation_id;
         }
-        
+
         $department_heads = \DB::table( 'head_selects' )
         ->select('emp_id')
         ->get();
@@ -88,7 +88,7 @@ class ProcessController extends Controller
         ->where( 'users.department_id', \Auth::User()->department_id )
         ->whereIn('designation_id', $lead_dept_id)
         ->get();
-        
+
 
 
         return view( 'process.resignationList', compact( 'emp_list', 'lead_list','headId','leadId' ) );
@@ -1004,7 +1004,7 @@ class ProcessController extends Controller
                 $data[] = $result->emp_id;
             }
         }
-        
+
         return $data;
     }
 
@@ -1018,7 +1018,7 @@ class ProcessController extends Controller
         // print_r($results);
         // echo '</pre>';
         // die;
-        
+
         $data = [];
         if(!empty($results)){
             foreach($results as $result){
@@ -1026,7 +1026,7 @@ class ProcessController extends Controller
             }
         }
 
-        
+
         return $data;
     }
     public function workflow(){
@@ -1037,6 +1037,11 @@ class ProcessController extends Controller
         $headId = [];
         foreach($department_heads as $department_head){
             $headId[] = $department_head->emp_id;
+        }
+        $department_leads = lead_selects::all();
+        $leadId =[];
+        foreach($department_leads as $department_lead){
+            $leadId[] = $department_lead->emp_id;
         }
 
         $RegistationWorkflows = \DB::table( 'workflows' )->where('mail_type', 'Resignation')->get();
@@ -1065,10 +1070,10 @@ class ProcessController extends Controller
 
         // foreach ( $resignation_departments as $resignation_department){
         //     $resignation_departments[$resignation_department]['resignation']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs($resignation_department,'Resignation'));
-        //     $resignation_departments[$resignation_department]['noDue']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs($resignation_department,'No Due'));        
-        // } 
+        //     $resignation_departments[$resignation_department]['noDue']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs($resignation_department,'No Due'));
+        // }
 
-        
+
             $Registation['HR']['list'] = $department_users['Human Resource']['list'];
             $Registation['Technical']['list'] = $department_users['Software Development']['list'];
             $Registation['Accounts']['list'] = $department_users['Accounts']['list'];
@@ -1082,10 +1087,10 @@ class ProcessController extends Controller
             $Nodue['Marketing']['list'] = $department_users['Marketing']['list'];
             $Nodue['System Admin']['list'] = $department_users['System Administration']['list'];
             $Nodue['Administrator']['list'] = $department_users['Administration']['list'];
-        
-            
 
-        
+
+
+
 
         // echo '<pre>';
         // echo 'resignation_departments';
@@ -1100,7 +1105,7 @@ class ProcessController extends Controller
 
        // dd($department_users);
 
-        return view('process.workflow', compact('Registation','Nodue', 'resignation_departments','department_users','selectedDepartmentHeads','headId'));
+        return view('process.workflow', compact('Registation','Nodue', 'resignation_departments','department_users','selectedDepartmentHeads','headId', 'leadId'));
     }
 
 
@@ -1111,12 +1116,12 @@ class ProcessController extends Controller
 
                if(!empty($arrCc['CC'])) {
                 foreach($arrCc['CC'] as $workflowCCEmpId)
-                    {   
+                    {
                             WorkflowCc::insert([
                                 'mail_type' => $arrCc['mailType'],
                                 'resignation_department' => $arrCc['departmentName'],
                                 "cc_emp_id" =>  $workflowCCEmpId,
-                                ]);                       
+                                ]);
                     }
                 }
     }
@@ -1147,8 +1152,8 @@ class ProcessController extends Controller
                         ]);
                 }
             }
-            
-            
+
+
             $this->manageCc($request->formData);
 
         return response()->json(
