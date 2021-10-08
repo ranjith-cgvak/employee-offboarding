@@ -518,7 +518,10 @@ class ProcessController extends Controller
         ];
 
         // \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+<<<<<<< Updated upstream
         // dispatch(new ResignationEmailJob($details,$subject,$template));
+=======
+>>>>>>> Stashed changes
 
         dd("mail sent now");
     }
@@ -591,7 +594,10 @@ class ProcessController extends Controller
         ];
 
         // \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
