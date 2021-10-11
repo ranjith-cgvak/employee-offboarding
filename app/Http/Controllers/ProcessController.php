@@ -599,10 +599,6 @@ class ProcessController extends Controller
         ];
 
         // \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 
         return redirect()->route('process.edit', ['process' => $resignationId])->with($notification);
     }
