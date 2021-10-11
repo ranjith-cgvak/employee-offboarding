@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('content'); ?>
 
 <!-- TABLE: Resignation mail -->
@@ -24,11 +26,21 @@
                 <tr>
                     <td><b class="department-name"> <?php echo e($key); ?></b></td>
                     <?php $__currentLoopData = $item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <td>  <input type="checkbox" class="form-input" name="<?php echo e($k); ?>"
-                        <?php echo e($col ==1 ? 'checked' : ''); ?>
+                        <td>
+                            <?php if($k == 'list'): ?>
+                            <select class="headSelect CC form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;">
+                                <?php $__currentLoopData = $col; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($key); ?>"><?php echo e($item); ?></option>
+                                    
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                            <?php else: ?>
+                                <input type="checkbox" class="form-input" name="<?php echo e($k); ?>"
+                                <?php echo e($col ==1 ? 'checked' : ''); ?>
 
-                        >
-                    </td>
+                                >
+                            <?php endif; ?>
+                        </td>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <td> <button type="submit" class="btn btn-primary saveToDb">Save</button>
                 </tr>
@@ -64,10 +76,19 @@
                 <tr>
                     <td><b class="department-name"> <?php echo e($key); ?></b></td>
                     <?php $__currentLoopData = $item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <td>  <input type="checkbox" class="form-input" name="<?php echo e($k); ?>"
-                        <?php echo e($col ==1 ? 'checked' : ''); ?>
+                    <td>
+                        <?php if($k == 'list'): ?>
+                            <select class="headSelect CC form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;">
+                                <?php $__currentLoopData = $col; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($key); ?>"><?php echo e($item); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        <?php else: ?>  
+                            <input type="checkbox" class="form-input" name="<?php echo e($k); ?>"
+                            <?php echo e($col ==1 ? 'checked' : ''); ?>
 
-                        >
+                            >
+                        <?php endif; ?>
                     </td>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <td> <button type="submit" class="btn btn-primary saveToDb">Save</button>
@@ -136,6 +157,9 @@
             var checkboxes = $(this).parents("tr").find('.form-input');
             var departmentName = $(this).parents("tr").find('.department-name').text();
             var mailType = $(this).parents("table").find('.mailType').val();
+            var cc = $(this).parents("tr").find('.CC').val();
+            //   .map(function(){return $(this).val();}).get();
+            console.log(cc);
             let formData = {};
             $.each(checkboxes, function(){
                 formData[$(this).attr('name')] = $(this).is(':checked');
@@ -143,6 +167,8 @@
             console.log(formData);
             formData['departmentName'] = departmentName;
             formData['mailType'] =mailType;
+            formData['CC'] = cc;
+            console.log(formData);
             $.ajax({
                 url: "<?php echo e(route('workflowStore')); ?>",
                 type: "POST",

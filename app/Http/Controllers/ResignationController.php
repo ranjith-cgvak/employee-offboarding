@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\User;
 use App\Resignation;
+use App\HeadSelect;
 use App\lead_selects;
 use App\AcceptanceStatus;
 use App\Support\Facades\DB;
@@ -38,7 +39,6 @@ class ResignationController extends Controller
         $converted_changed_dol = date( 'd-m-Y', $changed_dol );
 
         $converted_dates = array( 'joining_date'=>$converted_joining_date, 'date_of_resignation'=>$converted_resignation_date, 'date_of_leaving'=>$converted_leaving_date, 'changed_dol'=>$converted_changed_dol );
-
         $department_heads = \DB::table( 'head_selects' )
         ->select('emp_id')
         ->get();
@@ -46,12 +46,28 @@ class ResignationController extends Controller
         foreach($department_heads as $department_head){
             $headId[] = $department_head->emp_id;
         }
+
+<<<<<<< HEAD
+        $department_heads = \DB::table( 'head_selects' )
+        ->select('emp_id')
+        ->get();
+        $headId = [];
+        foreach($department_heads as $department_head){
+            $headId[] = $department_head->emp_id;
+        }
+=======
+>>>>>>> 74a397b0d0be6613dc3bab54f78501164e1cde4f
         $department_leads = lead_selects::all();
         $leadId =[];
         foreach($department_leads as $department_lead){
             $leadId[] = $department_lead->emp_id;
         }
+<<<<<<< HEAD
         return view( 'resignation.resignationDetails', compact( 'myResignation', 'user', 'converted_dates','headId','leadId' ) );
+=======
+
+        return view( 'resignation.resignationDetails', compact( 'myResignation', 'user', 'converted_dates', 'leadId', 'headId' ) );
+>>>>>>> 74a397b0d0be6613dc3bab54f78501164e1cde4f
     }
 
     //Resignation progress status of the resignation
@@ -324,7 +340,11 @@ class ResignationController extends Controller
             $leadId[] = $department_lead->emp_id;
         }
 
+<<<<<<< HEAD
         return view( 'resignation.create', compact( 'myResignation', 'user', 'converted_dates','headId','leadId' ) );
+=======
+        return view( 'resignation.create', compact( 'myResignation', 'user', 'converted_dates','headId', 'leadId' ) );
+>>>>>>> 74a397b0d0be6613dc3bab54f78501164e1cde4f
     }
 
     /**
