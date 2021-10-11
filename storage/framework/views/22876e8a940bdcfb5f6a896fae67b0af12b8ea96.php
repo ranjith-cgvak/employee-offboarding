@@ -91,7 +91,8 @@
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  
+  <div class="<?php echo e(Request::is('workflow') ? 'content-wrapper-workFlow' : ''); ?> content-wrapper">
     <!-- Content Header (Page header) -->
 
     <!-- Main content -->
