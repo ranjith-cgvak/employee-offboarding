@@ -21,20 +21,30 @@
                     <?php $__currentLoopData = $resignation_departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $title): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <th><?php echo e($title); ?></th>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <th>CC</th>
                 </thead>
+                <?php 
+                // echo '<pre>';
+                // print_r($Registation);
+                // echo '</pre>';
+                // die;
+                ?>
                 <?php $__currentLoopData = $Registation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
                     <td><b class="department-name"> <?php echo e($key); ?></b></td>
                     <?php $__currentLoopData = $item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <td>
                             <?php if($k == 'list'): ?>
-                            <select class="headSelect CC form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;">
                                 <?php $__currentLoopData = $col; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($key); ?>"><?php echo e($item); ?></option>
-                                    
+                                    <?php if(is_array($item)): ?>
+                                    <select data-selected-user="<?php echo e($col['selected_ccs']); ?>" class="cc-selected form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;" >
+                                        <?php $__currentLoopData = $item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list => $listItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($list); ?>"><?php echo e($listItem); ?></option>         
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                    <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
-                            <?php else: ?>
+                            <?php else: ?>  
                                 <input type="checkbox" class="form-input" name="<?php echo e($k); ?>"
                                 <?php echo e($col ==1 ? 'checked' : ''); ?>
 
@@ -78,17 +88,21 @@
                     <?php $__currentLoopData = $item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <td>
                         <?php if($k == 'list'): ?>
-                            <select class="headSelect CC form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;">
                                 <?php $__currentLoopData = $col; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($key); ?>"><?php echo e($item); ?></option>
+                                    <?php if(is_array($item)): ?>
+                                    <select data-selected-user="<?php echo e($col['selected_ccs']); ?>" class="cc-selected form-control form-input-head-select" name="CC[]" multiple="multiple" style="width:100%;" >
+                                        <?php $__currentLoopData = $item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list => $listItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($list); ?>"><?php echo e($listItem); ?></option>         
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                    <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
-                        <?php else: ?>  
-                            <input type="checkbox" class="form-input" name="<?php echo e($k); ?>"
-                            <?php echo e($col ==1 ? 'checked' : ''); ?>
+                            <?php else: ?>  
+                                <input type="checkbox" class="form-input" name="<?php echo e($k); ?>"
+                                <?php echo e($col ==1 ? 'checked' : ''); ?>
 
-                            >
-                        <?php endif; ?>
+                                >
+                            <?php endif; ?>
                     </td>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <td> <button type="submit" class="btn btn-primary saveToDb">Save</button>
@@ -149,6 +163,7 @@
 <script>
     $(document).ready(function() {
         $('.headSelect').select2();
+        $('.cc-selected').select2();
         //make the selected value on the select options
 
         //Save regisnation mail and no due mail to DB
@@ -157,7 +172,7 @@
             var checkboxes = $(this).parents("tr").find('.form-input');
             var departmentName = $(this).parents("tr").find('.department-name').text();
             var mailType = $(this).parents("table").find('.mailType').val();
-            var cc = $(this).parents("tr").find('.CC').val();
+            var cc = $(this).parents("tr").find('.cc-selected').val();
             //   .map(function(){return $(this).val();}).get();
             console.log(cc);
             let formData = {};
@@ -188,6 +203,12 @@
             selectedUsers = JSON.parse(selectedUsers);
             $(this).find('.headSelect').css('border', 'red solid 2px');
             $(this).find('select').val(selectedUsers).trigger('change');
+        })
+
+        $.each($('.cc-selected'),function(){
+            let selectedUsers = $(this).attr('data-selected-user');
+            selectedUsers = JSON.parse(selectedUsers);
+            $(this).val(selectedUsers).trigger('change');
         })
         //To save department heads to DB
 

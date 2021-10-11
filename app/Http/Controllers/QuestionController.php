@@ -29,7 +29,15 @@ class QuestionController extends Controller {
         $Question = Question::all();
         $answer = Answer::all();
 
-        return view( 'resignation.questions', compact( 'Question', 'answer', 'myResignation' ) );
+        $department_heads = \DB::table( 'head_selects' )
+        ->select('emp_id')
+        ->get();
+        $headId = [];
+        foreach($department_heads as $department_head){
+            $headId[] = $department_head->emp_id;
+        }
+
+        return view( 'resignation.questions', compact( 'Question', 'answer', 'myResignation' ,'headId') );
     }
 
     /**

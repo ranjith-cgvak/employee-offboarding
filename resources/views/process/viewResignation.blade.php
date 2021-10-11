@@ -406,27 +406,31 @@
                                                     <td>Lead</td>
                                                     <td class="{{ ($leadAcceptance == NULL || $leadAcceptance == 'Pending' ) ? 'bg-warning' :( $leadAcceptance == 'Accepted' ? 'bg-success' : 'bg-danger' )}}">{{ ($leadAcceptance == NULL ) ? 'Pending' : $leadAcceptance }}</td>
                                                     @if(\Auth::User()->department_id != 7)
-                                                    <td>{{ $leadGeneralComment['comment'] }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $leadDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
-                                                    <td>{{ $leadDolComment['comment'] }}</td>
+                                                    <td>{{ $leadGeneralComment ? $leadGeneralComment['comment'] : '' }}</td>
+                                                    {{-- <td>{{ ( $emp_resignation->changed_dol != NULL && $leadDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td> --}}
+                                                    <td>{{ $leadDolComment ? $leadDolComment['comment'] : '' }}</td>
                                                     @endif
                                                 </tr>
                                                 <tr>
                                                     <td>Department Head / Unit Head</td>
                                                     <td class="{{ ($headAcceptance == NULL || $headAcceptance == 'Pending' ) ? 'bg-warning' :( $headAcceptance == 'Accepted' ? 'bg-success' : 'bg-danger' )}}">{{ ($headAcceptance == NULL ) ? 'Pending' : $headAcceptance }}</td>
                                                     @if(\Auth::User()->department_id != 7)
-                                                    <td>{{ $headGeneralComment['comment'] }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $headDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
-                                                    <td>{{ $headDolComment['comment'] }}</td>
+                                                    <td>{{ $headGeneralComment ? $headGeneralComment['comment'] : '' }}</td>
+                                                    {{-- <td>{{ ( $emp_resignation->changed_dol != NULL && $headDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td> --}}
+                                                    {{-- <td>{{ ( $emp_resignation->changed_dol != NULL && $headDolComment != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td> --}}
+                                                    <td>{{ $converted_dates['changed_dol'] ? $converted_dates['changed_dol'] : ''  }}</td>
+                                                    <td>{{ $headDolComment ? $headDolComment['comment'] : '' }}</td>
                                                     @endif
                                                 </tr>
                                                 <tr>
                                                     <td>HR</td>
                                                     <td class="{{ ($hrAcceptance == NULL || $hrAcceptance == 'Pending' ) ? 'bg-warning' :( $hrAcceptance == 'Accepted' ? 'bg-success' : 'bg-danger' )}}">{{ ($hrAcceptance == NULL ) ? 'Pending' : $hrAcceptance }}</td>
                                                     @if(\Auth::User()->department_id != 7)
-                                                    <td>{{ $hrGeneralComment['comment'] }}</td>
-                                                    <td>{{ ( $emp_resignation->changed_dol != NULL && $hrDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td>
-                                                    <td>{{ $hrDolComment['comment'] }}</td>
+                                                    <td>{{ $hrGeneralComment ? $hrGeneralComment['comment'] : '' }}</td>
+                                                    {{-- <td>{{ ( $emp_resignation->changed_dol != NULL && $hrDolComment['comment'] != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td> --}}
+                                                    {{-- <td>{{ ( $emp_resignation->changed_dol != NULL && $hrDolComment != NULL ) ? $converted_dates['changed_dol'] : ' ' }}</td> --}}
+                                                    <td>{{ $converted_dates['changed_dol'] ? $converted_dates['changed_dol'] : ''  }}</td>
+                                                    <td>{{ $hrDolComment ? $hrDolComment['comment'] : '' }}</td>
                                                     @endif
                                                 </tr>
                                             </tbody>

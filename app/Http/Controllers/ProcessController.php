@@ -35,6 +35,7 @@ class ProcessController extends Controller
     }
 
     public function index(){
+        $loggedUserDepartmentId  = \Auth::User()->department_id;
         $leads_of_all_dept_list =  Helper::leadsList();
 
         $lead_dept_id = [];
@@ -55,39 +56,24 @@ class ProcessController extends Controller
         foreach($department_leads as $department_lead){
             $leadId[] = $department_lead->emp_id;
         }
+        $ids_for_list_all_resignations = config('constants.ids_for_list_all_resignations');
 
-        // Head
-        if ( \Auth::User()->department_name == "Software Development" ) {
-            $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
-            ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
-            ->where( 'users.department_id', \Auth::User()->department_id )
-            ->get();
+        $sql_emp = \DB::table('resignations')
+                    ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
+                    ->join('users', 'resignations.employee_id', '=', 'users.emp_id');
 
-        }
-        //HR OR SA
-        else if ( ( \Auth::User()->department_name == "Human Resource" ) || ( \Auth::User()->department_name == "System Administration" ) || ( \Auth::User()->department_name == "Administration" ) || ( \Auth::User()->department_name == "Marketing" ) || ( \Auth::User()->department_name == "Accounts" ) ) {
-            $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
-            ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
-            ->where( 'users.department_id', \Auth::User()->department_id )
-            ->get();
-        }
-        //LEAD
-        else {
-            $leadName = \Auth::User()->display_name;
-            $emp_list = \DB::table( 'resignations' )
-            ->select( 'resignations.id', 'employee_id', 'display_name', 'name', 'designation',  \DB::raw("DATE_FORMAT(date_of_resignation, '%d-%m-%Y') as date_of_resignation"), \DB::raw("DATE_FORMAT(date_of_leaving, '%d-%m-%Y') as date_of_leaving"), 'date_of_withdraw', 'lead', \DB::raw("DATE_FORMAT(changed_dol, '%d-%m-%Y') as changed_dol"), 'is_completed' )
-            ->join( 'users', 'resignations.employee_id', '=', 'users.emp_id' )
-            ->where( 'lead', $leadName )
-            ->get();
+        if(!in_array($loggedUserDepartmentId,$ids_for_list_all_resignations)){
+            $sql_emp->where('users.department_id',$loggedUserDepartmentId);
         }
 
-        array_push($lead_dept_id,49,102);
+        $emp_list = $sql_emp->get();
+
         $lead_list = \DB::table( 'users' )
         ->where( 'users.department_id', \Auth::User()->department_id )
+        // ->orWhere('users.department_id', 5)
         ->whereIn('designation_id', $lead_dept_id)
         ->get();
+
 
 
 
@@ -146,32 +132,38 @@ class ProcessController extends Controller
         $date_of_leaving = strtotime( $emp_resignation->date_of_leaving );
         $changed_dol = strtotime( $emp_resignation->changed_dol );
 
+
+
         $converted_joining_date = date( 'd-m-Y', $joining_date );
         $converted_resignation_date = date( 'd-m-Y', $date_of_resignation );
         $converted_leaving_date = date( 'd-m-Y', $date_of_leaving );
         $converted_changed_dol = date( 'd-m-Y', $changed_dol );
 
         $converted_dates = array( 'joining_date'=>$converted_joining_date, 'date_of_resignation'=>$converted_resignation_date, 'date_of_leaving'=>$converted_leaving_date, 'changed_dol'=>$converted_changed_dol );
-
-        $emp_id = \Auth::User()->emp_id ;
-
-        $answers = \DB::table( 'user_answers' )
-        ->Join( 'questions', 'questions.id', '=', 'user_answers.question_id' )
-        ->where( 'user_answers.resignation_id', $id )
-        ->get();
-
         // echo '<pre>';
-        // print_r($answers);
+        // print_r($converted_dates);
         // echo '</pre>';
         // die;
 
-        $finalCheckList = \DB::table( 'final_exit_checklists' )
-        ->where( 'final_exit_checklists.resignation_id', $id )
-        ->first();
+        $emp_id = \Auth::User()->emp_id ;
+
+        // $answers = \DB::table( 'user_answers' )
+        // ->Join( 'questions', 'questions.id', '=', 'user_answers.question_id' )
+        // ->where( 'user_answers.resignation_id', $id )
+        // ->get();
+
+        // // echo '<pre>';
+        // // print_r($answers);
+        // // echo '</pre>';
+        // // die;
+
+        // $finalCheckList = \DB::table( 'final_exit_checklists' )
+        // ->where( 'final_exit_checklists.resignation_id', $id )
+        // ->first();
         $comments = \DB::table( 'comments' )
         ->where( 'comments.resignation_id', $id )
         ->get();
-        $resignation_id = $id;
+        // $resignation_id = $id;
         $leadGeneralComment = NULL;
         $headGeneralComment = NULL;
         $hrGeneralComment = NULL;
@@ -183,292 +175,309 @@ class ProcessController extends Controller
         $hrDolComment = NULL;
 
         // echo '<pre>';
-        // print_r($comments);
+        // echo empty($comments);
         // echo '</pre>';
         // die;
-
-        foreach ( $comments as $comment ) {
-            if ( $comment->comment_type == 'general' && $comment->comment_by == 'lead' ) {
-                $leadGeneralComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
-            }
-            if ( $comment->comment_type == 'general' && $comment->comment_by == 'head' ) {
-                $headGeneralComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
-            }
-            if ( $comment->comment_type == 'general' && $comment->comment_by == 'hr' ) {
-                $hrGeneralComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
-            }
-            if ( $comment->comment_type == 'withdraw' && $comment->comment_by == 'lead' ) {
-                $leadDowComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
-            }
-            if ( $comment->comment_type == 'withdraw' && $comment->comment_by == 'head' ) {
-                $headDowComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
-            }
-            if ( $comment->comment_type == 'withdraw' && $comment->comment_by == 'hr' ) {
-                $hrDowComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
-            }
-            if ( $comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'lead' ) {
-                $leadDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
-            }
-            if ( $comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'head' ) {
-                $headDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
-            }
-            if ( $comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'hr' ) {
-                $hrDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+        if(!empty($comments)){
+            foreach ( $comments as $comment ) {
+                if ( $comment->comment_type == 'general' && $comment->comment_by == 'lead' ) {
+                    $leadGeneralComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+                }
+                if ( $comment->comment_type == 'general' && $comment->comment_by == 'head' ) {
+                    $headGeneralComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+                }
+                if ( $comment->comment_type == 'general' && $comment->comment_by == 'hr' ) {
+                    $hrGeneralComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+                }
+                if ( $comment->comment_type == 'withdraw' && $comment->comment_by == 'lead' ) {
+                    $leadDowComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+                }
+                if ( $comment->comment_type == 'withdraw' && $comment->comment_by == 'head' ) {
+                    $headDowComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+                }
+                if ( $comment->comment_type == 'withdraw' && $comment->comment_by == 'hr' ) {
+                    $hrDowComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+                }
+                if ( $comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'lead' ) {
+                    $leadDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+                }
+                if ( $comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'head' ) {
+                    $headDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+                }
+                if ( $comment->comment_type == 'date_of_leaving' && $comment->comment_by == 'hr' ) {
+                    $hrDolComment = array( 'comment'=>$comment->comment, 'id'=>$comment->id );
+                }
             }
         }
-        $acceptanceStatuses = \DB::table( 'acceptance_statuses' )
-        ->where( 'acceptance_statuses.resignation_id', $id )
-        ->get();
+        // $acceptanceStatuses = \DB::table( 'acceptance_statuses' )
+        // ->where( 'acceptance_statuses.resignation_id', $id )
+        // ->get();
 
         $leadAcceptance = NULL;
         $headAcceptance = NULL;
         $hrAcceptance = NULL;
-        foreach ( $acceptanceStatuses as $acceptanceStatus ) {
-            if( $acceptanceStatus->reviewed_by == 'lead') {
-                $leadAcceptance = $acceptanceStatus->acceptance_status;
-            }
-            if( $acceptanceStatus->reviewed_by == 'head') {
-                $headAcceptance = $acceptanceStatus->acceptance_status;
-            }
-            if( $acceptanceStatus->reviewed_by == 'hr') {
-                $hrAcceptance = $acceptanceStatus->acceptance_status;
-            }
-        }
+        // foreach ( $acceptanceStatuses as $acceptanceStatus ) {
+        //     if( $acceptanceStatus->reviewed_by == 'lead') {
+        //         $leadAcceptance = $acceptanceStatus->acceptance_status;
+        //     }
+        //     if( $acceptanceStatus->reviewed_by == 'head') {
+        //         $headAcceptance = $acceptanceStatus->acceptance_status;
+        //     }
+        //     if( $acceptanceStatus->reviewed_by == 'hr') {
+        //         $hrAcceptance = $acceptanceStatus->acceptance_status;
+        //     }
+        // }
 
         $acceptanceValue = NULL;
         $acceptanceComment = NULL;
         $is_reviewed = false;
-        //Head
+        // //Head
         if ( \Auth::User()->designation_id == 3 ) {
-            $acceptanceValue = $headAcceptance;
-            $acceptanceComment = $headGeneralComment['comment'];
+        //     $acceptanceValue = $headAcceptance;
+        //     $acceptanceComment = $headGeneralComment['comment'];
             $is_reviewed = ($leadAcceptance == 'Accepted') ? true : false;
         }
-        //HR
+        // //HR
         else if ( ( \Auth::User()->department_id == 2 ) ) {
-            $acceptanceValue = $hrAcceptance;
-            $acceptanceComment = $hrGeneralComment['comment'];
+        //     $acceptanceValue = $hrAcceptance;
+        //     $acceptanceComment = $hrGeneralComment['comment'];
             $is_reviewed = ($leadAcceptance == 'Accepted' && $headAcceptance == 'Accepted') ? true : false;
         }
-        //LEAD
+        // //LEAD
         else {
-            dd($leadGeneralComment['comment']);
-            $acceptanceValue = $leadAcceptance;
-            $acceptanceComment = $leadGeneralComment['comment'];
+        //     dd($leadGeneralComment['comment']);
+        //     $acceptanceValue = $leadAcceptance;
+        //     $acceptanceComment = $leadGeneralComment['comment'];
             $is_reviewed = true;
         }
 
-        //Feedback tab view enable
+        // //Feedback tab view enable
 
         $is_feedback_enable = ($leadAcceptance == 'Accepted' && $headAcceptance == 'Accepted' && $hrAcceptance == 'Accepted') ? true : false;
 
-        //fixing no due when to appear
+        // //fixing no due when to appear
         $today = Carbon::now();
         $nodueDate = Carbon::parse(date('d-m-Y', strtotime($converted_dates['changed_dol']. ' - 3 days')));
         $displayNodue = $today >= $nodueDate;
 
-        //Exit interview answers
+        // //Exit interview answers
         $showAnswers = \DB::table( 'user_answers' )
         ->where( 'resignation_id', $id )
         ->first();
 
-        //Exit interview comments
-        $hrExitInterviewComments = \DB::table( 'hr_exit_interview_comments' )
-        ->where( 'resignation_id', $id )
-        ->get();
+        // //Exit interview comments
+        // $hrExitInterviewComments = \DB::table( 'hr_exit_interview_comments' )
+        // ->where( 'resignation_id', $id )
+        // ->get();
 
-        //completed no due
-        // $completed_no_due = \DB::table( 'no_dues' )
-        // ->where([
-        //     ['no_dues.resignation_id', $id],
-        //     ['knowledge_transfer_lead','!=',NULL],
-        //     ['mail_id_closure_lead','!=',NULL],
-        //     ['knowledge_transfer_head','!=',NULL],
-        //     ['mail_id_closure_head','!=',NULL],
-        //     ['id_card','!=',NULL],
-        //     ['nda','!=',NULL],
-        //     ['official_email_id','!=',NULL],
-        //     ['skype_account','!=',NULL]
-        //     ])
-        // ->first();
+        // //completed no due
+        // // $completed_no_due = \DB::table( 'no_dues' )
+        // // ->where([
+        // //     ['no_dues.resignation_id', $id],
+        // //     ['knowledge_transfer_lead','!=',NULL],
+        // //     ['mail_id_closure_lead','!=',NULL],
+        // //     ['knowledge_transfer_head','!=',NULL],
+        // //     ['mail_id_closure_head','!=',NULL],
+        // //     ['id_card','!=',NULL],
+        // //     ['nda','!=',NULL],
+        // //     ['official_email_id','!=',NULL],
+        // //     ['skype_account','!=',NULL]
+        // //     ])
+        // // ->first();
 
-        //HR list for select the name in final exit checklist
+        // //HR list for select the name in final exit checklist
 
-        $nodues = \DB::table( 'no_dues' )
-        ->where( 'no_dues.resignation_id', $id )
-        ->get();
+        // $nodues = \DB::table( 'no_dues' )
+        // ->where( 'no_dues.resignation_id', $id )
+        // ->get();
 
         $nodueAttribute = NULL;
-        foreach($nodues as $nodue) {
-            if($nodue->attribute == 'Knowledge Transfer') {
-                $nodueAttribute['knowledge_transfer_comment'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Mail ID closure') {
-                $nodueAttribute['mail_closure'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'ID Card') {
-                $nodueAttribute['id_card'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'NDA') {
-                $nodueAttribute['nda'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Professional Tax') {
-                $nodueAttribute['professional_tax'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Official Email ID') {
-                $nodueAttribute['official_email_id'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Skype Account') {
-                $nodueAttribute['skype_account'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Gmail or Yahoo Testing Purpose') {
-                $nodueAttribute['gmail_yahoo'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Testing Tools') {
-                $nodueAttribute['testing_tools'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Linux or Mac Machine Password') {
-                $nodueAttribute['linux_mac_password'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Specific Tools For Renewal Details') {
-                $nodueAttribute['renewal_tools'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Handover Testing Device') {
-                $nodueAttribute['testing_device'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Headset') {
-                $nodueAttribute['headset'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Machine Port Forwarding') {
-                $nodueAttribute['machine_port_forwarding'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'SVN & VSS & TFS Login Details') {
-                $nodueAttribute['svn_vss_tfs'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'RDP, VPN Connection') {
-                $nodueAttribute['rdp_vpn'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Laptop and Data Card') {
-                $nodueAttribute['laptop_datacard'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Salary Advance Due') {
-                $nodueAttribute['salary_advance_due'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Income Tax Due') {
-                $nodueAttribute['income_tax_due'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Documents For IT') {
-                $nodueAttribute['documents_it'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Laptop') {
-                $nodueAttribute['laptop'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Data Card') {
-                $nodueAttribute['data_card'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Official Property If Any') {
-                $nodueAttribute['official_property'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Exit Process Completion From Core Departments') {
-                $nodueAttribute['exit_process_completion'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'ISMS/QMS Incidents & Tickets Closure Status') {
-                $nodueAttribute['isms_qms'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Disable All Access Control') {
-                $nodueAttribute['disable_access'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'KT completed for all the current and old projects') {
-                $nodueAttribute['kt_completion'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Relieving date informed and accepted by client') {
-                $nodueAttribute['relieving_date_informed'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)') {
-                $nodueAttribute['internal_client_souce_code'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)') {
-                $nodueAttribute['project_detail_document'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Handing over CLIENT details (Excel)') {
-                $nodueAttribute['client_details_handle'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'KT on HOT & WARM prospects') {
-                $nodueAttribute['kt_hot_warm'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Introducing new account manager to CLIENTS via Email') {
-                $nodueAttribute['intro_new_acc_manager'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'Completion of Data Categorization') {
-                $nodueAttribute['data_categorization'] = $nodue->comment;
-            }
-            if($nodue->attribute == 'RFP System updation') {
-                $nodueAttribute['rfp_system'] = $nodue->comment;
-            }
-        }
+        // foreach($nodues as $nodue) {
+        //     if($nodue->attribute == 'Knowledge Transfer') {
+        //         $nodueAttribute['knowledge_transfer_comment'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Mail ID closure') {
+        //         $nodueAttribute['mail_closure'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'ID Card') {
+        //         $nodueAttribute['id_card'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'NDA') {
+        //         $nodueAttribute['nda'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Professional Tax') {
+        //         $nodueAttribute['professional_tax'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Official Email ID') {
+        //         $nodueAttribute['official_email_id'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Skype Account') {
+        //         $nodueAttribute['skype_account'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Gmail or Yahoo Testing Purpose') {
+        //         $nodueAttribute['gmail_yahoo'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Testing Tools') {
+        //         $nodueAttribute['testing_tools'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Linux or Mac Machine Password') {
+        //         $nodueAttribute['linux_mac_password'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Specific Tools For Renewal Details') {
+        //         $nodueAttribute['renewal_tools'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Handover Testing Device') {
+        //         $nodueAttribute['testing_device'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Headset') {
+        //         $nodueAttribute['headset'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Machine Port Forwarding') {
+        //         $nodueAttribute['machine_port_forwarding'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'SVN & VSS & TFS Login Details') {
+        //         $nodueAttribute['svn_vss_tfs'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'RDP, VPN Connection') {
+        //         $nodueAttribute['rdp_vpn'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Laptop and Data Card') {
+        //         $nodueAttribute['laptop_datacard'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Salary Advance Due') {
+        //         $nodueAttribute['salary_advance_due'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Income Tax Due') {
+        //         $nodueAttribute['income_tax_due'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Documents For IT') {
+        //         $nodueAttribute['documents_it'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Laptop') {
+        //         $nodueAttribute['laptop'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Data Card') {
+        //         $nodueAttribute['data_card'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Official Property If Any') {
+        //         $nodueAttribute['official_property'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Exit Process Completion From Core Departments') {
+        //         $nodueAttribute['exit_process_completion'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'ISMS/QMS Incidents & Tickets Closure Status') {
+        //         $nodueAttribute['isms_qms'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Disable All Access Control') {
+        //         $nodueAttribute['disable_access'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'KT completed for all the current and old projects') {
+        //         $nodueAttribute['kt_completion'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Relieving date informed and accepted by client') {
+        //         $nodueAttribute['relieving_date_informed'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'All the Internal and client projects Source code, Projects Documents pushed to SVN and shared the details to concerned Projects Lead(s)') {
+        //         $nodueAttribute['internal_client_souce_code'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Prepared the document with the details of all the projects, access credentials and handover to concerned project Lead(s)') {
+        //         $nodueAttribute['project_detail_document'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Handing over CLIENT details (Excel)') {
+        //         $nodueAttribute['client_details_handle'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'KT on HOT & WARM prospects') {
+        //         $nodueAttribute['kt_hot_warm'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Introducing new account manager to CLIENTS via Email') {
+        //         $nodueAttribute['intro_new_acc_manager'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'Completion of Data Categorization') {
+        //         $nodueAttribute['data_categorization'] = $nodue->comment;
+        //     }
+        //     if($nodue->attribute == 'RFP System updation') {
+        //         $nodueAttribute['rfp_system'] = $nodue->comment;
+        //     }
+        // }
 
-        $feedbacks = \DB::table( 'feedback' )
-        ->where( 'feedback.resignation_id', $id )
-        ->get();
+        // $feedbacks = \DB::table( 'feedback' )
+        // ->where( 'feedback.resignation_id', $id )
+        // ->get();
 
         $feedbackValues = NULL;
-        foreach($feedbacks as $feedback) {
-            if($feedback->attribute == 'Primary') {
-                $feedbackValues['primary'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Secondary') {
-                $feedbackValues['secondary'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Project Name') {
-                $feedbackValues['project_name'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Attendance') {
-                $feedbackValues['attendance'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Reponsiveness') {
-                $feedbackValues['reponsiveness'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Reponsibility') {
-                $feedbackValues['reponsibility'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Commit on Task Delivery') {
-                $feedbackValues['commit_on_task_delivery'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Technical Knowledge') {
-                $feedbackValues['technical_knowledge'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Logical Ability') {
-                $feedbackValues['logical_ability'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Attitude') {
-                $feedbackValues['attitude'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Overall performance during the tenure with CG-VAK Software') {
-                $feedbackValues['overall_performance'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Lead Comment') {
-                $feedbackValues['lead_comment'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Head Comment') {
-                $feedbackValues['head_comment'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Learning & Responsiveness') {
-                $feedbackValues['learning_responsiveness'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Commitment & Integrity') {
-                $feedbackValues['commitment_integrity'] = $feedback->comment_rating;
-            }
-            if($feedback->attribute == 'Sales Performance') {
-                $feedbackValues['sales_performance'] = $feedback->comment_rating;
-            }
-        }
+        // foreach($feedbacks as $feedback) {
+        //     if($feedback->attribute == 'Primary') {
+        //         $feedbackValues['primary'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Secondary') {
+        //         $feedbackValues['secondary'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Project Name') {
+        //         $feedbackValues['project_name'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Attendance') {
+        //         $feedbackValues['attendance'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Reponsiveness') {
+        //         $feedbackValues['reponsiveness'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Reponsibility') {
+        //         $feedbackValues['reponsibility'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Commit on Task Delivery') {
+        //         $feedbackValues['commit_on_task_delivery'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Technical Knowledge') {
+        //         $feedbackValues['technical_knowledge'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Logical Ability') {
+        //         $feedbackValues['logical_ability'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Attitude') {
+        //         $feedbackValues['attitude'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Overall performance during the tenure with CG-VAK Software') {
+        //         $feedbackValues['overall_performance'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Lead Comment') {
+        //         $feedbackValues['lead_comment'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Head Comment') {
+        //         $feedbackValues['head_comment'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Learning & Responsiveness') {
+        //         $feedbackValues['learning_responsiveness'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Commitment & Integrity') {
+        //         $feedbackValues['commitment_integrity'] = $feedback->comment_rating;
+        //     }
+        //     if($feedback->attribute == 'Sales Performance') {
+        //         $feedbackValues['sales_performance'] = $feedback->comment_rating;
+        //     }
+        // }
 
 
         $hr_list = \DB::table( 'users' )
         ->where( 'department_id', 2 )
         ->get();
 
-        return view('process.viewResignation' , compact('emp_resignation','feedback','converted_dates','nodues','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance','acceptanceValue','acceptanceComment','is_reviewed','displayNodue','showAnswers','hrExitInterviewComments','is_feedback_enable','completed_no_due','hr_list','nodueAttribute','feedbackValues'));
+        $department_heads = \DB::table( 'head_selects' )
+        ->select('emp_id')
+        ->get();
+        $headId = [];
+        foreach($department_heads as $department_head){
+            $headId[] = $department_head->emp_id;
+        }
+
+        $department_leads = lead_selects::all();
+        $leadId =[];
+        foreach($department_leads as $department_lead){
+            $leadId[] = $department_lead->emp_id;
+        }
+
+        return view('process.viewResignation' , compact('emp_resignation','converted_dates','leadGeneralComment','headGeneralComment','hrGeneralComment','headDolComment','leadDolComment','hrDolComment','leadAcceptance','headAcceptance','hrAcceptance','is_reviewed','displayNodue','showAnswers','is_feedback_enable','hr_list','nodueAttribute','feedbackValues','headId','leadId'));
+
+        // return view('process.viewResignation' , compact('emp_resignation','feedback','converted_dates','nodues','finalCheckList','leadGeneralComment','headGeneralComment','hrGeneralComment','leadDowComment','headDowComment','hrDowComment','leadDolComment','headDolComment','hrDolComment','answers','leadAcceptance','headAcceptance','hrAcceptance','acceptanceValue','acceptanceComment','is_reviewed','displayNodue','showAnswers','hrExitInterviewComments','is_feedback_enable','completed_no_due','hr_list','nodueAttribute','feedbackValues'));
     }
 
     /**
@@ -518,10 +527,6 @@ class ProcessController extends Controller
         ];
 
         // \Mail::to([config('constants.HEAD_EMAIL'),config('constants.HR_EMAIL')])->cc(config('constants.LEAD_EMAIL'))->send(new \App\Mail\SendMail($details,$subject,$template));
-<<<<<<< Updated upstream
-        // dispatch(new ResignationEmailJob($details,$subject,$template));
-=======
->>>>>>> Stashed changes
 
         dd("mail sent now");
     }
@@ -1011,6 +1016,7 @@ class ProcessController extends Controller
             }
         }
 
+
         return $data;
     }
 
@@ -1028,9 +1034,11 @@ class ProcessController extends Controller
         $data = [];
         if(!empty($results)){
             foreach($results as $result){
-                $data[] = $result->emp_id;
+                // echo $result;
+                $data[] = $result->cc_emp_id;
             }
         }
+
 
 
         return $data;
@@ -1075,6 +1083,43 @@ class ProcessController extends Controller
         }
 
         // foreach ( $resignation_departments as $resignation_department){
+        //     //  echo $resignation_department;
+
+        //     //  print_r($this->getselectedWorkFlowCcs($resignation_department,'No Due'));
+        //     //  print_r($this->getselectedWorkFlowCcs($resignation_department,'No Due'));
+        //     $department_users[$resignation_department]['resignation']['selected_ccs'][] = json_encode($this->getselectedWorkFlowCcs($resignation_department,'Resignation'));
+        //     $department_users[$resignation_department]['noDue']['selected_ccs'][] = json_encode($this->getselectedWorkFlowCcs($resignation_department,'No Due'));
+        // }
+
+
+            $Registation['HR']['list']['select'] = $department_users['Human Resource']['list'];
+            $Registation['Technical']['list']['select'] = $department_users['Software Development']['list'];
+            $Registation['Accounts']['list']['select'] = $department_users['Accounts']['list'];
+            $Registation['Marketing']['list']['select'] = $department_users['Marketing']['list'];
+            $Registation['System Admin']['list']['select'] = $department_users['System Administration']['list'];
+            $Registation['Administrator']['list']['select'] = $department_users['Administration']['list'];
+
+            $Nodue['HR']['list']['select'] = $department_users['Human Resource']['list'];
+            $Nodue['Technical']['list']['select'] = $department_users['Software Development']['list'];
+            $Nodue['Accounts']['list']['select'] = $department_users['Accounts']['list'];
+            $Nodue['Marketing']['list']['select'] = $department_users['Marketing']['list'];
+            $Nodue['System Admin']['list']['select'] = $department_users['System Administration']['list'];
+            $Nodue['Administrator']['list']['select']= $department_users['Administration']['list'];
+
+            $Registation['HR']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('HR','Resignation'));
+            $Registation['Technical']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('Technical','Resignation'));
+            $Registation['Accounts']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('Accounts','Resignation'));
+            $Registation['Marketing']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('Marketing','Resignation'));
+            $Registation['System Admin']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('System Admin','Resignation'));
+            $Registation['Administrator']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('Administrator','Resignation'));
+
+            $Nodue['HR']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('HR','No Due'));
+            $Nodue['Technical']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('Technical','No Due'));
+            $Nodue['Accounts']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('Accounts','No Due'));
+            $Nodue['Marketing']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('Marketing','No Due'));
+            $Nodue['System Admin']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('System Admin','No Due'));
+            $Nodue['Administrator']['list']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs('Administrator','No Due'));
+
         //     $resignation_departments[$resignation_department]['resignation']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs($resignation_department,'Resignation'));
         //     $resignation_departments[$resignation_department]['noDue']['selected_ccs'] = json_encode($this->getselectedWorkFlowCcs($resignation_department,'No Due'));
         // }
@@ -1099,17 +1144,18 @@ class ProcessController extends Controller
 
 
         // echo '<pre>';
-        // echo 'resignation_departments';
-        // print_r($resignation_departments);
+        // echo 'department_users';
+        // print_r($department_users);
+        // echo 'Registation';
         // print_r($Registation);
         // print_r($NoDueWorkflows);
+        // print_r($Nodue);
         // echo 'department_users';
         // print_r($department_users);
         // echo '</pre>';
         // die;
 
-
-       // dd($department_users);
+    //    dd($department_users);
 
         return view('process.workflow', compact('Registation','Nodue', 'resignation_departments','department_users','selectedDepartmentHeads','headId', 'leadId'));
     }
@@ -1215,4 +1261,3 @@ class ProcessController extends Controller
         //
     }
 }
-
